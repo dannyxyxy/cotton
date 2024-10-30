@@ -12,7 +12,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <style type="text/css">
-    	
+    	.container{
+    		margin-top:20px;
+    		margin-bottom:20px;
+    	}
         .visualImage {
             width: 100%;
             max-width: 1536px;
@@ -36,8 +39,14 @@
             color: white;
     		text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* 텍스트 그림자 추가 */
         }
-         .promotion-card .card {
-		    position: relative;
+       
+       .promotion-card {
+   		 	margin-bottom: 20px;
+		}
+		
+		.promotion-card .card {
+		    width: 100%;
+		    height: 350px; /* 고정 높이 */
 		    overflow: hidden;
 		    border: none;
 		    transition: transform 0.3s ease;
@@ -49,27 +58,28 @@
 		
 		.promotion-card .card-img-top {
 		    width: 100%;
-		    height: 100%;
-		    object-fit: cover;
-		    position: absolute;
-		    top: 0;
-		    left: 0;
-		    z-index: 1;
+		    height: 75%; /* 이미지 높이를 카드의 75%로 설정 */
+		    object-fit: cover; /* 이미지 전체 채우기 */
 		}
 		
-		.promotion-card .card-img-overlay {
-		    position: relative;
-		    z-index: 2;
-		    color: white;
-		    background-color: rgba(0, 0, 0, 0.5); /* 텍스트 가독성을 위한 반투명 배경 */
-		    padding: 20px;
-		    text-align: center;
+		.promotion-card .card-body {
+		    height: 25%; /* 본문을 카드의 하단 25%에 배치 */
+		    background-color: #fff; /* 배경색 */
+		    display: flex;
+		    flex-direction: column;
+		    justify-content: right;
+		    text-align: right;
+		    padding: 10px;
 		}
 		
 		.promotion-card .card-title,
 		.promotion-card .card-text {
-		    color: white; /* 흰색 텍스트 */
+		    margin: 0;
+		    color: #333; /* 본문 텍스트 색상 */
 		}
+
+       
+
         .visualImageText{
         	text-align:right;
         }
@@ -162,31 +172,39 @@
     	</div>
     	<div>
 	    	<div><h4>진행중인 이벤트 및 프로모션</h4></div>
-	    	<div>우리의 쇼핑몰에서 자신있게 제시하는<br>이벤트와 프로모션을 살펴보세요!</div>
+	    	<div>우리의 쇼핑몰이 자신있게 제시하는<br>이벤트와 프로모션을 살펴보세요!</div>
     	</div>
     </div>
     <div class="container">
         <div class="row">
                 <div class="col-md-4 promotion-card">
-                    <div class="card-img-overlay">
-                        <img src="/upload/goods/2.png" class="card-img-top" alt="${event.title}">
-                        <div class="card-body">
-                            <h5 class="card-title">Event Title</h5>
-                            <p class="card-text">Event Content</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 promotion-card">
 				    <div class="card">
-				        <div class="card-img-overlay">
-				            <img src="/upload/goods/2.png" class="card-img-top" alt="${event.title}">
-				            <div class="card-body">
-				                <h5 class="card-title">Event Title</h5>
-				                <p class="card-text">Event Content</p>
-				            </div>
+				        <img src="/upload/goods/2.png" class="card-img-top" alt="${event.title}">
+				        <div class="card-body">
+				            <h5 class="card-title">Event Title</h5>
+				            <p class="card-text">Event Content</p>
 				        </div>
 				    </div>
 				</div>
+                <div class="col-md-4 promotion-card">
+				    <div class="card">
+				        <img src="/upload/goods/3.png" class="card-img-top" alt="${event.title}">
+				        <div class="card-body">
+				            <h5 class="card-title">Event Title</h5>
+				            <p class="card-text">Event Content</p>
+				        </div>
+				    </div>
+				</div>
+                <div class="col-md-4 promotion-card">
+				    <div class="card">
+				        <img src="/upload/goods/1.png" class="card-img-top" alt="${event.title}">
+				        <div class="card-body">
+				            <h5 class="card-title">Event Title</h5>
+				            <p class="card-text">Event Content</p>
+				        </div>
+				    </div>
+				</div>
+
         </div>
 <!--         <div class="row"> -->
 <%--             <c:forEach var="event" items="${eventsList}"> --%>

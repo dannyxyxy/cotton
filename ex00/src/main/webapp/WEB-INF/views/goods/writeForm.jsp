@@ -2,17 +2,12 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
-
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>상품 등록</title>
-
-
-
-<!-- <script type="text/javascript">
+<script type="text/javascript">
 	$(function(){
 		// 이벤트 처리
 		let now = new Date();
@@ -81,72 +76,10 @@
 				}
 			});
 		});
-		// 대분류 리스트 끝변경 
-		
-		
-		// color 추가 / 삭제
-		let colorTagCnt = 1;
-		
-		$("#appendColorBtn").click(function () {
-			// alert("add Color Button");""
-			
-			if (colorTagCnt >= 5) return;
-			
-			let addColorTag = "";
-			
-			addColorTag += '<div class="input-group mb-3">';
-			addColorTag += '<input type="text" class="form-control" name="color_names">';
-			addColorTag += '<div class="input-group-append">';
-			addColorTag += '<button class="btn btn-danger removeColorBtn" type="button">';
-			addColorTag += '<i class="fa fa-close"></i>';
-			addColorTag += '</button>';
-			addColorTag += '</div>';
-			addColorTag += '</div>';
-			
-			$(".colorForm").append(addColorTag);
-			colorTagCnt++;
-		});
-		
-		$(".colorForm").on("click", ".removeColorBtn", function () {
-			// alert("remove Color Button");
-			$(this).closest(".input-group").remove();
-			colorTagCnt--;
-		});
-		
-		
-		// size 추가 / 삭제
-		let sizeTagCnt = 1;
-		
-		$("#appendSizeBtn").click(function () {
-			// alert("add Size Button");""
-			
-			if (sizeTagCnt >= 5) return;
-			
-			let addSizeTag = "";
-			
-			addSizeTag += '<div class="input-group mb-3">';
-			addSizeTag += '<input type="text" class="form-control" name="size_names">';
-			addSizeTag += '<div class="input-group-append">';
-			addSizeTag += '<button class="btn btn-danger removeSizeBtn" type="button">';
-			addSizeTag += '<i class="fa fa-close"></i>';
-			addSizeTag += '</button>';
-			addSizeTag += '</div>';
-			addSizeTag += '</div>';
-			
-			$(".sizeForm").append(addSizeTag);
-			sizeTagCnt++;
-		});
-		
-		$(".sizeForm").on("click", ".removeSizeBtn", function () {
-			// alert("remove Size Button");
-			$(this).closest(".input-group").remove();
-			sizeTagCnt--;
-		});
-		
 		
 		// image 추가 / 삭제
 		let imageTagCnt = 1;
-		
+
 		$("#appendImageBtn").click(function () {
 			// alert("add Image Button");""
 			
@@ -172,13 +105,8 @@
 			$(this).closest(".input-group").remove();
 			imageTagCnt--;
 		});
-		
-		
-		
-		
 	});
-</script> -->
-
+</script>
 
 <style>
 	h5 {
@@ -295,7 +223,6 @@
         </select>
         <input class="ipt" type="text" id="manufacturer" name="manufacturer" placeholder="제조사">
 	</form>
-
 	<fieldset class="border p-4 imageForm">
 		<legend class="w-auto px-2">
 			<button class="btn btn-primary btn-sm" id="appendImageBtn" type="button">
@@ -313,6 +240,5 @@
         <p class="reg_btn" style="float: right;">제품 등록하기</p>
     </form>
 </div>
-
 </body>
 </html>
