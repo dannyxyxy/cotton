@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+  <mapper namespace="org.zerock.board.mapper.BoardMapper">
+  <!-- 1-1. 일반게시판 리트스 쿼리 ( + 페이지 처리) -->
+  		<select id="list" resultType="org.zerock.board.vo.BoardVO">
+  			select no, title, writer, writeDate, hit
+  			from
+  			(
+	  			select rownum rnum, no, title, writer, writeDate, hit
+	  			from
+	  			(
+	  				select no, title, writer, writeDate, hit from board 
+	  				<include refid="search"></include>
+	  				order by no desc
+	  			)
+  			)
+  			where rnum between #{startRow} and #{endRow}
+  		</select>
+ 
+  	<!-- 1-2. 일반 게시판 리스트 페이지 처를 위한 전체 데이터 불러오기 쿼리 -->	
+  		<select id="getTotalRow" resultType="Long">
+  			select count(*)
+  			from board		
+  			<include refid="search"></include>
+  		</select>
+  	
+  	<!-- 일반게시판 검색 처리 -->
+  	<!-- SQL 태그는 함수라고 생각하면 편리합니다. -->
+  		<sql id="search">
+  		<!--  검색어가 없거나 null 일때 작동하지 않도록 하는 쿼리 -->
+  		 <if test="word != null and word != ''.toString()">
+  		  <!-- 쿼리문 작성후 제일 앞에 where 붙이고 where 다음에 나오는 or는 제거합니다 -->
+  			<trim prefix="where" prefixOverrides="or">
+  			 <!-- t(제목)이 있으면 -->
+  				<if test="key.indexOf('t') >= 0"> 
+  				  <!--  '%' || #(word=검색어) || '%' : 하나의 문자열로 만들어줍니다.(oracle에서 제공) -->	
+  					or title like '%' || #{word} || '%'
+  				</if>
+  				<if test="key.indexOf('c') >= 0"> 
+  					or content like '%' || #{word} || '%'
+  				</if>
+  				<if test="key.indexOf('w') >= 0"> 
+  					or writer like '%' || #{word} || '%'
+  				</if>
+  			</trim>
+  		  </if>
+  		</sql>
+  		
+  	
+  		
+  	
+  	<!-- 2. 글보기 쿼리  -->
+  	<!-- 2-1. 조회수 증가 쿼리  -->
+  		<update id="increase">
+  			update board set hit = hit+1 
+  			where no = #{no}
+  		</update>		
+  	<!-- 2-3. 글정보 불러오기 -->
+  		<select id="view" resultType="org.zerock.board.vo.BoardVO">
+  			select no, title, content, writer, writeDate, hit
+  			from board 
+  			where no = #{no}
+  		</select>	
+  	
+  	<!-- 3. 일반게시판 글쓰기 쿼리 -->
+  	<!-- 	<insert id="write">
+  			insert into board(no, title, content, writer, pw)
+  			values(board_seq.nextval, #{title}, #{content}, #{writer}, #{pw})
+  		</insert> -->
+  		
+  		<insert id="write">
+  			<!-- keyProoerty: 사용하는 변수이름 resultType: 변수에 담기는 값의 자료형 order(BEFORE): 먼저 실행한다 -->
+  			<!-- BoardVO에 있는 no에 setter를 이용해서 시퀀스애 있는 값을 세팅한다 -->
+  			<selectKey keyProperty="no" resultType="Long" order="BEFORE">
+  			<!-- dual: 더미테이블 테이블이 없는 값을 가져올때 사용-->
+  				select board_seq.nextval from dual 
+  			</selectKey>
+	  			insert into board(no,title, content, writer, pw)
+	  			values(#{no}, #{title}, #{content}, #{writer}, #{pw}) 
+  		</insert>
+  		
+	<!-- Transaction 테스트를 위한 쿼리입니다. : 같은 no의 데이터 등록 시도
+  		<insert id="writeTx">
+	  			insert into board(no,title, content, writer, pw)
+	  			values(#{no}, #{title}, #{content}, #{writer}, #{pw}) 
+  		</insert> -->
+  		
+  <!-- 글 수정 처리 -->	
+  		<update id="update">
+  		<!-- 특수문자를 String으로 인식하게 만들어준다 -->
+  			<![CDATA[
+  				update Board
+  				set title = #{title}, content = #{content}, writer = #{writer}
+  				where no = #{no} and pw =#{pw}
+  			]]>
+  		</update>	
+  	
+  <!-- 글 삭제 쿼리 -->
+  		<delete id="delete">	
+  			delete from board
+  			where no = #{no} and pw = #{pw}
+  		</delete>
+  		
+  		
+  		
+  </mapper>
