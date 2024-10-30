@@ -36,9 +36,40 @@
             color: white;
     		text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* 텍스트 그림자 추가 */
         }
-         .promotion-card {
-            margin: 15px;
-        }
+         .promotion-card .card {
+		    position: relative;
+		    overflow: hidden;
+		    border: none;
+		    transition: transform 0.3s ease;
+		}
+		
+		.promotion-card .card:hover {
+		    transform: scale(1.05); /* 마우스 오버 시 확대 효과 */
+		}
+		
+		.promotion-card .card-img-top {
+		    width: 100%;
+		    height: 100%;
+		    object-fit: cover;
+		    position: absolute;
+		    top: 0;
+		    left: 0;
+		    z-index: 1;
+		}
+		
+		.promotion-card .card-img-overlay {
+		    position: relative;
+		    z-index: 2;
+		    color: white;
+		    background-color: rgba(0, 0, 0, 0.5); /* 텍스트 가독성을 위한 반투명 배경 */
+		    padding: 20px;
+		    text-align: center;
+		}
+		
+		.promotion-card .card-title,
+		.promotion-card .card-text {
+		    color: white; /* 흰색 텍스트 */
+		}
         .visualImageText{
         	text-align:right;
         }
@@ -137,26 +168,25 @@
     <div class="container">
         <div class="row">
                 <div class="col-md-4 promotion-card">
-                    <div class="card">
+                    <div class="card-img-overlay">
                         <img src="/upload/goods/2.png" class="card-img-top" alt="${event.title}">
                         <div class="card-body">
                             <h5 class="card-title">Event Title</h5>
                             <p class="card-text">Event Content</p>
-                            <a href="" class="btn btn-primary">자세히 보기</a>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4 promotion-card">
-                    <div class="card">
-                        <img src="/upload/goods/1.png" class="card-img-top" alt="${event.title}">
-                        <div class="card-body">
-                            <h5 class="card-title">Event Title</h5>
-                            <p class="card-text">Event Content</p>
-                            <a href="" class="btn btn-primary">자세히 보기</a>
-                        </div>
-                    </div>
-              
-                </div>
+				    <div class="card">
+				        <div class="card-img-overlay">
+				            <img src="/upload/goods/2.png" class="card-img-top" alt="${event.title}">
+				            <div class="card-body">
+				                <h5 class="card-title">Event Title</h5>
+				                <p class="card-text">Event Content</p>
+				            </div>
+				        </div>
+				    </div>
+				</div>
         </div>
 <!--         <div class="row"> -->
 <%--             <c:forEach var="event" items="${eventsList}"> --%>
@@ -166,7 +196,6 @@
 <!--                         <div class="card-body"> -->
 <%--                             <h5 class="card-title">${event.title}</h5> --%>
 <%--                             <p class="card-text">${event.description}</p> --%>
-<%--                             <a href="${event.link}" class="btn btn-primary">자세히 보기</a> --%>
 <!--                         </div> -->
 <!--                     </div> -->
 <!--                 </div> -->
