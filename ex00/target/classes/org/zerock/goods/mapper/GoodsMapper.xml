@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="org.zerock.goods.mapper.GoodsMapper">
+  	<select id="list" resultType="org.zerock.goods.vo.GoodsVO">
+  		select goods_no, goods_name, price, discount, discount_rate, sale_price, saved_rate, image_name
+  		from
+  		(
+	  		select rownum rnum, goods_no, goods_name, price, discount, discount_rate, sale_price, saved_rate, image_name
+	  		from 
+		  		(select g.goods_no, g.goods_name, p.price, p.discount, p.discount_rate, p.sale_price, p.saved_rate, g.image_name
+		  		from goods g, goods_price p
+		  		where
+			  		(
+				  		<include refid="search"></include>
+				  		<![CDATA[
+				  		sale_start_date <= sysDate and trunc(sysDate) <= sale_end_date
+				  		]]>
+			  		)
+		  		and (g.goods_no = p.goods_no)
+		  		)
+  		)
+  		where rnum between #{pageObject.startRow} and #{pageObject.endRow}
+  	</select>
+  	
+  	<select id="getTotalRow" resultType="Long">
+  		select count(*) from goods g, goods_price p
+  		where
+			(	
+				<include refid="search"></include>
+				<![CDATA[
+				sale_start_date <= sysDate and trunc(sysDate) <= sale_end_date
+				]]>
+			)
+		and (g.goods_no = p.goods_no)
+  	</select>
+  	<sql id="search">
+  	<trim prefixOverrides="and" suffix="and">
+  		<!-- 카테고리 -->
+  		<if test="goodsSearchVO.cate_code1!=null and goodsSearchVO.cate_code1!=0">
+			and cate_code1=${goodsSearchVO.cate_code1}
+			<if test="goodsSearchVO.cate_code2!=null and goodsSearchVO.cate_code2!=0">
+				and cate_code2=${goodsSearchVO.cate_code2}
+			</if>
+		</if>
+		<!-- 제품명 -->
+		<if test="goodsSearchVO.goods_name != null and goodsSearchVO.goods_name!=''.toString">
+			and goods_name like '%'||#{goodsSearchVO.goods_name}||'%'
+		</if>
+		<!-- 최소최대가격 -->
+		<if test="goodsSearchVO.min_price!=null and goodsSearchVO.min_price!=0">
+			<![CDATA[
+				and sale_price>=#{goodsSearchVO.min_price}
+			]]>
+		</if>
+		<if test="goodsSearchVO.max_price!=null and goodsSearchVO.max_price!=0">
+			<![CDATA[
+				and sale_price<=#{goodsSearchVO.max_price}
+			]]>
+		</if>
+	</trim>
+  	</sql>
+  	
+  	<select id="getCategory" resultType="org.zerock.category.vo.CategoryVO">
+  		select cate_code1, cate_code2, cate_name from category where
+  		<if test="cate_code1==0">
+  			cate_code2=0
+  		</if>
+  		<if test="cate_code1>0">
+  			cate_code1=#{cate_code1} and cate_code2!=0
+  		</if>
+  	</select>
+  	
+  	<select id="view" resultType="org.zerock.goods.vo.GoodsVO">
+  		select
+  		g.goods_no, g.goods_name, g.cate_code1, g.cate_code2, c.cate_name, g.image_name, g.content, g.company, g.product_date,
+  		p.price, p.discount, p.discount_rate, p.sale_price, p.saved_rate, p.delivary_charge, p.sale_start_date, p.sale_end_date
+  		from goods g, goods_price p, category c
+  		where
+  		(g.goods_no=#{goods_no})
+  		<![CDATA[
+			and(sale_start_date <= sysDate and trunc(sysDate) <= sale_end_date)
+		]]>
+  		and (g.goods_no=p.goods_no)
+  		and (g.cate_code1 = c.cate_code1 and g.cate_code2 = c.cate_code2)
+  	</select>
+  	
+  	<select id="imageList" resultType="org.zerock.goods.vo.GoodsImageVO">
+  		select goods_img_no, goods_img_name, goods_no from goods_image
+  		where goods_no = #{goods_no}
+  	</select>
+  	
+  	<insert id="write">
+  		<selectKey keyProperty="goods_no" resultType="Long" order="BEFORE">
+  			select goods_seq.nextval from dual
+  		</selectKey>
+  		insert into goods(goods_no, goods_name, cate_code1, cate_code2, image_name,
+  		content, company, product_date)
+  		values(#{goods_no}, #{goods_name}, #{cate_code1}, #{cate_code2}, #{image_name}, #{content},
+  			#{company}, #{product_date,jdbcType=DATE})
+  	</insert>
+  	<insert id="writePrice">
+  		insert into goods_price(goods_price_no, price, discount, discount_rate, sale_price,
+  		saved_rate, delivary_charge
+  		<if test="sale_start_date != null">
+			, sale_start_date
+			</if>
+			<if test="sale_end_date != null">
+			, sale_end_date
+			</if>
+			, goods_no)
+  		values(goods_price_seq.nextval, #{price}, #{discount,jdbcType=INTEGER}, #{discount_rate,jdbcType=INTEGER},
+  		#{sale_price}, #{saved_rate,jdbcType=INTEGER}, #{delivary_charge,jdbcType=INTEGER}
+  		<if test="sale_start_date != null">
+				, #{sale_start_date,jdbcType=DATE}
+			</if>
+			<if test="sale_end_date != null">
+				, #{sale_end_date,jdbcType=DATE}
+			</if>	
+			, #{goods_no})
+  	</insert>
+  	<insert id="writeImage">
+  		insert into goods_image(goods_img_no, goods_img_name, goods_no)
+  		values(goods_image_seq.nextval, #{goods_img_name}, #{goods_no})
+  	</insert>
+  	
+  	<update id="update">
+  		update goods set cate_code1=#{cate_code1}, cate_code2=#{cate_code2}, goods_name = #{goods_name},
+  		company=#{company}, content=#{content}, product_date=#{product_date}
+  	</update>
+
+  </mapper>
+  
+  
+  
+  
+  
+  
