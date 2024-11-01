@@ -2,6 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -76,10 +78,72 @@
 				}
 			});
 		});
+		// 대분류 리스트 끝변경 
+		
+		
+		// color 추가 / 삭제
+		let colorTagCnt = 1;
+		
+		$("#appendColorBtn").click(function () {
+			// alert("add Color Button");""
+			
+			if (colorTagCnt >= 5) return;
+			
+			let addColorTag = "";
+			
+			addColorTag += '<div class="input-group mb-3">';
+			addColorTag += '<input type="text" class="form-control" name="color_names">';
+			addColorTag += '<div class="input-group-append">';
+			addColorTag += '<button class="btn btn-danger removeColorBtn" type="button">';
+			addColorTag += '<i class="fa fa-close"></i>';
+			addColorTag += '</button>';
+			addColorTag += '</div>';
+			addColorTag += '</div>';
+			
+			$(".colorForm").append(addColorTag);
+			colorTagCnt++;
+		});
+		
+		$(".colorForm").on("click", ".removeColorBtn", function () {
+			// alert("remove Color Button");
+			$(this).closest(".input-group").remove();
+			colorTagCnt--;
+		});
+		
+		
+		// size 추가 / 삭제
+		let sizeTagCnt = 1;
+		
+		$("#appendSizeBtn").click(function () {
+			// alert("add Size Button");""
+			
+			if (sizeTagCnt >= 5) return;
+			
+			let addSizeTag = "";
+			
+			addSizeTag += '<div class="input-group mb-3">';
+			addSizeTag += '<input type="text" class="form-control" name="size_names">';
+			addSizeTag += '<div class="input-group-append">';
+			addSizeTag += '<button class="btn btn-danger removeSizeBtn" type="button">';
+			addSizeTag += '<i class="fa fa-close"></i>';
+			addSizeTag += '</button>';
+			addSizeTag += '</div>';
+			addSizeTag += '</div>';
+			
+			$(".sizeForm").append(addSizeTag);
+			sizeTagCnt++;
+		});
+		
+		$(".sizeForm").on("click", ".removeSizeBtn", function () {
+			// alert("remove Size Button");
+			$(this).closest(".input-group").remove();
+			sizeTagCnt--;
+		});
+		
 		
 		// image 추가 / 삭제
 		let imageTagCnt = 1;
-
+		
 		$("#appendImageBtn").click(function () {
 			// alert("add Image Button");""
 			
@@ -105,140 +169,125 @@
 			$(this).closest(".input-group").remove();
 			imageTagCnt--;
 		});
+		
+		
+		
+		
 	});
 </script>
 
+
 <style>
-	h5 {
-		font-size: 18px;
-		color: #979797;
-	}
-   	
-    .ipt {
-    	width: 550px;
+    
+    form {
+    	width: 1143px;
+    }
+    
+    .form-control {
+    	width: 560px;
+    }
+    
+    #content {
+    	width: 100%;
+    	margin-top: 16px;
+    }
+    
+    .btn1 {
+    	float: right;
+    	width: 150px;
     	height: 40px;
-    	border-radius: 5px;
-    	border: 1px solid #e8e8e8;
-    	color: #black;
-    	font-size: 14px;
-    	padding-left: 10px;
+    	border: none;
+    	border-radius: .25rem;
+    	font-size: 16px;
+    }
+    
+    .btn2 {
+    	float: left;
+    	margin-right: 16px;
+    	width: 150px;
+    	height: 40px;
+    	border: none;
+    	border-radius: .25rem;
+    	font-size: 16px;
+    	background: black;
+    	color: white;
     }
     
     select {
-    	color: black;
+    	height: 38px;
+    	border: 1px solid #ccc;
+    	border-radius: .25rem;
     }
-    
-    #description {
-    	width: 1104px;
-    	height: 200px;
-    	border: 1px solid #e8e8e8;
-    	border-radius: 5px;
-    	margin-top: 12px;
-    	padding-left: 10px;
-    }
-    
-    .ipt4 {
-    	margin-top: 12px;
-    }
-    
-    .back_btn {
-    	width: 140px;
-    	height: 40px;
-    	background: #f5f5f5;
-    	color: black;
-    	text-align: center;
-    	line-height: 40px;
-    	border-radius: 5px;
-    	cursor: pointer;
-    }
-    
-    .reg_btn {
-    	width: 140px;
-    	height: 40px;
-    	background: #2c2c2c;
-    	color: white;
-    	text-align: center;
-    	line-height: 40px;
-    	border-radius: 5px;
-    	cursor: pointer;
-    }
-    
-    .plus-button {
-	    width: 24px;
-	    height: 24px;
-	    background-color: #eee;
-	    border: none;
-	    border-radius: 2px;
-	    color: #007aff;
- 	    font-size: 24px;
-	    cursor: pointer;
- 	    display: flex;
- 	    justify-content: center; 
- 	    align-items: center;
- 	    transition: background-color 0.3s;
-	    font-weight: 400;
-	}
-    
     
 </style>
 
 </head>
 <body>
-
-<div class="container">
-	<h2>제품 등록하기</h2>
-	<h5>침구제품 등록하기</h5>
-    <form action="/product/register" method="post" enctype="multipart/form-data">
-        <input class="ipt" type="text" id="productName" name="productName" placeholder="제품이름" required>
-        <input class="ipt" type="text" id="modelNumber" name="modelNumber" placeholder="모델번호" required>
-	</form>
-	
-    <label for="category" style="margin: 14px 0 5px 0; font-size: 14px;">카테고리</label>
-	<form>
-        <select class="ipt" id="category" name="category"  style="color: black;" required>
-            <option value="침구">침구</option>
-            <option value="가구">가구</option>
-            <option value="의류">의류</option>
-        </select>
-        <input class="ipt" type="text" id="manufacturer" name="manufacturer" placeholder="제조사">
-	</form>
-
-	<form>
-        <textarea id="description" name="description" rows="5" placeholder="제품설명"></textarea>
-	</form>
-	<form>
-		<input type="checkbox" checked>
-        <label for="productImage"> 제품 대표이미지 첨부하기</label>
-	</form>
-	<form class="ipt4" action="/product/register" method="post" enctype="multipart/form-data">
-        <input class="ipt" type="text" id="productName" name="productName" placeholder="정가" required>
-        <input class="ipt" type="text" id="modelNumber" name="modelNumber" placeholder="판매가" required>
-	</form>
-	<form style="margin-top: 8px;">
-        <select class="ipt" id="category" name="category" style="color: black;" required>
-            <option value="배송방법">배송방법</option>
-            <option value="택배">택배</option>
-            <option value="퀵서비스">퀵서비스</option>
-            <option value="직접수령">직접수령</option>
-        </select>
-        <input class="ipt" type="text" id="manufacturer" name="manufacturer" placeholder="제조사">
-	</form>
-	<fieldset class="border p-4 imageForm">
-		<legend class="w-auto px-2">
-			<button class="btn btn-primary btn-sm" id="appendImageBtn" type="button">
-				+
-			</button>
-			<b style="font-size: 14px">상세이미지 첨부하기</b>
-		</legend>
-		<div class="input-group mb-3">
-		  <input type="file" class="form-control" name="imageFiles">
+	<div class="container">
+	  <h2>제품 등록하기</h2>
+	  <form action="write.do" method="post" enctype="multipart/form-data">
+		  <input type="hidden" name="perPageNum" value="${param.perPageNum }" />
+	      <label for="name" style="color: #ccc;">침구제품 등록하기</label>
+		    <div class="form-group">
+		      <input type="text" class="form-control" id="name" pattern="^[^ .].{2.99}$" required
+		      		title="맨앞에 공백문자 불가, 3~100자 입력" placeholder="제품이름" name="goods_name" style="float: left;">
+		      <input type="text" class="form-control" id="name" pattern="^[^ .].{2.99}$" required
+		      		title="맨앞에 공백문자 불가, 3~100자 입력" placeholder="모델번호" name="model_no" style="float: right;">
+		    </div>
+		      <label for="name" style="margin: 16px 0 -4px 0;">카테고리</label>
+		    <div class="form-group">
+		      <select class="form-control" name="category_no" style="float: left; width: 560px; height: 38px; padding-left: 10px; color: black;">
+		      	<option value="침구">침구</option>
+		      	<option value="침구">테이블</option>
+		      	<option value="침구">의자</option>
+		      	<option value="침구">소품</option>
+		      	<option value="침구">수납</option>
+		      	<option value="침구">러그</option>
+		      	<option value="침구">커튼</option>
+		      	<option value="침구">조명</option>
+		      </select>
+		      <input type="text" class="form-control" id="name" pattern="^[^ .].{2.99}$" required title="맨앞에 공백문자 불가, 3~100자 입력"
+		      	placeholder=제조사 name="company" style="float: right;">
+		    </div>
+		    <div class="form-group" style="margin-top: 60px;">
+		      <textarea class="form-control" rows="7" id="content" name="content" placeholder="제품설명" required></textarea>
+		    </div>
+		    <div class="form-group">
+				<!-- 파일로 넘어가는 데이터는 GoodsVO 객체의 이름과 다른이름을 사용해야 합니다. -->
+				<label for="imageMain">대표이미지</label>
+				<input type="file" class="form-control" id="imageMain" name="imageMain" required>	
+			</div>
+		    <div class="form-group">
+		      <input type="text" class="form-control" id="goodsPrice" pattern="^[A-Z0-9].{3.20}$" required
+		      		title="대문자와 숫자만 입력 3~20자 입력" placeholder="정가" name="goodsPrice" style="float: left;">
+		      <input type="text" class="form-control" id="goodsPrice2" pattern="^[A-Z0-9].{3.20}$" required
+		      		title="대문자와 숫자만 입력 3~20자 입력" placeholder="판매가" name="sale_price" style="float: right;">
+		    </div>
+		    <div class="form-group">
+		    <input type="text" class="form-control" id="name" pattern="^[^ .].{2.99}$" required title="맨앞에 공백문자 불가, 3~100자 입력"
+		      	placeholder="배송비" name="delivary_charge" style="float: right; margin-top: 16px;">
+		     <input type="text" class="form-control" id="discount_rate" pattern="^[^ .].{2.99}$" required title="맨앞에 공백문자 불가, 3~100자 입력"
+			    placeholder="할인율" name="discount_rate" style="float:left; margin-top: 16px;">
+		      
+		    </div>
+		    <fieldset class="border p-4 imageForm" style="width: 100%; border-radius: .25rem;">
+				<legend class="w-auto px-2">
+					<button class="btn btn-primary btn-sm" id="appendImageBtn" type="button">
+						+
+					</button>
+					<b style="font-size: 14px">상세이미지 첨부하기</b>
+				</legend>
+				<div class="input-group mb-3">
+				  <input type="file" class="form-control" name="imageFiles">
+				</div>
+			</fieldset>
+		    
+		  <div class="form-group" style="float: right; margin-top: 48px;">
+				    <button type="submit" class="btn2">등록</button>
+				    <button type="button" class="btn1" onclick="history.back()" id="cancelBtn">취소</button>
 		</div>
-	</fieldset>
+	  </form>
+	</div>
 
-	<form style="margin-top: 60px; float: right;">
-        <p class="back_btn" style="float: left; margin-right: 12px;">돌아가기</p>
-        <p class="reg_btn" style="float: right;">제품 등록하기</p>
-    </form>
-</div>
 </body>
 </html>

@@ -181,56 +181,68 @@
 
 
 <style>
+	
 	h5 {
 		font-size: 18px;
 		color: #979797;
 	}
-   	
+	
     .ipt {
     	width: 100%;
     	height: 40px;
-    	border-radius: 5px;
+    	border-radius: .25rem;
     	border: 1px solid #e8e8e8;
     	color: #black;
     	font-size: 14px;
     	padding-left: 10px;
-    }
-    
-    select {
-    	color: black;
-    }
-    
-    #description {
-    	width: 1104px;
-    	height: 200px;
-    	border: 1px solid #e8e8e8;
-    	border-radius: 5px;
-    	padding-left: 10px;
-    }
-    
-    .ipt4 {
     	margin-top: 12px;
     }
     
-    .back_btn {
+    .form-control {
+    	width: 1143px;
+    }
+    
+    .form-group {
+    	width: 1143px;
+    }
+    
+    fieldset {
+    	width: 1143px;
+    	color: black;
+    	border-radius: .25rem;
+    }
+    
+    #description {
+    	width: 1143px;
+    	height: 200px;
+    	border: 1px solid #e8e8e8;
+    	border-radius: .25rem;
+    	padding-left: 10px;
+    	margin-top: 12px;
+    }
+    
+    .cancel_btn {
     	width: 140px;
     	height: 40px;
     	background: #f5f5f5;
     	color: black;
     	text-align: center;
     	line-height: 40px;
-    	border-radius: 5px;
+    	border: none;
+    	border-radius: .25rem;
     	cursor: pointer;
     }
     
-    .reg_btn {
+    .update_btn {
     	width: 140px;
     	height: 40px;
+    	margin-right: 16px;
     	background: #2c2c2c;
     	color: white;
     	text-align: center;
     	line-height: 40px;
-    	border-radius: 5px;
+    	border: none;
+    	border-radius: .25rem;
     	cursor: pointer;
     }
     
@@ -239,7 +251,7 @@
 	    height: 24px;
 	    background-color: #eee;
 	    border: none;
-	    border-radius: 2px;
+	    border-radius: .25rem;
 	    color: #007aff;
  	    font-size: 24px;
 	    cursor: pointer;
@@ -250,6 +262,14 @@
 	    font-weight: 400;
 	}
     
+    .ceo {
+    	width: 120px;
+    	height: 32px;
+    	line-height: 32px;
+    	text-align: center;
+    	background: #007aff;
+    	border-radius: .25rem;
+    }
     
 </style>
 
@@ -258,50 +278,67 @@
 
 <div class="container">
 	<h2>제품등록 수정하기</h2>
-    <form action="/product/register" method="post" enctype="multipart/form-data">
-        <input class="ipt" type="text" id="productName" name="productName" placeholder="제품번호" readonly required style="margin-top: 16px; background: #eee;">
-	</form>
-    <form action="/product/register" method="post" enctype="multipart/form-data">
-        <input class="ipt" type="text" id="productName" name="productName" placeholder="제품이름" readonly required style="margin: 16px 0; background: #eee;">
-	</form>
-    <form action="/product/register" method="post" enctype="multipart/form-data">
-        <input class="ipt" type="text" id="modelNumber" name="modelNumber" placeholder="모델번호" readonly required style="background: #eee;">
-	</form>
-	
-	<form action="/product/register" method="post" enctype="multipart/form-data">
-        <input class="ipt" type="text" id="manufacturer" name="manufacturer" placeholder="제조사" readonly required style="margin: 16px 0; background: #eee;">
-	</form>
-	<form action="/product/register" method="post" enctype="multipart/form-data">
-        <p>대표이미지</p>
-        <div>
-        	<img alt="" src="https://i.namu.wiki/i/Dh1wj48FlqpDrA7QZMaX7GkbNgmmoctGGyWNl4wucPOdMWvJ8ftgm2fHl1toQYbZl7GhxcagetEyTYyWkEIKXqvbMvfH_S7V91x_R8KfbHvFuW3mCAMP2kS0Z12Sr4GEdzN_QAcBiYW03HRbhWpH8g.webp"
-        		style="width: 15%; cursor: pointer;">
-        </div>
-	</form>
-	<form action="/product/register" method="post" enctype="multipart/form-data">
-        <textarea id="description" name="description" rows="5" placeholder="제품설명" style="margin-top: 16px;"></textarea>
-	</form>
-	<form class="ipt4" action="/product/register" method="post" enctype="multipart/form-data">
-        <input class="ipt" type="text" id="productName" name="productName" placeholder="정가" required>
-        <input class="ipt" type="text" id="modelNumber" name="modelNumber" placeholder="할인금액" required style="margin: 16px 0;">
-        <input class="ipt" type="text" id="modelNumber" name="modelNumber" placeholder="할인율" required>
-        <input class="ipt" type="text" id="modelNumber" name="modelNumber" placeholder="배송비" required style="margin: 16px 0;">
-	</form>
-	<fieldset class="border p-4 imageForm">
-		<legend class="w-auto px-2">
-			<button class="btn btn-primary btn-sm" id="appendImageBtn" type="button">
-				+
-			</button>
-			<b style="font-size: 14px">상세이미지 첨부하기</b>
-		</legend>
-		<div class="input-group mb-3">
-		  <input type="file" class="form-control" name="imageFiles">
+	<form action="write.do" method="post" enctype="multipart/form-data">
+		<div class="form-group">
+	         <input type="text" class="form-control ipt" id="name" pattern="^[^ .].{2.99}$" readonly required
+			      		title="" placeholder="제품번호" name="name">
+	         <input type="text" class="form-control ipt" id="name" pattern="^[^ .].{2.99}$" required
+			      		title="필수입력 항목입니다." placeholder="제품이름" name="name">
+	         <input type="text" class="form-control ipt" id="name" pattern="^[^ .].{2.99}$" readonly required
+			      		title="" placeholder="모델번호" name="name">
+			 <input type="text" class="form-control ipt" id="name" pattern="^[^ .].{2.99}$" required
+			      		title="필수입력 항목입니다." placeholder="제조사" name="name">
 		</div>
-	</fieldset>
-
-	<form style="margin-top: 60px; float: right;">
-        <p class="back_btn" style="float: left; margin-right: 12px;">돌아가기</p>
-        <p class="reg_btn" style="float: right;">수정하기</p>
+		
+		<fieldset class="border p-4 imageForm">
+			<legend class="w-auto px-2">
+				<b style="font-size: 14px">대표이미지</b>
+				<button class="btn btn-primary btn-sm" id="appendImageBtn" type="button">
+					수정
+				</button>
+			</legend>
+			<div class="input-group mb-3">
+			  <img alt="" src="https://i.namu.wiki/i/Dh1wj48FlqpDrA7QZMaX7GkbNgmmoctGGyWNl4wucPOdMWvJ8ftgm2fHl1toQYbZl7GhxcagetEyTYyWkEIKXqvbMvfH_S7V91x_R8KfbHvFuW3mCAMP2kS0Z12Sr4GEdzN_QAcBiYW03HRbhWpH8g.webp"
+	        		style="width: 15%;">
+			</div>
+		</fieldset>
+		
+<!-- 		<div class="form-group"> -->
+<!-- 	        <p class="ceo">대표이미지</p> -->
+<!-- 	        <div> -->
+<!-- 	        	<img alt="" src="https://i.namu.wiki/i/Dh1wj48FlqpDrA7QZMaX7GkbNgmmoctGGyWNl4wucPOdMWvJ8ftgm2fHl1toQYbZl7GhxcagetEyTYyWkEIKXqvbMvfH_S7V91x_R8KfbHvFuW3mCAMP2kS0Z12Sr4GEdzN_QAcBiYW03HRbhWpH8g.webp" -->
+<!-- 	        		style="width: 15%; cursor: pointer;"> -->
+<!-- 	        </div> -->
+<!--         </div> -->
+        
+        <div class="form-group">
+	        <textarea id="description" name="description" rows="5" placeholder="제품설명"></textarea>
+	        <input type="text" class="form-control ipt" id="name" pattern="^[^ .].{2.99}$" required
+			      		title="필수입력 항목입니다." placeholder="정가" name="name">
+	        <input type="text" class="form-control ipt" id="name" pattern="^[^ .].{2.99}$" required
+			      		title="필수입력 항목입니다." placeholder="판매가" name="name">
+			<input type="text" class="form-control ipt" id="name" pattern="^[^ .].{2.99}$" required
+			      		title="필수입력 항목입니다." placeholder="배송방법" name="name">
+			<input type="text" class="form-control ipt" id="name" pattern="^[^ .].{2.99}$" required
+			      		title="필수입력 항목입니다." placeholder="배송비" name="name">
+        </div>
+        
+		<fieldset class="border p-4 imageForm">
+			<legend class="w-auto px-2">
+				<b style="font-size: 14px">상세이미지</b>
+				<button class="btn btn-primary btn-sm" id="appendImageBtn" type="button">
+					수정
+				</button>
+			</legend>
+			<div class="input-group mb-3">
+			  <input type="file" class="form-control" name="imageFiles">
+			</div>
+		</fieldset>
+		
+		<div class="form-group" style="display: flex; justify-content: flex-end; margin-top: 48px;">
+		    <button type="submit" class="update_btn">수정</button>
+		    <button type="button" class="cancel_btn" onclick="history.back()" id="cancelBtn">취소</button>
+	    </div>
     </form>
 </div>
 

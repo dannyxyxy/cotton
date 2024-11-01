@@ -12,12 +12,7 @@
 		  		(select g.goods_no, g.goods_name, p.price, p.discount, p.discount_rate, p.sale_price, p.saved_rate, g.image_name
 		  		from goods g, goods_price p
 		  		where
-			  		(
-				  		<include refid="search"></include>
-				  		<![CDATA[
-				  		sale_start_date <= sysDate and trunc(sysDate) <= sale_end_date
-				  		]]>
-			  		)
+			  		(1=1)
 		  		and (g.goods_no = p.goods_no)
 		  		)
   		)
@@ -28,10 +23,7 @@
   		select count(*) from goods g, goods_price p
   		where
 			(	
-				<include refid="search"></include>
-				<![CDATA[
-				sale_start_date <= sysDate and trunc(sysDate) <= sale_end_date
-				]]>
+				1=1
 			)
 		and (g.goods_no = p.goods_no)
   	</select>
@@ -79,9 +71,7 @@
   		from goods g, goods_price p, category c
   		where
   		(g.goods_no=#{goods_no})
-  		<![CDATA[
-			and(sale_start_date <= sysDate and trunc(sysDate) <= sale_end_date)
-		]]>
+  		
   		and (g.goods_no=p.goods_no)
   		and (g.cate_code1 = c.cate_code1 and g.cate_code2 = c.cate_code2)
   	</select>

@@ -1,200 +1,136 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>상품상세보기</title>
-<style>
-    #smallImageDiv img {
-        width: 100px;
-        height: 100px;
-    }
-    #smallImageDiv img:hover {
-        opacity:70%;
-        cursor:pointer;
-    }
-    #bigImageDiv img{
-    	width:500px;
-    	height:500px;
-    }
-    .arrow {
-        cursor: pointer;
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 24px;
-        color: black;
-        background-color: rgba(255, 255, 255, 0.7);
-        padding: 5px;
-        border-radius: 5px;
-    }
-    .left-arrow {
-        margin-left:0;
-    }
-    .right-arrow {
-        right: 10px;
-    }
-    #bigImageDiv {
-        position: relative;
-    }
-    .cate_name{
-    	color:gray;
-    	margin-left:0;
-    }
-    .goods_name{
-    	font-size:25px;
-    	font-weight:bold;
-    }
-    .sale_price{
-	font-weight:bold;
-	color:red;
-	font-size:25px;
-	}
-	.discount_rate{
-		font-weight:bold;
-		color:red;
-		font-size:small;
-		margin-left:10px;
-	}
-	span{
-		margin-left:30px;
-	}
-	.delivary_charge, .saved_rate, .company, .product_date{
-		color:black;
-	}
-	.content{
-		margin-top:50px;
-		background-color:#eeeeee;
-		height:100px;
-		border-radius:15px;
-		padding:10px;
-		text-align:center;
-	}
-	.contentImage{
-		width:500px;
-		height:500px;
-		text-align:center;
-	}
-</style>
+<title>상품 상세페이지</title>
+<link rel="stylesheet" href="/resources/css/goods/view.css">
+<link rel="stylesheet" href="/resources/css/goods/view_detail.css">
+<link rel="stylesheet" href="/resources/css/goods/view_review.css">
+
 <script type="text/javascript">
-    var currentIndex = 0; // 현재 이미지 인덱스
-    var imageList = []; // 이미지 리스트
 
-    window.onload = function() {
-        // JSP에서 이미지 리스트를 가져옵니다.
-        <c:forEach items="${imageList}" var="imageVO">
-            imageList.push("${imageVO.goods_img_name}");
-        </c:forEach>
-
-        // 화살표 클릭 이벤트 등록
-        document.getElementById("leftArrow").addEventListener("click", showPreviousImage);
-        document.getElementById("rightArrow").addEventListener("click", showNextImage);
-    };
-
-    function changeBigImage(imageSrc) {
-        var bigImageElement = document.getElementById("bigImage");
-        if (bigImageElement) {
-            bigImageElement.src = imageSrc;
-        } else {
-            console.error("bigImage element not found.");
-        }
-    }
-
-    function showPreviousImage() {
-        if (currentIndex > 0) {
-            currentIndex--;
-            changeBigImage(imageList[currentIndex]);
-        }
-    }
-
-    function showNextImage() {
-        if (currentIndex < imageList.length - 1) {
-            currentIndex++;
-            changeBigImage(imageList[currentIndex]);
-        }
-    }
-$(function(){
-	$("#listBtn").click(function(){
-		location="list.do?page=${param.page}"+"&perPageNum=${param.perPageNum}"
-		+"&${goodsSearchVO.searchQuery}";
-	})
-	
-	$("#updateBtn").click(function(){
-		location="updateForm.do?goods_no=${vo.goods_no}&page=${param.page}"
-		+"&perPageNum=${param.perPageNum}"
-		+"&${goodsSearchVO.searchQuery}";
-	})
-});
+	$(function(){
+	    
+		$("#smallImageDiv img").click(function () {
+			// alert("이미지 클릭");
+			$("#bigImageDiv img").attr("src", $(this).attr("src", ));
+			
+		}); 
+		
+		$("#listBtn").click(function () {
+			// alert("리스트 버튼");
+			location="list.do?page=${param.page}"
+				+ "&perPageNum=${param.perPageNum}"
+				+ "&${goodsSearchVO.searchQuery}";
+		});
+		
+		$("#updateBtn").click(function () {
+			// alert("수정 버튼");
+			location="updateForm.do?goods_no=${vo.goods_no}&page=${param.page}"
+				+ "&perPageNum=${param.perPageNum}"
+				+ "&${goodsSearchVO.searchQuery}";
+		});
+		function sendData(){
+			let firstForm = document.forms[0];
+		
+			if($("input[name='star']:checked").val() == undefined){
+			alert("별점 선택 필수입니다!");
+			return;
+		}
+			
+			 function loadContent(tab) {
+		            window.location.href = window.location.pathname + "?tab=" + tab; // 현재 페이지에 tab 파라미터 추가
+		        }
+		
+	});
 </script>
 </head>
 <body>
-<div class="container">
-<div class="card">
-  <div class="card-body">
-    <div class="row">
-        <div class="col-md-6">
-            <div id="bigImageDiv" class="img-thumbnail">
-                <span id="leftArrow" class="arrow left-arrow">&lt;</span>
-                <img id="bigImage" src="${vo.image_name}">
-                <span id="rightArrow" class="arrow right-arrow">&gt;</span>
-            </div>
-            <div id="smallImageDiv">
-                <c:if test="${!empty imageList}">
-                    <c:forEach items="${imageList}" var="imageVO">
-                        <img src="${imageVO.goods_img_name}" class="img-thumbnail"
-                        onclick="changeBigImage('${imageVO.goods_img_name}'); currentIndex = ${imageList.indexOf(imageVO)};">
-                    </c:forEach>
-                </c:if>
-            </div>
-        </div>
-        <div class="col-md-6">
-        	<div class="mb-3">카테고리 > <span class="cate_name">${vo.cate_name }</span></div>
-        	<div class="mb-3" data-goods_no="${vo.goods_no }"></div>
-        	<div class="mb-3 goods_name">${vo.goods_name }</div>
-        	<div class="mb-3" style="color:gray;">${vo.price }원<span class="mb-3 discount_rate">${vo.discount_rate }%OFF</span></div>
-        	<div class="mb-3" style="color:gray;">세일가<span class="mb-3 sale_price">${vo.sale_price }원</span></div>
-        	<div class="mb-3" style="color:gray;">배송비<span class="mb-3 delivary_charge">${vo.delivary_charge }원</span></div>
-        	<div class="mb-3" style="color:gray;">적립율<span class="mb-3 saved_rate">${vo.saved_rate }%</span></div>
-        	<div class="mb-3" style="color:gray;">제조사<span class="mb-3 company">${vo.company }</span></div>
-        	<div class="mb-3" style="color:gray;">제조일<span class="mb-3 product_date">
-        		<fmt:formatDate value="${vo.product_date}" pattern="yyyy년 MM월 dd일" /></span>
-        	</div>
-        	<div class="mb-3" class="form-group">
-			  <label for="sel1">Select list:</label>
-			  <select class="form-control" id="sel1">
-			    <option>1</option>
-			    <option>2</option>
-			    <option>3</option>
-			    <option>4</option>
-			  </select>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6 bigImg">
+				<div id="bigImageDiv" class="img-thumbnail" style="width: 600px; height: 600px;">
+    			<img id="bigImage" src="${vo.image_name}" style="width: 100%; height: 100%; object-fit: cover;">
 			</div>
-			<div class="float-right">
-				<button class="btn btn-primary" id="cartBtn">장바구니</button>
-	  			<button class="btn btn-primary" id="likeBtn">관심목록</button>
-	  			<button class="btn btn-primary" id="buyBtn">구매하기</button>
-			</div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-        	<pre class="content">${vo.content }</pre>
+			<div id="smallImageDiv" style="display: flex; align-items: center; overflow-x: auto; margin-top: 10px;">
+		    <div style="display: flex; gap: 10px;">
         	<c:if test="${!empty imageList}">
-                    <c:forEach items="${imageList}" var="imageVO">
-                        <img src="${imageVO.goods_img_name}" class="contentImage">
-                    </c:forEach>
-            </c:if>
-        </div>
-    </div>
-  </div>
-  <div class="card-footer">
-  	<button class="btn btn-primary" id="listBtn">리스트</button>
-  	<button class="btn btn-primary" id="updateBtn">수정</button>
-  	
-  </div>
-</div>
-</div>
+            <c:forEach items="${imageList}" var="imageVO">
+                <img src="${imageVO.goods_img_name}" class="img-thumbnail smallImage" style="width: 100px; height: 100px; object-fit: cover; cursor: pointer;">
+            </c:forEach>
+        </c:if>
+    		</div>
+			</div>
+			</div>
+			<div class="col-md-6 imgContent" id="goodsDetailDiv">
+				<p style="font-size: 12px; color: #999; margin-bottom: -1px;">카테고리 > ${vo.cate_name}</p>
+				<div  style="">
+					<strong class="tit" style="font-size: 32px;">${vo.goods_name }</strong>
+				</div>
+				<p style="color: #ccc; width: 100px;">A001<!-- 모델번호 --></p>
+				<div class="lBox">
+					<div class="summary">상품 요약정보</div>
+					<div>정가</div>
+					<div><span style="font-weight: 900;">판매가</span></div>
+					<div>제조사</div>
+					<div>배송방법</div>
+					<div>배송비</div>
+				</div>
+				<div class="rBox">
+					<div class="summary2" style="margin-top: 0;">${vo.content }</div>
+					<div><fmt:formatNumber value="${vo.price}"/></div>
+					<div><span style="font-weight: 900;"><fmt:formatNumber value="${vo.sale_price}"/></span></div>
+					<div>${vo.company }</div>
+					<div>배송방법 <%-- ${vo.delivery_type } --%></div>
+					<div>무료</div>
+				</div>
+				<div class="bBox">
+					<img class="bBoxImg" src="${vo.image_name }">
+					<div class="bBoxTxt">
+						<strong>${vo.goods_name }<span style="font-weight: 100;">&nbsp;<fmt:formatNumber value="${vo.sale_price}"/></span>원</strong>
+					</div>
+				</div>
+				<div class="add">
+					<div class="addCart">ADD CART</div>
+					<div class="addWish">ADD WISH</div>
+					<div class="addBuy">구매하기</div>
+				</div>
+				<div style="float: right; width: 150px; margin-top: 50px;">
+					<c:if test="${login.gradeNo==9 }">
+						<p class="updateBtn">제품 수정</p>
+						<p class="deleteBtn">제품 삭제</p>
+					</c:if>
+				</div>
+			</div>
+			</div>
+		<ul class="nav nav-tabs" role="tablist">
+		    <li class="nav-item">
+		      <a class="nav-link active" data-toggle="tab" href="#detail">상세보기</a>
+		    </li>
+		    <li class="nav-item">
+		      <a class="nav-link" data-toggle="tab" href="#review">리뷰보기</a>
+		    </li>
+		  </ul>
+       
+	<div class="tab-content">
+		  <div class="tab-pane container active" id="detail">
+		  	<div class="container">
+        		<jsp:include page="view_detail.jsp"></jsp:include>
+		  	</div>
+		  </div>
+		  <div class="tab-pane container fade" id="review">
+        	<jsp:include page="view_review.jsp"></jsp:include>
+    	</div>		  
+	</div>
+	</div>
 </body>
+
+
+
+
 </html>

@@ -93,7 +93,7 @@ public class GoodsController {
 		model.addAttribute("listBig",listBig);
 		model.addAttribute("listMid",listMid);
 		
-		return "goods/write";
+		return "goods/writeForm";
 	}
 	// 중분류 가져오기
 	@GetMapping(value = "/getCategory.do", produces = MediaType.APPLICATION_JSON_VALUE)

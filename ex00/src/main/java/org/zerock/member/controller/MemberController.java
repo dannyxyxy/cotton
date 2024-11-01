@@ -69,6 +69,16 @@ public class MemberController {
 		
 		return "redirect:/main/main.do";
 	}
+	@GetMapping("/writeForm.do")
+    public String writeForm() {
+        log.info("========= writeForm.do ============");
+        return "member/writeForm";
+    }
+	@GetMapping("/updateForm.do")
+    public String updateForm() {
+        log.info("========= writeForm.do ============");
+        return "member/updateForm";
+    }
 	
 }
 

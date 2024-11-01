@@ -73,7 +73,7 @@ public class BoardController {
 	public String writeForm() {
 		log.info("writeForm() =======");
 		//service.write();
-		return "board/write";
+		return "board/writeForm";
 	}
 	
 	// 3-2. 일반 게시판 글쓰기 처리
