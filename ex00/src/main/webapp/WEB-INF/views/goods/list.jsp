@@ -3,14 +3,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="pageNav" tagdir="/WEB-INF/tags" %>
-<!-- 데이터는 DispatcherServlet에 담겨있다(request) -->
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>상품리스트</title>
 <style type="text/css">
-	.listHeader{
+    .listHeader{
 		margin-bottom:15px;
 	}
 		.visualImage {
@@ -26,7 +25,6 @@
 		/* 상단 비주얼 이미지와 텍스트 부분 */
 		.visualImage-top {
 		    height: 220px; /* 상단 이미지 부분 높이 */
-		    background-image: url('/upload/goods/bed03.png');
 		    background-size: cover;
 		    background-position: center;
 		    display: flex;
@@ -34,6 +32,10 @@
 		    justify-content: center;
 		    color: white;
 		}
+		.visualImage .visualImage-top {
+    background-size: cover;
+    background-position: center;
+}
 		
 		.category-title {
 		    font-size: 24px;
@@ -176,96 +178,95 @@
 		    font-weight: bold;
 		    color: #333;
 }
-
 </style>
-<!-- 4. 우리가 만든 라이브러리 등록 -->
-
 <script type="text/javascript">
 $(function(){
-	$(".promotion-card").click(function() {
-	    let goods_no = $(this).data("goods_no");
-	    console.log("goods_no =", goods_no);
-	    if (goods_no) {
-	        location = "view.do?goods_no=" + goods_no + "&${pageObject.pageQuery}&${goodsSearchVO.searchQuery}";
-	    } else {
-	        console.error("goods_no가 정의되지 않았습니다.");
+
+	$(function(){
+		$(".promotion-card").click(function() {
+		    let goods_no = $(this).data("goods_no");
+		    console.log("goods_no =", goods_no);
+		    if (goods_no) {
+		        location = "view.do?goods_no=" + goods_no + "&${pageObject.pageQuery}&${goodsSearchVO.searchQuery}";
+		    } else {
+		        console.error("goods_no가 정의되지 않았습니다.");
+		    }
+		});
+
+	    
+		$("#perPageNum").change(function(){
+			$("#searchForm").submit();
+		});
+		// 검색데이터 세팅
+		$("#key").val("${(empty pageObject.key) ? 't' : pageObject.key}");
+		$("#perPageNum").val("${(empty pageObject.perPageNum) ? '10' : pageObject.perPageNum}");
+
+		
+		$("#cate_code1").change(function(){
+		    let cate_code1 = $(this).val();
+		    $.ajax({
+		        type: "get",
+		        url: "/goods/getCategory.do?cate_code1=" + cate_code1,
+		        dataType: "json", // JSON 형식의 데이터를 기대
+		        success: function(result){
+		            console.log(result);
+		            let subCategorySelect = $("#cate_code2");
+		            subCategorySelect.empty(); // 기존 옵션 제거
+		            $.each(result, function(index, category){
+		                subCategorySelect.append(
+		                    $("<option></option>").attr("value", category.cate_code2).text(category.cate_name)
+		                );
+		            });
+		        },
+		        error: function(xhr, status, err){
+		            console.log("중분류 가져오기 오류");
+		            console.log("xhr : " + xhr);
+		            console.log("status : " + status);
+		            console.log("err : " + err);
+		        }
+		    });
+		});
+		//페이징처리버튼 JS
+		const cardsPerPage = 6; // 페이지당 카드 수
+	    let currentPage = 1; // 현재 페이지
+	    const totalCards = $("div.promotion-card").length; // 전체 카드 수
+	    const totalPages = Math.ceil(totalCards / cardsPerPage); // 전체 페이지 수
+	    function showPage(page) {
+	        // 모든 카드를 숨김
+	        $("div.promotion-card").hide();
+	        
+	        // 현재 페이지 카드만 표시
+	        $("div.promotion-card").slice((page - 1) * cardsPerPage, page * cardsPerPage).show();
+	        
+	        // 페이지 정보 업데이트
+	        $("#pageInfo").text(`${page} / ${totalPages}`);
+	        
+	        // 이전 및 다음 버튼 상태 설정
+	        $("#prevPage").prop("disabled", page === 1);
+	        $("#nextPage").prop("disabled", page === totalPages);
 	    }
-	});
-
-    
-	$("#perPageNum").change(function(){
-		$("#searchForm").submit();
-	});
-	// 검색데이터 세팅
-	$("#key").val("${(empty pageObject.key) ? 't' : pageObject.key}");
-	$("#perPageNum").val("${(empty pageObject.perPageNum) ? '10' : pageObject.perPageNum}");
-
-	
-	$("#cate_code1").change(function(){
-	    let cate_code1 = $(this).val();
-	    $.ajax({
-	        type: "get",
-	        url: "/goods/getCategory.do?cate_code1=" + cate_code1,
-	        dataType: "json", // JSON 형식의 데이터를 기대
-	        success: function(result){
-	            console.log(result);
-	            let subCategorySelect = $("#cate_code2");
-	            subCategorySelect.empty(); // 기존 옵션 제거
-	            $.each(result, function(index, category){
-	                subCategorySelect.append(
-	                    $("<option></option>").attr("value", category.cate_code2).text(category.cate_name)
-	                );
-	            });
-	        },
-	        error: function(xhr, status, err){
-	            console.log("중분류 가져오기 오류");
-	            console.log("xhr : " + xhr);
-	            console.log("status : " + status);
-	            console.log("err : " + err);
+	    // 페이지 로드 시 첫 페이지 표시
+	    showPage(currentPage);
+	    // 이전 페이지 버튼 클릭 시
+	    $("#prevPage").click(function(e) {
+	        e.preventDefault();
+	        if (currentPage > 1) {
+	            currentPage--;
+	            showPage(currentPage);
 	        }
 	    });
+	    // 다음 페이지 버튼 클릭 시
+	    $("#nextPage").click(function(e) {
+	        e.preventDefault();
+	        if (currentPage < totalPages) {
+	            currentPage++;
+	            showPage(currentPage);
+	        }
+	    });
+	  //페이징처리버튼 JS -end
 	});
-	//페이징처리버튼 JS
-	const cardsPerPage = 6; // 페이지당 카드 수
-    let currentPage = 1; // 현재 페이지
-    const totalCards = $("div.promotion-card").length; // 전체 카드 수
-    const totalPages = Math.ceil(totalCards / cardsPerPage); // 전체 페이지 수
-    function showPage(page) {
-        // 모든 카드를 숨김
-        $("div.promotion-card").hide();
-        
-        // 현재 페이지 카드만 표시
-        $("div.promotion-card").slice((page - 1) * cardsPerPage, page * cardsPerPage).show();
-        
-        // 페이지 정보 업데이트
-        $("#pageInfo").text(`${page} / ${totalPages}`);
-        
-        // 이전 및 다음 버튼 상태 설정
-        $("#prevPage").prop("disabled", page === 1);
-        $("#nextPage").prop("disabled", page === totalPages);
-    }
-    // 페이지 로드 시 첫 페이지 표시
-    showPage(currentPage);
-    // 이전 페이지 버튼 클릭 시
-    $("#prevPage").click(function(e) {
-        e.preventDefault();
-        if (currentPage > 1) {
-            currentPage--;
-            showPage(currentPage);
-        }
-    });
-    // 다음 페이지 버튼 클릭 시
-    $("#nextPage").click(function(e) {
-        e.preventDefault();
-        if (currentPage < totalPages) {
-            currentPage++;
-            showPage(currentPage);
-        }
-    });
-  //페이징처리버튼 JS -end
 });
 </script>
-
 </head>
 <body>
 <div class="container p-3 my-3">
@@ -274,11 +275,51 @@ $(function(){
         <div><h4>카테고리별 제품 보러가기</h4></div>
         <div>카테고리별 제품을 만나보세요!</div>
     </div>
+    
+    	
+    
     <div class="visualImage">
     <!-- 상단 이미지와 텍스트 -->
-    <div class="visualImage-top">
-        <h2 class="category-title">침구</h2>
-    </div>
+    <c:if test="${param.cate_code1==1 }">
+        <div class="visualImage-top" style="background-image: url(/upload/goods/chair_visual.png)">
+            <h2 class="category-title">의자</h2>
+        </div>
+    </c:if>
+    <c:if test="${param.cate_code1==2 }">
+        <div class="visualImage-top" style="background-image: url(/upload/goods/etc_visual.png)">
+            <h2 class="category-title">소품</h2>
+        </div>
+    </c:if>
+    <c:if test="${param.cate_code1==3 }">
+        <div class="visualImage-top" style="background-image: url(/upload/goods/bed_visual.png)">
+            <h2 class="category-title">침구</h2>
+        </div>
+    </c:if>
+    <c:if test="${param.cate_code1==4 }">
+        <div class="visualImage-top" style="background-image: url(/upload/goods/table_visual.png)">
+            <h2 class="category-title">테이블</h2>
+        </div>
+    </c:if>
+    <c:if test="${param.cate_code1==5 }">
+        <div class="visualImage-top" style="background-image: url(/upload/goods/storage_visual.png)">
+            <h2 class="category-title">수납</h2>
+        </div>
+    </c:if>
+    <c:if test="${param.cate_code1==6 }">
+        <div class="visualImage-top" style="background-image: url(/upload/goods/curtain_visual.png)">
+            <h2 class="category-title">커튼</h2>
+        </div>
+    </c:if>
+    <c:if test="${param.cate_code1==7 }">
+        <div class="visualImage-top" style="background-image: url(/upload/goods/lug_visual.png)">
+            <h2 class="category-title">러그</h2>
+        </div>
+    </c:if>
+    <c:if test="${param.cate_code1==8 }">
+        <div class="visualImage-top" style="background-image: url(/upload/goods/light_visual.png)">
+            <h2 class="category-title">조명</h2>
+        </div>
+    </c:if>
     <!-- 하단 서치 폼 -->
     <form action="list.do" id="searchForm" class="visualImage-form">
         <div class="input-group mb-3">
@@ -296,6 +337,7 @@ $(function(){
             </div>
     </form>
 </div>
+
 <c:if test="${empty list }">
     <h4 style="text-align:center;">데이터가 존재하지 않습니다.</h4>
 </c:if>

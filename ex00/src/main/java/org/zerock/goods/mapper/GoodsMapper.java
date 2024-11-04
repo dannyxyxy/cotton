@@ -23,5 +23,7 @@ public interface GoodsMapper {
 	public Integer writePrice(GoodsVO vo);
 	public Integer writeImage(GoodsImageVO vo);
 	public Integer update(GoodsVO vo);
+	public Integer updatePrice(GoodsVO vo);
+//	public String updateImage(GoodsImageVO vo);
 	
 }

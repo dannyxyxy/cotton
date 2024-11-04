@@ -1,17 +1,29 @@
 package org.zerock.member.vo;
 
+import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Data;
 
 @Data
 public class LoginVO {
-
-	// member table
+	
+	//member Table
 	private String id;
 	private String pw;
 	private String name;
+	private String gender;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	private Date birth;
+	private String tel;
+	private String email;
+	private String address;
+	private String status;
 	private String photo;
-	private Long newMsgCont;
-	private Integer gradeNo;
-	// grade table
+	
+	//grade Table
+	private int gradeNo ;
 	private String gradeName;
+
 }

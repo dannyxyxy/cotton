@@ -26,6 +26,11 @@
     <link rel="stylesheet" href="/resources/css/decorator/default_decorator.css">
     
     <script>
+    // 페이지 이동을 위한 JavaScript 함수
+    function goToCategory(cateCode) {
+        window.location.href = "/goods/list.do?cate_code1=" + cateCode;
+    }
+    
         document.addEventListener("DOMContentLoaded", function() {
             const profileIcon = document.querySelector(".nav-icons .profile-icon"); // 네비 바에 있는 프로필 아이콘
             const rightSidebar = document.getElementById("rightSidebar");
@@ -166,55 +171,40 @@
     </div>
    
     <div class="category-bar">
-        <div class="category-item">
-            <a href="/goods/list.do">
-                <img src="/upload/goods/chair.png" alt="Chair">
-                <p>의자</p>
-            </a>
-        </div>
-        <div class="category-item">
-            <a href="/goods/etcList.do">
-                <img src="/upload/goods/etc.png" alt="Accessories">
-                <p>소품</p>
-            </a>
-        </div>
-        <div class="category-item">
-            <a href="/goods/bedList.do">
-                <img src="/upload/goods/bed.png" alt="Bed">
-                <p>침구</p>
-            </a>
-        </div>
-        <div class="category-item">
-            <a href="/goods/tableList.do">
-                <img src="/upload/goods/table.png" alt="Table">
-                <p>테이블</p>
-            </a>
-        </div>
-        <div class="category-item">
-            <a href="/goods/storageList.do">
-                <img src="/upload/goods/storage.png" alt="Storage">
-                <p>수납</p>
-            </a>
-        </div>
-        <div class="category-item">
-            <a href="/goods/curtainList.do">
-                <img src="/upload/goods/curtain.png" alt="Curtain">
-                <p>커튼</p>
-            </a>
-        </div>
-        <div class="category-item">
-            <a href="/goods/rugList.do">
-                <img src="/upload/goods/rug.png" alt="Rug">
-                <p>러그</p>
-            </a>
-        </div>
-        <div class="category-item">
-            <a href="/goods/lightList.do">
-                <img src="/upload/goods/light.png" alt="Light">
-                <p>조명</p>
-            </a>
-        </div>
+    <!-- 각 카테고리 항목에서 <a> 태그 제거하고 onclick 이벤트 추가 -->
+    <div class="category-item" onclick="goToCategory(1)">
+        <img src="/upload/goods/chair.png" alt="Chair">
+        <p>의자</p>
     </div>
+    <div class="category-item" onclick="goToCategory(2)">
+        <img src="/upload/goods/etc.png" alt="Accessories">
+        <p>소품</p>
+    </div>
+    <div class="category-item" onclick="goToCategory(3)">
+        <img src="/upload/goods/bed.png" alt="Bed">
+        <p>침구</p>
+    </div>
+    <div class="category-item" onclick="goToCategory(4)">
+        <img src="/upload/goods/table.png" alt="Table">
+        <p>테이블</p>
+    </div>
+    <div class="category-item" onclick="goToCategory(5)">
+        <img src="/upload/goods/storage.png" alt="Storage">
+        <p>수납</p>
+    </div>
+    <div class="category-item" onclick="goToCategory(6)">
+        <img src="/upload/goods/curtain.png" alt="Curtain">
+        <p>커튼</p>
+    </div>
+    <div class="category-item" onclick="goToCategory(7)">
+        <img src="/upload/goods/rug.png" alt="Rug">
+        <p>러그</p>
+    </div>
+    <div class="category-item" onclick="goToCategory(8)">
+        <img src="/upload/goods/light.png" alt="Light">
+        <p>조명</p>
+    </div>
+</div>
     
     <div class="main-content">
         <decorator:body />

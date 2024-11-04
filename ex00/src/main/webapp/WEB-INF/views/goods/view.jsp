@@ -14,12 +14,12 @@
 <script type="text/javascript">
 
 	$(function(){
-	    
-		$("#smallImageDiv img").click(function () {
-			// alert("이미지 클릭");
-			$("#bigImageDiv img").attr("src", $(this).attr("src", ));
-			
-		}); 
+	    $// 작은 이미지 클릭 시 큰 이미지 업데이트
+	    $("#smallImageDiv img").click(function () {
+	        // 클릭한 이미지의 src를 bigImage에 설정
+	        $("#bigImage").attr("src", $(this).attr("src"));
+	    });
+
 		
 		$("#listBtn").click(function () {
 			// alert("리스트 버튼");
@@ -28,12 +28,6 @@
 				+ "&${goodsSearchVO.searchQuery}";
 		});
 		
-		$("#updateBtn").click(function () {
-			// alert("수정 버튼");
-			location="updateForm.do?goods_no=${vo.goods_no}&page=${param.page}"
-				+ "&perPageNum=${param.perPageNum}"
-				+ "&${goodsSearchVO.searchQuery}";
-		});
 		function sendData(){
 			let firstForm = document.forms[0];
 		
@@ -54,25 +48,25 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-6 bigImg">
-				<div id="bigImageDiv" class="img-thumbnail" style="width: 600px; height: 600px;">
-    			<img id="bigImage" src="${vo.image_name}" style="width: 100%; height: 100%; object-fit: cover;">
-			</div>
-			<div id="smallImageDiv" style="display: flex; align-items: center; overflow-x: auto; margin-top: 10px;">
-		    <div style="display: flex; gap: 10px;">
-        	<c:if test="${!empty imageList}">
-            <c:forEach items="${imageList}" var="imageVO">
-                <img src="${imageVO.goods_img_name}" class="img-thumbnail smallImage" style="width: 100px; height: 100px; object-fit: cover; cursor: pointer;">
-            </c:forEach>
-        </c:if>
-    		</div>
-			</div>
+			    <div id="bigImageDiv" class="img-thumbnail" style="width: 600px; height: 600px;">
+			        <img id="bigImage" src="${vo.image_name}" style="width: 100%; height: 100%;">
+			    </div>
+			    <div id="smallImageDiv" style="display: flex; align-items: center; overflow-x: auto; margin-top: 10px;">
+			        <div style="display: flex; gap: 10px;">
+			            <c:if test="${!empty imageList}">
+			                <c:forEach items="${imageList}" var="imageVO">
+			                    <img src="${imageVO.goods_img_name}" class="img-thumbnail smallImage" style="width: 100px; height: 100px; object-fit: cover; cursor: pointer;">
+			                </c:forEach>
+			            </c:if>
+			        </div>
+			    </div>
 			</div>
 			<div class="col-md-6 imgContent" id="goodsDetailDiv">
 				<p style="font-size: 12px; color: #999; margin-bottom: -1px;">카테고리 > ${vo.cate_name}</p>
 				<div  style="">
 					<strong class="tit" style="font-size: 32px;">${vo.goods_name }</strong>
 				</div>
-				<p style="color: #ccc; width: 100px;">A001<!-- 모델번호 --></p>
+				<p style="color: #ccc; width: 100px;">${vo.goods_code }</p>
 				<div class="lBox">
 					<div class="summary">상품 요약정보</div>
 					<div>정가</div>
@@ -86,8 +80,8 @@
 					<div><fmt:formatNumber value="${vo.price}"/></div>
 					<div><span style="font-weight: 900;"><fmt:formatNumber value="${vo.sale_price}"/></span></div>
 					<div>${vo.company }</div>
-					<div>배송방법 <%-- ${vo.delivery_type } --%></div>
-					<div>무료</div>
+					<div>택배배송</div>
+					<div>${vo.delivary_charge }</div>
 				</div>
 				<div class="bBox">
 					<img class="bBoxImg" src="${vo.image_name }">
@@ -102,7 +96,7 @@
 				</div>
 				<div style="float: right; width: 150px; margin-top: 50px;">
 					<c:if test="${login.gradeNo==9 }">
-						<p class="updateBtn">제품 수정</p>
+						<a href="updateForm.do?goods_no=${vo.goods_no }" class="btn btn-primary">상품수정</a>
 						<p class="deleteBtn">제품 삭제</p>
 					</c:if>
 				</div>
