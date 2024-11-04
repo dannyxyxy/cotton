@@ -20,6 +20,6 @@ public interface GoodsService {
 	public Integer write(GoodsVO vo, List<String> imageFileNames);
 	public Integer update(GoodsVO vo);
 	public Integer delete(GoodsVO vo);
-//	public String updateImage(Long goods_no, MultipartFile imageFile, String savePath, String deleteFileName) throws Exception;
+
 	
 }

@@ -161,11 +161,10 @@
 		    <div class="form-group" style="margin-top: 60px;">
 		      <textarea class="form-control" rows="7" id="content" name="content" value="${goodsVO.content }" required></textarea>
 		    </div>
-<!-- 		    <div class="form-group"> -->
-<!-- 				파일로 넘어가는 데이터는 GoodsVO 객체의 이름과 다른이름을 사용해야 합니다. -->
-<!-- 				<label for="imageMain">대표이미지</label> -->
-<!-- 				<input type="file" class="form-control" id="imageMain" name="imageMain" required>	 -->
-<!-- 			</div> -->
+		    <div class="form-group">
+				<label for="imageMain">대표이미지</label>
+				<input type="file" class="form-control" id="imageMain" name="profileImage" required>	
+			</div>
 		    <div class="form-group">
 		      <input type="text" class="form-control" id="price" pattern="^[A-Z0-9].{3.20}$" required
 		      		title="대문자와 숫자만 입력 3~20자 입력" value="${goodsVO.price }" name="price" style="float: left;">

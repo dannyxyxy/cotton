@@ -1,12 +1,15 @@
 package org.zerock.goods.controller;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -29,6 +32,7 @@ import org.zerock.goods.vo.GoodsImageVO;
 import org.zerock.goods.vo.GoodsPriceVO;
 import org.zerock.goods.vo.GoodsSearchVO;
 import org.zerock.goods.vo.GoodsVO;
+import org.zerock.member.vo.MemberVO;
 import org.zerock.util.file.FileUtil;
 import org.zerock.util.page.PageObject;
 
@@ -160,49 +164,54 @@ public class GoodsController {
 			return "goods/updateForm";
 		}
 	
-		// 상품 수정 처리
 		@PostMapping("/update.do")
 		public String update(
-				@ModelAttribute(name = "goodsVO") GoodsVO goodsVO,
-				PageObject pageObject,
-			//	@ModelAttribute(name = "goodsSearchVO") GoodsSearchVO goodsSearchVO,
-				RedirectAttributes rttr) throws Exception {
-			
-			log.info("update.do===========");
-			// 상품 상세 정보 수정
-			log.info(goodsVO);
-			//log.info(goodsSearchVO);
-			
-			service.update(goodsVO);
-		
-		
-			
-			return "redirect:view.do?goods_no=" + goodsVO.getGoods_no() +
-					"&" + pageObject.getPageQuery();
-			
+		        @ModelAttribute(name = "goodsVO") GoodsVO goodsVO, HttpSession session,
+		        PageObject pageObject, @RequestParam(value = "profileImage", required = false) MultipartFile file,
+		        RedirectAttributes rttr) throws Exception {
+
+		    log.info("===========update.do===========");
+		    log.info(goodsVO);
+
+		    // 이미지 파일 업데이트
+		    if (file != null && !file.isEmpty()) {
+		        log.info("파일이 존재합니다.");
+		        try {
+		            String uploadDir = session.getServletContext().getRealPath("/upload/goods/");
+		            File directory = new File(uploadDir);
+		            if (!directory.exists()) {
+		                directory.mkdirs(); // 디렉토리 생성
+		            }
+
+		            String fileName = goodsVO.getGoods_no() + "_" + UUID.randomUUID() + "_" + file.getOriginalFilename();
+		            File newFile = new File(uploadDir + fileName);
+
+		            // 파일 저장
+		            file.transferTo(newFile);
+
+		            // 파일 경로 설정
+		            String imagePath = "/upload/goods/" + fileName;
+		            goodsVO.setImage_name(imagePath); // goodsVO에 사진 경로 설정
+		        } catch (Exception e) {
+		            log.error("프로필 사진 업로드 중 오류 발생", e);
+		            rttr.addFlashAttribute("errorMessage", "프로필 사진 업데이트 중 오류가 발생했습니다. 다시 시도해주세요.");
+		            return "redirect:/goods/updateForm.do";
+		        }
+		    } else {
+		        log.info("파일이 존재하지 않습니다. 기존 이미지 사용.");
+		        GoodsVO existingGoods = service.view(goodsVO.getGoods_no());
+		        if (existingGoods != null) {
+		            goodsVO.setImage_name(existingGoods.getImage_name());
+		        }
+		    }
+
+		    // 상품 정보 업데이트
+		    service.update(goodsVO);
+
+		    return "redirect:/goods/view.do?goods_no=" + goodsVO.getGoods_no() +
+		            "&" + pageObject.getPageQuery();
 		}
-//		@PostMapping("/updateImage.do")
-//		public String updateImage(@RequestParam("imageFile") MultipartFile imageFile,
-//		                          @RequestParam("goods_no") Long goods_no, HttpServletRequest request,
-//		                          @RequestParam("deleteFileName") String deleteFileName,
-//		                          RedirectAttributes redirectAttributes) throws Exception {
-//		    // 업로드 기본 설정
-//		    String savePath = "/upload";  // 실제 경로에 맞게 설정
-//		    String realSavePath = request.getServletContext().getRealPath(savePath);
-//
-//		    // 기존 파일 삭제 및 신규 파일 저장 처리
-//		    String newFileName = service.updateImage(goods_no, imageFile, realSavePath, deleteFileName);
-//
-//		    // 메시지 설정
-//		    redirectAttributes.addFlashAttribute("msg", "이미지 바꾸기가 성공했습니다.");
-//		    return "redirect:/goods/view?no=" + goods_no;  // 리다이렉트 경로 설정
-//		}
-//		
-//		// 이미지 삭제 처리
-//		@PostMapping("/deleteImage.do")
-//		public String deleteImage(GoodsVO goodsVO) {
-//			return "redirect:update.do?goods_no="+goodsVO.getGoods_no();
-//		}
+
 
 	
 	

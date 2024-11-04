@@ -9,7 +9,5 @@ public class GoodsImageVO {
 	private String goods_img_name;
 	private Long goods_no;
 
-	private String fileName;
-
 	
 }

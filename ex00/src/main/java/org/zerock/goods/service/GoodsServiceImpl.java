@@ -85,26 +85,6 @@ public class GoodsServiceImpl implements GoodsService {
 		return 1;
 	}
 	
-//	@Override
-//    public String updateImage(Long goods_no, MultipartFile imageFile, String savePath, String deleteFileName) throws Exception {
-//        // 새로운 파일 이름 생성 및 저장
-//        String newFileName = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
-//        File saveFile = new File(savePath, newFileName);
-//        imageFile.transferTo(saveFile);
-//
-//        // 기존 이미지 삭제
-//        File oldFile = new File(savePath, deleteFileName);
-//        if (oldFile.exists()) oldFile.delete();
-//
-//        // DB 업데이트 - 새로운 파일 경로 전달
-//        GoodsImageVO vo = new GoodsImageVO();
-//        vo.setGoods_no(goods_no);
-//        vo.setFileName(newFileName);
-//        mapper.updateImage(vo);  // DB 업데이트 실행
-//
-//        return newFileName;
-//    }
-//	
 
 	@Override
 	public Integer delete(GoodsVO vo) {

@@ -119,7 +119,7 @@
     UPDATE goods
     SET goods_name = #{goods_name},
         cate_code1 = #{cate_code1},
-<!--         image_name = #{image_name, jdbcType=VARCHAR},  jdbcType 명시 -->
+		image_name = #{image_name, jdbcType=VARCHAR},  
         content = #{content},
         company = #{company},
         goods_code = #{goods_code,jdbcType=VARCHAR}
