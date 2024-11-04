@@ -1,5 +1,6 @@
 package org.zerock.goods.vo;
 
+
 import lombok.Data;
 
 @Data
@@ -25,3 +26,4 @@ public class GoodsVO {
     private Long goods_price_no; // Ensure this property is added
 
 }
+

@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class GoodsSearchVO {
+
     
     private Integer cate_code1; // 카테고리 코드 1을 String으로 변경
     private String goods_name; // 상품 이름
@@ -33,5 +34,6 @@ public class GoodsSearchVO {
         
         return true; // 유효성 검사 통과
     }
+
 
 }

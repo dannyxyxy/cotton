@@ -5,7 +5,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.zerock.mapper.TimeMapper;
+import org.zerock.mapper.TimeMapper2;
 
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -17,7 +17,7 @@ public class TimeMapperTests {
 
 	// 자동DI
 	@Setter(onMethod_ = @Autowired)
-	private TimeMapper timeMapper;
+	private TimeMapper2 timeMapper;
 	
 	@Test
 	public void testGetTime() {

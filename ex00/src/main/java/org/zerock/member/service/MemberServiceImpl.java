@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.zerock.member.mapper.MemberMapper;
 import org.zerock.member.vo.LoginVO;
+
 import org.zerock.member.vo.MemberVO;
 
 import lombok.Setter;
@@ -50,6 +51,7 @@ public class MemberServiceImpl implements MemberService {
 	    return mapper.update(vo);
 	}
 	
+
 
 
 

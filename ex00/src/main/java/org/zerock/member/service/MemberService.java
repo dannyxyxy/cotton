@@ -1,6 +1,7 @@
 package org.zerock.member.service;
 
 import org.zerock.member.vo.LoginVO;
+
 import org.zerock.member.vo.MemberVO;
 
 public interface MemberService {
@@ -19,6 +20,7 @@ public interface MemberService {
 	
 	//회원정보 수정
 	public Integer update(MemberVO vo);
+
 
 
 
