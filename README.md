@@ -1,6 +1,6 @@
-<<<<<<< HEAD
+
 # cotton
-=======
+
 <div align= "center">
     <img src="https://capsule-render.vercel.app/api?type=waving&color=auto&height=120&text=cotton&animation=&fontColor=000000&fontSize=70" />
     </div>
@@ -23,4 +23,3 @@
           <br/></div>
     </div>
     
->>>>>>> branch 'main' of https://github.com/dannyxyxy/cotton.git
