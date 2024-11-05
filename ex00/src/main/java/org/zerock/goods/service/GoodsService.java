@@ -2,6 +2,8 @@ package org.zerock.goods.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.zerock.category.vo.CategoryVO;
@@ -19,7 +21,8 @@ public interface GoodsService {
 	public List<GoodsImageVO> imageList(Long goods_no);
 	public Integer write(GoodsVO vo, List<String> imageFileNames);
 	public Integer update(GoodsVO vo);
-	public Integer delete(GoodsVO vo);
+	boolean delete(Long goods_no, HttpServletRequest request) throws Exception;
+	Integer getCateCode1ByGoodsNo(Long goods_no);
 
 	
 }

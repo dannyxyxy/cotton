@@ -193,15 +193,24 @@ $(function(){
 		        console.error("goods_no가 정의되지 않았습니다.");
 		    }
 		});
+		
+		function appendCateCode() {
+		    // cate_code1 값을 가져와서 URL에 추가
+		    var cateCode1 = document.querySelector('input[name="cate_code1"]').value;
+		    // 폼의 액션 URL을 수정
+		    var form = document.getElementById('searchForm');
+		    form.action = 'list.do?cate_code1=' + cateCode1;
+		    return true; // 폼 제출을 계속 진행
+		}
 
 	    
 		$("#perPageNum").change(function(){
+			console.log("goodsSearchVO.goods_no : "+goodsSearchVO.goods_no);
 			$("#searchForm").submit();
 		});
 		// 검색데이터 세팅
 		$("#key").val("${(empty pageObject.key) ? 't' : pageObject.key}");
 		$("#perPageNum").val("${(empty pageObject.perPageNum) ? '10' : pageObject.perPageNum}");
-
 		
 		$("#cate_code1").change(function(){
 		    let cate_code1 = $(this).val();
@@ -323,20 +332,23 @@ $(function(){
     </c:if>
     <!-- 하단 서치 폼 -->
     <form action="list.do" id="searchForm" class="visualImage-form">
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="상품명검색" id="goods_name"
-                name="goods_name" value="${goodsSearchVO.goods_name }">
-            <input type="text" class="form-control" placeholder="최저가격입력" id="min_price"
-                name="min_price" value="${goodsSearchVO.min_price }">
-            <input type="text" class="form-control max-price-input" placeholder="최고가격입력" id="max_price"
-                name="max_price" value="${goodsSearchVO.max_price }">
-        </div>
-            <div class="input-group-prepend">
-                <button type="submit" class="btn btn-primary">
-                    <i class="fa fa-search"></i>
-                </button>
-            </div>
-    </form>
+    <!-- cate_code1 값을 저장할 hidden 필드 추가 -->
+    <input type="hidden" name="cate_code1" value="${cate_code1 }">
+
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="상품명검색" id="goods_name"
+            name="goods_name" value="${goodsSearchVO.goods_name }">
+        <input type="text" class="form-control" placeholder="최저가격입력" id="min_price"
+            name="min_price" value="${goodsSearchVO.min_price }">
+        <input type="text" class="form-control max-price-input" placeholder="최고가격입력" id="max_price"
+            name="max_price" value="${goodsSearchVO.max_price }">
+    </div>
+    <div class="input-group-prepend">
+        <button type="submit" class="btn btn-primary">
+            <i class="fa fa-search"></i>
+        </button>
+    </div>
+</form>
 </div>
 
 <c:if test="${empty list }">
@@ -346,9 +358,9 @@ $(function(){
 	<div class="container p-3 my-3">
     <div class="dataRow row" id="cardContainer">
         <c:forEach items="${list}" var="vo" varStatus="vs">
-            <c:if test="${vs.index % 3 == 0 && vs.index != 0}">
-                </div> <!-- 이전 row 닫기 -->
-                <div class="dataRow row"> <!-- 새로운 row 시작 -->
+        <c:if test="${vs.index % 3 == 0 && vs.index != 0}">
+    </div> <!-- 이전 row 닫기 -->
+     <div class="dataRow row"> <!-- 새로운 row 시작 -->
             </c:if>
             <div class="col-md-4 promotion-card" data-goods_no="${vo.goods_no}">
                 <div class="card">

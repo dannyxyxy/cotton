@@ -67,3 +67,14 @@
         .visualImageText{
         	text-align:right;
         }
+        .tooltip-inner {
+		    background-color: #333; /* 배경색 */
+		    color: #fff; /* 글자색 */
+		    padding: 10px; /* 패딩 */
+		    border-radius: 5px; /* 둥근 모서리 */
+		    max-width: 200px; /* 최대 너비 */
+		}
+		
+		.tooltip-arrow {
+		    border-top-color: #333; /* 화살표 색상 */
+		}

@@ -51,42 +51,45 @@ public class GoodsController {
 	private GoodsService service;
 	
 	@GetMapping("/list.do")
-	public String List(Model model, @ModelAttribute(name = "goodsSearchVO") GoodsSearchVO goodsSearchVO,
+	public String list(Model model, @ModelAttribute(name = "goodsSearchVO") GoodsSearchVO goodsSearchVO,
 	                   HttpServletRequest request) {
 	    PageObject pageObject = PageObject.getInstance(request);
 	    String perPageNum = request.getParameter("perPageNum");
-	    String cateCode1 = request.getParameter("cate_code1"); // String으로 받기
-	    log.info(perPageNum);
+	    String cateCode1 = request.getParameter("cate_code1");
+
+	    log.info("페이지 당 항목 수: " + perPageNum); // 추가된 로깅
 	    
+	    // 페이지 당 항목 수 설정
 	    if (perPageNum == null) {
 	        pageObject.setPerPageNum(8);
 	    } else {
 	        pageObject.setPerPageNum(Integer.parseInt(perPageNum));
 	    }
 
-	    // cate_code1 값을 request에서 가져와서 Integer로 변환하여 goodsSearchVO에 설정
+	    // cate_code1 값을 Integer로 변환하여 설정
 	    if (cateCode1 != null) {
 	        try {
 	            Integer parsedCateCode1 = Integer.parseInt(cateCode1);
-	            goodsSearchVO.setCate_code1(parsedCateCode1); // GoodsSearchVO에 Integer로 설정
+	            goodsSearchVO.setCate_code1(parsedCateCode1);
+	            log.info("카테고리 코드 설정: " + parsedCateCode1); // 추가된 로깅
 	        } catch (NumberFormatException e) {
-	            log.warn("Invalid cate_code1 value: " + cateCode1);
-	            goodsSearchVO.setCate_code1(null); // or any default value
+	            log.warn("잘못된 cate_code1 값: " + cateCode1); // 경고 로그
+	            goodsSearchVO.setCate_code1(null); // 기본값 설정
 	        }
 	    }
 
-	    // 카테고리 조회
+	    // 카테고리 및 상품 목록 조회
 	    List<CategoryVO> listBig = service.listCategory(0);
 	    model.addAttribute("listBig", listBig);
 	    
-	    // 상품 목록 조회
 	    List<GoodsVO> list = service.list(pageObject, goodsSearchVO);
 	    model.addAttribute("list", list);
 	    model.addAttribute("pageObject", pageObject);
-	    model.addAttribute("cate_code1", cateCode1);
+	    model.addAttribute("goodsSearchVO", goodsSearchVO); // 모델에 추가
 
-	    return "goods/list";
+	    return "goods/list"; // 뷰 반환
 	}
+
 
 
 
@@ -211,6 +214,26 @@ public class GoodsController {
 		    return "redirect:/goods/view.do?goods_no=" + goodsVO.getGoods_no() +
 		            "&" + pageObject.getPageQuery();
 		}
+		
+		
+		@PostMapping("/delete.do")
+		public String delete(@RequestParam("goods_no") Long goods_no, RedirectAttributes rttr, HttpServletRequest request) throws Exception {
+		    log.info("상품 삭제 요청, goods_no: " + goods_no);
+		 // 삭제 전 cate_code1 조회
+		    Integer cateCode1 = service.getCateCode1ByGoodsNo(goods_no);
+		    // 서비스 호출하여 상품 및 이미지 삭제
+		    boolean isDeleted = service.delete(goods_no, request);
+		    
+		    if (isDeleted) {
+		        rttr.addFlashAttribute("msg", "상품이 성공적으로 삭제되었습니다.");
+		    } else {
+		        rttr.addFlashAttribute("errorMsg", "상품 삭제에 실패하였습니다.");
+		    }
+		    
+		    
+			return "redirect:/goods/list.do?cate_code1="+cateCode1;
+		}
+
 
 
 	

@@ -11,13 +11,14 @@
 <link rel="stylesheet" href="/resources/css/goods/view_detail.css">
 <link rel="stylesheet" href="/resources/css/goods/view_review.css">
 
+
 <script type="text/javascript">
 
-	$(function(){
-	    $// 작은 이미지 클릭 시 큰 이미지 업데이트
-	    $("#smallImageDiv img").click(function () {
-	        // 클릭한 이미지의 src를 bigImage에 설정
-	        $("#bigImage").attr("src", $(this).attr("src"));
+	$(document).ready(function(){
+		// smallImageDiv 내에 있는 img 요소에 클릭 이벤트를 연결
+	    $("#smallImageDiv").on("click", "img", function(){
+	        alert("이미지 클릭");
+	        $("#bigImageDiv img").attr("src", $(this).attr("src"));
 	    });
 
 		
@@ -97,7 +98,10 @@
 				<div style="float: right; width: 150px; margin-top: 50px;">
 					<c:if test="${login.gradeNo==9 }">
 						<a href="updateForm.do?goods_no=${vo.goods_no }" class="btn btn-primary">상품수정</a>
-						<p class="deleteBtn">제품 삭제</p>
+						<form action="${pageContext.request.contextPath}/goods/delete.do" method="post" onsubmit="return confirm('정말로 삭제하시겠습니까?');">
+						    <input type="hidden" name="goods_no" value="${vo.goods_no}">
+						    <button type="submit" class="deleteBtn">제품 삭제</button>
+						</form>
 					</c:if>
 				</div>
 			</div>

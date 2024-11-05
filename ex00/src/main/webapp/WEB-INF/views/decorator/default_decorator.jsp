@@ -97,21 +97,36 @@
 <body>
     <div class="navbar">
         <a href="/main.do" class="logo">cotton</a>
-        <div class="search-container">
-            <select class="form-control searchDrop">
-                <option value="category1">카테고리 1</option>
-                <option value="category2">카테고리 2</option>
-                <option value="category3">카테고리 3</option>
-            </select>
-            <div class="search-bar-container">
-                <span class="search-icon"><button type="button" class="searchBtn"><i class="fa fa-search icon"></i></button></span>
-                <span class="cancel-icon"><button type="button" class="resetBtn" onclick= "reset()"><i class="fa fa-times times"></i></button></span>
-                <input class="form-control search-bar" type="text" placeholder="검색어 입력">
-            </div>
-        </div>
+        <form action="/goods/list.do" method="get" class="search-container">
+	    <select class="form-control searchDrop" id="categorySelect" name="cate_code1">
+	        <option value="">카테고리</option>
+	        <option value="1">의자</option>
+	        <option value="2">소품</option>
+	        <option value="3">침구</option>
+	        <option value="4">테이블</option>
+	        <option value="5">수납</option>
+	        <option value="6">커튼</option>
+	        <option value="7">러그</option>
+	        <option value="8">조명</option>
+	    </select>
+	    <div class="search-bar-container">
+	        <span class="search-icon">
+	            <button type="button" class="searchBtn" onclick="performSearch()">
+	                <i class="fa fa-search icon"></i>
+	            </button>
+	        </span>
+	        <span class="cancel-icon">
+	            <button type="button" class="resetBtn" onclick="reset()">
+	                <i class="fa fa-times times"></i>
+	            </button>
+	        </span>
+	        <input class="form-control search-bar" type="text" id="searchInput" name="goods_name" placeholder="제품명 검색">
+	    </div>
+
+	</form>
         
         <div class="nav-icons">
-            <a href="/board/list.do">이벤트 및 프로모션</a>
+            <a href="/event/list.do">이벤트 및 프로모션</a>
             <a href="/member/inquiry.do">고객문의</a>
             <c:if test="${ empty login }">
                 <a href="/member/loginForm.do"><i class="fa fa-user"></i></a>

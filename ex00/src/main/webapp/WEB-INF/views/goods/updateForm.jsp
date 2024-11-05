@@ -159,10 +159,10 @@
 		      	value="${goodsVO.company }" name="company" style="float: right;">
 		    </div>
 		    <div class="form-group" style="margin-top: 60px;">
-		      <textarea class="form-control" rows="7" id="content" name="content" value="${goodsVO.content }" required></textarea>
+		      <textarea class="form-control" rows="7" id="content" name="content" placeholder="${goodsVO.content }" required></textarea>
 		    </div>
 		    <div class="form-group">
-				<label for="imageMain">대표이미지</label>
+				<label for="imageMain">대표이미지 변경하기</label>
 				<input type="file" class="form-control" id="imageMain" name="profileImage" required>	
 			</div>
 		    <div class="form-group">

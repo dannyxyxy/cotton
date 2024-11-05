@@ -4,22 +4,21 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
   <mapper namespace="org.zerock.goods.mapper.GoodsMapper">
 
-  <select id="list" parameterType="org.zerock.goods.vo.GoodsSearchVO" resultType="org.zerock.goods.vo.GoodsVO">
+ <select id="list" parameterType="org.zerock.goods.vo.GoodsSearchVO" resultType="org.zerock.goods.vo.GoodsVO">
     SELECT goods_no, goods_name, price, discount_rate, sale_price, image_name, content
     FROM (
-        SELECT g.goods_no, g.goods_name, p.price, p.discount_rate,
-               p.sale_price, g.image_name, g.content,
-               ROW_NUMBER() OVER (ORDER BY g.goods_no) AS rnum
+        SELECT ROWNUM AS rnum, g.goods_no, g.goods_name, p.price, p.discount_rate,
+               p.sale_price, g.image_name, g.content
         FROM goods g
         JOIN goods_price p ON g.goods_no = p.goods_no
-        <where>
-            <if test="goodsSearchVO.cate_code1 != null and goodsSearchVO.cate_code1 != 0">
-                AND g.cate_code1 = #{goodsSearchVO.cate_code1}
-            </if>
-        </where>
+        WHERE 1=1 <!-- 기본 조건 -->
+        <include refid="search" /> <!-- 검색 조건 포함 -->
     )
     WHERE rnum BETWEEN #{pageObject.startRow} AND #{pageObject.endRow}
 </select>
+
+
+
 
 
 
@@ -32,27 +31,31 @@
 	</select>
 
   	<sql id="search">
-    <trim prefixOverrides="and">
-        <!-- 제품명 조건 -->
+    <trim prefix="AND" prefixOverrides="and">
+        <!-- 카테고리 대분류, 중분류-->
+        <if test="goodsSearchVO.cate_code1 != null and goodsSearchVO.cate_code1 != 0">
+            AND cate_code1 = #{goodsSearchVO.cate_code1}
+        </if>
+        <!-- 제품명 -->
         <if test="goodsSearchVO.goods_name != null and goodsSearchVO.goods_name != ''">
             AND goods_name LIKE '%' || #{goodsSearchVO.goods_name} || '%'
         </if>
-
-        <!-- 최소 가격 조건 -->
+        <!-- 최소가격 -->
         <if test="goodsSearchVO.min_price != null and goodsSearchVO.min_price != 0">
             <![CDATA[
-                AND sale_price >= #{goodsSearchVO.min_price}
+            AND sale_price >= #{goodsSearchVO.min_price}
             ]]>
         </if>
-
-        <!-- 최대 가격 조건 -->
+        <!-- 최대가격 -->
         <if test="goodsSearchVO.max_price != null and goodsSearchVO.max_price != 0">
             <![CDATA[
-                AND sale_price <= #{goodsSearchVO.max_price}
+            AND sale_price <= #{goodsSearchVO.max_price}
             ]]>
         </if>
     </trim>
 </sql>
+
+
 
   	
   	<select id="getCategory" resultType="org.zerock.category.vo.CategoryVO">
@@ -135,11 +138,25 @@
         delivary_charge = #{delivary_charge, jdbcType=VARCHAR}
     WHERE goods_price_no = #{goods_price_no, jdbcType=BIGINT}
 </update>
-<!-- <update id="updateImage" parameterType="org.zerock.goods.vo.GoodsImageVO"> -->
-<!--     UPDATE goods -->
-<!--     SET image_name = #{fileName} -->
-<!--     WHERE goods_no = #{no} -->
-<!-- </update> -->
+
+<!-- 이미지 목록 가져오기 -->
+<select id="getImageList" resultType="String">
+    SELECT image_name FROM goods WHERE goods_no = #{goods_no}
+</select>
+
+<!-- 상품 삭제 -->
+<delete id="deleteGoods">
+    DELETE FROM goods WHERE goods_no = #{goods_no}
+</delete>
+
+<!-- 이미지 데이터 삭제 -->
+<delete id="deleteImages">
+    DELETE FROM goods WHERE goods_no = #{goods_no}
+</delete>
+<select id="getCateCode1ByGoodsNo" resultType="int">
+    SELECT cate_code1 FROM goods WHERE goods_no = #{goods_no}
+</select>
+
 
 
 

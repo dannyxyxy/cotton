@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -85,17 +87,37 @@ public class GoodsServiceImpl implements GoodsService {
 		return 1;
 	}
 	
-
 	@Override
-	public Integer delete(GoodsVO vo) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	@Transactional
+    public boolean delete(Long goods_no, HttpServletRequest request) throws Exception {
+		// 상품 번호로 이미지 목록을 가져옵니다.
+	    List<String> imageList = mapper.getImageList(goods_no);
+	    // 상품 삭제 및 이미지 삭제 처리
+	    int result = mapper.deleteGoods(goods_no);
+	    if (result > 0) {
+	        // 이미지가 존재하면 서버에서 삭제
+	        if (imageList != null && !imageList.isEmpty()) {
+	            String uploadDir = request.getServletContext().getRealPath("/upload/goods/");
+	            for (String imageName : imageList) {
+	                File file = new File(uploadDir + imageName);
+	                if (file.exists()) {
+	                    file.delete(); // 파일 삭제
+	                }
+	            }
+	        }
+	        return true; // 삭제 성공 시 true 반환
+	    }
+	    return false; // 삭제 실패 시 false 반환
+    }
 
 	@Override
 	public List<CategoryVO> listCategory(Integer cate_code1) {
 		// TODO Auto-generated method stub
 		return mapper.getCategory(cate_code1);
+	}
+	@Override
+	public Integer getCateCode1ByGoodsNo(Long goods_no) {
+	    return mapper.getCateCode1ByGoodsNo(goods_no);
 	}
 
 	

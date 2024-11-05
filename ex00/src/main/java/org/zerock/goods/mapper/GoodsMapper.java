@@ -24,6 +24,10 @@ public interface GoodsMapper {
 	public Integer writeImage(GoodsImageVO vo);
 	public Integer update(GoodsVO vo);
 	public Integer updatePrice(GoodsVO vo);
+	List<String> getImageList(Long goods_no); // 이미지 목록 가져오기
+    int deleteGoods(Long goods_no); // 상품 삭제
+    int deleteImages(Long goods_no); // 이미지 데이터 삭제
+	public Integer getCateCode1ByGoodsNo(Long goods_no);
 
 	
 }

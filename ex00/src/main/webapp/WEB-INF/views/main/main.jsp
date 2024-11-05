@@ -9,12 +9,29 @@
     <title>Main</title>
     <link rel="stylesheet" href="/resources/css/main/main.css">
     <script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        fetch('/event/main')  // GET 요청을 통해 이벤트 리스트를 가져옴
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();  // 응답을 텍스트로 변환
+            })
+            .then(data => {
+                // 이벤트 리스트만을 eventListContainer에 삽입
+                document.getElementById('eventListContainer').innerHTML = data;
+            })
+            .catch(error => console.error('Error:', error));
+    });
+
+
+ 
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip(); // Bootstrap 툴팁 활성화
         });
 
         function viewProduct(productId) {
-            window.location.href = `/product/${productId}`; // 제품 보기로 이동
+            window.location.href = `goods/view.do?goods_no=${productId}`; // 제품 보기로 이동
         }
     </script>
 </head>
@@ -34,15 +51,16 @@
             <div class="carousel-inner">
                 <!-- 첫 번째 이미지 -->
                 <div class="carousel-item active visualImage">
-                    <img src="/upload/goods/room.png" class="d-block">
-                    <div class="product-icon" style="top: 30%; left: 40%;"	
-                         data-toggle="tooltip" 
-                         data-html="true" 
-                         data-placement="top" 
-                         title="<strong>goodsName</strong><br>content<br>₩goodsPrice" 
-                         onclick="viewProduct(1)">
-                        <i class="fa fa-plus"></i>
-                    </div>
+                    <img src="/upload/goods/bed03.png" class="d-block">
+                    <div class="product-icon" style="top: 50%; left: 25%;"
+					     data-goods_no="1"
+					     data-toggle="tooltip" 
+					     data-html="true" 
+					     data-placement="top" 
+					     title='Arc Chair 아크체어플라스틱 90,000' 
+					     onclick="viewProduct(1)">
+					    <i class="fa fa-plus"></i>
+					</div>
                     <div class="product-icon" style="top: 70%; left: 80%;" 
                          data-toggle="tooltip" 
                          data-html="true" 
@@ -98,51 +116,7 @@
 	    	<div><h4>진행중인 이벤트 및 프로모션</h4></div>
 	    	<div><b>cotton</b>이 자신있게 제시하는<br>이벤트와 프로모션을 살펴보세요!</div>
     	</div>
-    </div>
-    <div class="container">
-        <div class="row">
-                <div class="col-md-4 promotion-card">
-				    <div class="card">
-				        <img src="/upload/goods/event1.png" class="card-img-top" alt="${event.title}">
-				        <div class="card-body">
-				            <h5 class="card-title">Event Title</h5>
-				            <p class="card-text">Event Content</p>
-				        </div>
-				    </div>
-				</div>
-                <div class="col-md-4 promotion-card">
-				    <div class="card">
-				        <img src="/upload/goods/event2.png" class="card-img-top" alt="${event.title}">
-				        <div class="card-body">
-				            <h5 class="card-title">Event Title</h5>
-				            <p class="card-text">Event Content</p>
-				        </div>
-				    </div>
-				</div>
-                <div class="col-md-4 promotion-card">
-				    <div class="card">
-				        <img src="/upload/goods/event3.png" class="card-img-top" alt="${event.title}">
-				        <div class="card-body">
-				            <h5 class="card-title">Event Title</h5>
-				            <p class="card-text">Event Content</p>
-				        </div>
-				    </div>
-				</div>
-
-        </div>
-<!--         <div class="row"> -->
-<%--             <c:forEach var="event" items="${eventsList}"> --%>
-<!--                 <div class="col-md-4 promotion-card"> -->
-<!--                     <div class="card"> -->
-<%--                         <img src="${event.imageUrl}" class="card-img-top" alt="${event.title}"> --%>
-<!--                         <div class="card-body"> -->
-<%--                             <h5 class="card-title">${event.title}</h5> --%>
-<%--                             <p class="card-text">${event.description}</p> --%>
-<!--                         </div> -->
-<!--                     </div> -->
-<!--                 </div> -->
-<%--             </c:forEach> --%>
-<!--         </div> -->
+    <div id="eventListContainer"></div>	
     </div>
 </body>
 </html>
