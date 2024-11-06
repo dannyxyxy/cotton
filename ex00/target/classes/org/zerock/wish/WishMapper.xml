@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zerock.wish.mapper.WishMapper">
+
+    <!-- 사용자 ID로 위시리스트 조회 -->
+    <select id="getWishListByUserId" resultType="org.zerock.wish.vo.WishVO">
+        SELECT * FROM wish WHERE id = #{id}
+    </select>
+
+    <!-- 사용자 ID와 goods_no로 특정 항목 조회 -->
+    <select id="getWishByGoodsNo" parameterType="map" resultType="org.zerock.wish.vo.WishVO">
+        SELECT * FROM wish WHERE id = #{id} AND goods_no = #{goods_no}
+    </select>
+
+    <!-- 위시리스트 항목 추가 -->
+    <insert id="addWishItem" parameterType="org.zerock.wish.vo.WishVO">
+        INSERT INTO wish (wish_no, goods_no, id, goods_name, content, price, sale_price, 
+                          discount_rate, image_name, total)
+        VALUES (wish_seq.nextval, #{goods_no}, #{id}, #{goods_name}, #{content}, #{price}, 
+                #{sale_price}, #{discount_rate}, #{image_name}, #{total})
+    </insert>
+
+    <!-- 특정 상품 수량 업데이트 -->
+    <update id="updateWishTotal">
+        UPDATE wish SET total = #{total} WHERE goods_no = #{goods_no}
+    </update>
+
+    <!-- 위시리스트 항목 삭제 -->
+    <delete id="deleteWishItem">
+        DELETE FROM wish WHERE wish_no = #{wish_no}
+    </delete>
+
+</mapper>

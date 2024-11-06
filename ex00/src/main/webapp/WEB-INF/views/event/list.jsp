@@ -13,62 +13,8 @@
 <head>
 	<meta charset="UTF-8">
 	<title>상품 리스트</title>
-
-
-<style type="text/css">
-	h2 {
-		font-size: 32px;
-	}
 	
-	h5 {
-		font-size: 14px; color: #79747E; margin-bottom: 32px;
-	}
-
-	.promotion-card {
-		margin-bottom: 20px;
-	}
-	
-	.promotion-card .card {
-	    width: 100%;
-	    height: 350px; /* 고정 높이 */
-	    overflow: hidden;
-	    border: none;
-	    transition: transform 0.3s ease;
-	}
-	
-	.promotion-card .card:hover {
-	    transform: scale(1.05); /* 마우스 오버 시 확대 효과 */
-	}
-	
-	.promotion-card .card-img-top {
-	    width: 100%;
-	    height: 75%; /* 이미지 높이를 카드의 75%로 설정 */
-	    object-fit: cover; /* 이미지 전체 채우기 */
-	}
-	
-	.promotion-card .card-body {
-	    height: 25%; /* 본문을 카드의 하단 25%에 배치 */
-	    background-color: #fff; /* 배경색 */
-	    display: flex;
-	    flex-direction: column;
-	    justify-content: right;
-	    text-align: right;
-	    padding: 10px;
-	}
-	
-	.promotion-card .card-title,
-	.promotion-card .card-text {
-	    margin: 0;
-	    color: #333; /* 본문 텍스트 색상 */
-	}
-	
-	.pagination {
-		justify-content: center;
-		
-	}
-	
-</style>
-
+	<link rel="stylesheet" href="/resources/css/event/list.css">
 
 
 <script type="text/javascript">
@@ -84,9 +30,9 @@
 		});
 		
 // 		$(".dataRow").click(function() {
-// 			// tag에 적힌 data-no="${vo.no}"
+// 			// tag에 적힌 data-eno="${vo.eno}"
 // 			let eno = $(this).data("eno");
-// 			//alert(no);
+// 			//alert(eno);
 // 			location = "view.do?eno=" + eno + "&inc=1"
 // 				+ "&${pageObject.pageQuery}";
 // 				// pageObject의 getPageQuery()를 가져와서
@@ -126,12 +72,13 @@
 		        }
 		    });
 		});
+		
+		
 		//페이징처리버튼 JS
 		const cardsPerPage = 6; // 페이지당 카드 수
 	    let currentPage = 1; // 현재 페이지
 	    const totalCards = $("div.promotion-card").length; // 전체 카드 수
 	    const totalPages = Math.ceil(totalCards / cardsPerPage); // 전체 페이지 수
-	    
 	    function showPage(page) {
 	        // 모든 카드를 숨김
 	        $("div.promotion-card").hide();
@@ -164,7 +111,7 @@
 	            showPage(currentPage);
 	        }
 	    });
-	  //페이징처리버튼 JS -end
+	  // end of 페이징처리버튼
 	});	
 </script>
 
@@ -191,17 +138,20 @@
 	            </c:forEach>
 	        </div>				
 				<!-- 이미지 데이터 반복 표시 끝 -->
-			<div>
-				<pageNav:pageNav listURI="list.do" pageObject="${pageObject}"></pageNav:pageNav>
-			</div>
+			<!-- 페이지 내비게이션 -->
+		    <div class="pageNav" id="pagination">
+		        <a href="#" class="btn" id="prevPage"><i class="fa fa-angle-left"></i></a>
+		        <span id="pageInfo"></span>
+		        <a href="#" class="btn" id="nextPage"><i class="fa fa-angle-right"></i></a>
+		    </div>
 		</c:if>
 		<!-- 데이터 존재했을때 처리 끝 -->
 
 		<!-- 로그인이 되어있으면 등록버튼이 보이게 처리 -->
-		<div style="text-align: center;">
-<%-- 			<c:if test="${login.gradeNo==9 }"> --%>
+		<div style="text-align: center; margin-top: 20px;">
+			<c:if test="${login.gradeNo==9 }">
 				<a href="writeForm.do?perPageNum=${pageObject.perPageNum }" class="btn btn-primary">등록</a>
-<%-- 			</c:if> --%>
+			</c:if>
 		</div>
 	</div>
 </body>

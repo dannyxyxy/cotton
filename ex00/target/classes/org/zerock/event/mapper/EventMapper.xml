@@ -5,26 +5,26 @@
 <mapper namespace="org.zerock.event.mapper.EventMapper">
    <!-- 이벤트 게시판 리스트 쿼리 -->
    <select id="list" resultType="org.zerock.event.vo.EventVO">
-       select eno, title, content, startDate, endDate, writeDate, imageName
-       from
+       SELECT eno, title, content, startDate, endDate, writeDate, imageName
+       FROM
        (
-           select rownum rnum, eno, title, content, startDate, endDate, writeDate, imageName
-           from
+           SELECT rownum rnum, eno, title, content, startDate, endDate, writeDate, imageName
+           FROM
            (
-               select eno, title, content, startDate, endDate, writeDate, imageName
-               from event
+               SELECT eno, title, content, startDate, endDate, writeDate, imageName
+               FROM event
                <!-- 검색을 달아야 한다. -->
                <include refid="search"></include>
                order by eno desc
            )
        )
-       where rnum between #{startRow} and #{endRow}
+       WHERE rnum between #{startRow} and #{endRow}
    </select>
 
    <!-- 이벤트 게시판 리스트 페이지 처리를 위한 전체 데이터 개수를 가져오는 쿼리 -->
    <select id="getTotalRow" resultType="Long">
-       select count(*)
-       from event
+       SELECT count(*)
+       FROM event
        <!-- 검색을 달아야 한다. -->
        <include refid="search"></include>
    </select>
@@ -48,14 +48,14 @@
 
    <!-- 이벤트 게시판 글보기 -->
    <update id="increase">
-       update event set hit = hit + 1
-       where eno = #{eno}
+       UPDATE event set hit = hit + 1
+       WHERE eno = #{eno}
    </update>
 
    <select id="view" resultType="org.zerock.event.vo.EventVO">
-       select eno, title, content, startDate, endDate, writeDate, imageName
-       from event
-       where eno = #{eno}
+       SELECT eno, title, content, startDate, endDate, writeDate, imageName
+       FROM event
+       WHERE eno = #{eno, jdbcType=INTEGER}
    </select>
 
    <!-- 이벤트 게시판 글쓰기 쿼리 -->
@@ -63,35 +63,42 @@
        <selectKey keyProperty="eno" resultType="Long" order="BEFORE">
            select event_seq.nextval from dual
        </selectKey>
-       insert into event(eno, title, content, startDate, endDate, writeDate, imageName)
-       values(#{eno}, #{title, jdbcType=VARCHAR}, #{content, jdbcType=VARCHAR}, 
+       INSERT INTO event(eno, title, content, startDate, endDate, writeDate, imageName)
+       VALUES(#{eno}, #{title, jdbcType=VARCHAR}, #{content, jdbcType=VARCHAR}, 
                #{startDate, jdbcType=DATE}, #{endDate, jdbcType=DATE}, #{writeDate, jdbcType=DATE}, 
                #{imageName, jdbcType=BLOB})
    </insert>
 
    <!-- 이벤트 게시판 글수정 쿼리 -->
-   <!-- <update id="update">
+<!--    <update id="update"> -->
+<!--        <![CDATA[ -->
+<!--        UPDATE event -->
+<!--        SET title = #{title, jdbcType=VARCHAR}, content = #{content, jdbcType=VARCHAR} -->
+<!--        WHERE eno = #{eno, jdbcType=INTEGER} -->
+<!--        ]]> -->
+<!--    </update> -->
+   <update id="update">
        <![CDATA[
-       update event
-       set title = #{title, jdbcType=VARCHAR}, content = #{content, jdbcType=VARCHAR}
-       where eno = #{eno}
+       SELECT eno, title, content, startDate, endDate, writeDate, imageName
+       FROM event
+       WHERE eno = #{eno}
        ]]>
    </update>
 
-   이벤트 게시판 글삭제 쿼리
+   <!-- 이벤트 게시판 글삭제 쿼리 -->
    <delete id="delete">
        delete from event
        where eno = #{eno}
-   </delete> -->
+   </delete>
    
    
    
    
 <!--    메인페이지에 이벤트리스트를 출력하기 위한 쿼리 -->
    <select id="selectAllEvents" resultType="org.zerock.event.vo.EventVO">
-    SELECT eno, title, content, imageName
-    FROM event
-</select>
+	    SELECT eno, title, content, imageName
+	    FROM event
+	</select>
    
    
 </mapper>

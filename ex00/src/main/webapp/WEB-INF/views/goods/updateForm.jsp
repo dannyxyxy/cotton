@@ -9,6 +9,7 @@
 <head>
 <meta charset="UTF-8">
 <title>상품 등록</title>
+<link rel="stylesheet" href="/resources/css/goods/updateForm.css">
 <script type="text/javascript">
 	$(function(){
 		// 대분류 리스트 변경
@@ -80,52 +81,6 @@
 		
 	});
 </script>
-
-
-<style>
-    
-    form {
-    	width: 1143px;
-    }
-    
-    .form-control {
-    	width: 560px;
-    }
-    
-    #content {
-    	width: 100%;
-    	margin-top: 16px;
-    }
-    
-    .btn1 {
-    	float: right;
-    	width: 150px;
-    	height: 40px;
-    	border: none;
-    	border-radius: .25rem;
-    	font-size: 16px;
-    }
-    
-    .btn2 {
-    	float: left;
-    	margin-right: 16px;
-    	width: 150px;
-    	height: 40px;
-    	border: none;
-    	border-radius: .25rem;
-    	font-size: 16px;
-    	background: black;
-    	color: white;
-    }
-    
-    select {
-    	height: 38px;
-    	border: 1px solid #ccc;
-    	border-radius: .25rem;
-    }
-    
-</style>
-
 </head>
 <body>
 	<div class="container">

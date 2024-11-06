@@ -13,58 +13,7 @@
 	
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 	<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8030f1881b41d3cc1dfafec0c630e729&libraries=services"></script>
-	
-	
-<style type="text/css">
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .writeAll {
-            width: 50%;
-            margin: 0 auto;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            font-weight: bold;
-            margin-bottom: 5px;
-            display: block;
-        }
-        input, select, button {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-        button {
-            background-color: #333;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #555;
-        }
-        .btn-secondary {
-            background-color: #e0e0e0;
-            color: #333;
-            margin-right: 10px;
-        }
-        .btn-secondary:hover {
-            background-color: #ccc;
-        }
-        .flex {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .half-width {
-            width: 48%;
-        }
-</style>
+	<link rel="stylesheet" href="/resources/css/member/writeForm.css">
 
 <script type="text/javascript">
 // 페이지 로딩 후 설정
@@ -219,7 +168,6 @@ $(function() {
         <div class="form-group">
             <label for="address2">주소입력</label>
             <input type="text" id="address" name="address" placeholder=" '구'만 입력해주세요 ex)은평구 " >
-
         </div>
 
         <div class="form-group flex">

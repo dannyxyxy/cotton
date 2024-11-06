@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="pageNav" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 
 <!DOCTYPE html>
@@ -9,80 +11,8 @@
 	<meta charset="UTF-8">
 	<title>이벤트 및 프로모션 상세페이지</title>
 	<jsp:include page="../jsp/webLib.jsp"></jsp:include>
-
-
-<style>
-    .title {
-        font-size: 32px;
-        font-weight: bold;
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
-    .event-info {
-    	width: 600px;
-    	margin: auto;
-    	margin-bottom: 5px;
-        display: flex;
-        justify-content: space-between;
-        font-size: 14px;
-        color: #777;
-    }
-
-    .image-container {
-        text-align: center;
-    }
-
-    .image-container img {
-        width: 100%;
-        max-width: 600px;
-        border-radius: 8px;
-    }
-
-    .content {
-        font-size: 16px;
-        line-height: 24px;
-        color: #333;
-        white-space: pre-line;
-        text-align: center;
-    }
-
-    .buttons {
-    	height: 100px;
-        display: flex;
-        justify-content: right;
-        margin-top: 50px;
-    }
-
-    .button {
-    	height: 40px;
-        font-size: 14px;
-        padding: 10px 20px;
-        border: none;
-        border-radius: .25rem;
-        cursor: pointer;
-    }
-    
-    .backBtn {
-    	width: 100px;
-    	background: #f2f2f7;
-    	color: #2c2c2c;
-    }
-    
-    .updateBtn {
-    	width: 80px;
-    	background: #f2f2f7;
-    	color: #2c2c2c;
-    	margin: 0 10px;
-    }
-    
-    .deleteBtn {
-    	width: 130px;
-    	background: #2c2c2c;
-    	color: #f2f2f7;
-    }
-
-</style>
+	
+	<link rel="stylesheet" href="/resources/css/event/view.css">
 
 <!-- 1. 필요한 전역변수 선언 : 직접코딩 -->
 <script type="text/javascript">
@@ -140,106 +70,34 @@
 
 </head>
 <body>
-	<%-- <div class="container">
-		<div class="card">
-			<div class="card-header"><h3>이벤트 및 프로모션 상세페이지</h3></div>
-			<div class="card-body">
-				<div class="card dataRow" data-no="${vo.no }">
-					<div class="card-header">
-						<span class="float-right">조회수 : ${vo.hit }</span>
-						${vo.no }. ${vo.title }
-					</div>
-					<div class="card-body">
-						<pre>${vo.content }</pre>
-					</div>
-					<div class="card-footer">
-						<span class="float-right">
-							<fmt:formatDate value="${vo.writeDate }"
-							pattern="yyyy-MM-dd"/>
-						</span>
-						${vo.writer }
-					</div>
-				</div>
-			</div>
-			<div class="card-footer">
-				<button class="btn btn-primary" id="updateBtn">수정</button>
-				<button class="btn btn-danger" id="deleteBtn"
-					data-toggle="modal" data-target="#deleteModal">삭제</button>
-				<button class="btn btn-warning" id="listBtn">리스트</button>
-			</div>
-		</div>
-		<!-- 글보기 card가 끝 -->
-		
-		<div>
-			<jsp:include page="boardreply.jsp"></jsp:include>
-		</div>
-		
-		
-		
-		
-		<!-- The Modal -->
-	  <div class="modal fade" id="deleteModal">
-	    <div class="modal-dialog modal-dialog-centered">
-	      <div class="modal-content">
-	      
-	        <!-- Modal Header -->
-	        <div class="modal-header">
-	          <h4 class="modal-title">비밀번호 입력 모달 창</h4>
-	          <button type="button" class="close" data-dismiss="modal">&times;</button>
-	        </div>
-	        <!-- deleto.do 로 이동시 no, pw 가 필요합니다. -->
-	        <!-- no : hidden으로, pw: 사용자입력으로 세팅 -->
-	        <form action="delete.do" method="post">
-	        	<input type="hidden" name="no" value="${vo.no }">
-		        <!-- Modal body -->
-		        <div class="modal-body">
-		          <div class="form-group">
-		          	<input class="form-control" type="password"
-		          		name="pw" id="pw">
-		          </div>
-		        </div>
-		        
-		        <!-- Modal footer -->
-		        <div class="modal-footer">
-		          <button class="btn btn-danger">삭제</button>
-		          <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-		        </div>
-	        </form>
-	      </div>
-	    </div>
-	  </div>
-		
-	</div> --%>
-	
-	
-	
-	
-	
-	
-	
 	<div class="container">
-        <div class="title">${vo.title }</div>
+        <div class="titleBox">
+       		<p>${vo.title }</p>
+       	</div>
         <div class="event-info">
-            <span>이벤트 기간 : ${vo.startDate } ~ ${vo.endDate }</span>
-            <span>작성일 ${vo.writeDate }</span>
+            <span>이벤트 기간 : <fmt:formatDate value="${vo.startDate }" pattern="yyyy-MM-dd"/> ~ <fmt:formatDate value="${vo.endDate }" pattern="yyyy-MM-dd"/> </span>
+            <span>작성일 : <fmt:formatDate value="${vo.writeDate }" pattern="yyyy-MM-dd"/></span>
         </div>
         
         <div class="image-container">
-            <img src="${vo.imageName }" alt="가을 신제품 이미지">
+            <img src="${vo.imageName }" alt="가을 신제품 이미지" style="width: 900px;">
         </div>
         
         <div class="content">
-            ${vo.content }
+            <p>${vo.content }</p>
         </div>
-        <c:if test="${login.gradeNo==9 }">
-	        <div class="buttons" style="margin-right: 25px;">
-	            <button class="button backBtn" onclick="history.back()" id="cancelBtn">돌아가기</button>
-	            <button class="button updateBtn">수정</button>
-	            <button class="button deleteBtn">이벤트 삭제</button>
-	        </div>
-        </c:if>
         
+        <div class="buttons">
+	        <button class="button backBtn" onclick="history.back()" id="cancelBtn">돌아가기</button>
+	        <c:if test="${login.gradeNo==9 }">
+	            <a href="updateForm.do?perPageNum=${pageObject.perPageNum }" class="button updateBtn">수정</a>
+	            <!-- <button class="button deleteBtn">이벤트 삭제</button> -->
+	            <form action="${pageContext.request.contextPath}/event/delete.do" method="post" onsubmit="return confirm('정말로 삭제하시겠습니까?');">
+				    <input type="hidden" name="eno" value="${vo.eno}">
+				    <button type="submit" class="button deleteBtn">이벤트 삭제</button>
+				</form>
+	        </c:if>
+        </div>
     </div>
-	
 </body>
 </html>

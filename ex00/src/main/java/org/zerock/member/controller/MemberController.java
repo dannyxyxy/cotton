@@ -2,12 +2,15 @@ package org.zerock.member.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.zerock.member.service.MemberService;
 import org.zerock.member.vo.LoginVO;
 import org.zerock.member.vo.MemberVO;
+import org.zerock.util.page.PageObject;
 
 import lombok.extern.log4j.Log4j;
 
@@ -32,6 +36,42 @@ public class MemberController {
 	@Qualifier("memberServiceImpl")
 	private MemberService service;
 	
+	
+	@GetMapping("/adminPage.do")
+	 public String list(Model model, HttpServletRequest request) {
+	     log.info("========= adminPage.do ============");
+
+	     PageObject pageObject = PageObject.getInstance(request);
+	     if (request.getParameter("perPageNum") == null) {
+	        pageObject.setPerPageNum(3);
+	     }
+
+	     model.addAttribute("list", service.list(pageObject));
+	     model.addAttribute("pageObject", pageObject);
+	     return "member/adminPage";
+	 }
+
+	 
+	 
+	 @PostMapping("/updateStatus")
+	 public String updateStatus(@RequestParam("id") String id, 
+	                            @RequestParam("status") String status, 
+	                            @RequestParam("gradeNo") int gradeNo, 
+	                            RedirectAttributes rttr) {
+	     log.info("ID: " + id);
+	     log.info("Status: " + status);
+	     log.info("Grade No: " + gradeNo);
+
+	     try {
+	         service.updateStatusAndGrade(id, status, gradeNo);
+	         rttr.addFlashAttribute("msg", "회원 상태와 등급이 성공적으로 변경되었습니다.");
+	     } catch (Exception e) {
+	         log.error("회원 상태 변경 중 오류 발생", e);
+	         rttr.addFlashAttribute("errorMessage", "회원 상태 변경 중 오류가 발생했습니다. 다시 시도해 주세요.");
+	     }
+	     return "redirect:/member/adminPage.do";
+	 }
+	 
 	// 로그인 폼
 	@GetMapping("/loginForm.do")
 	public String loginForm() {
@@ -96,11 +136,7 @@ public class MemberController {
 		
 		return "redirect:/main/main.do";
 	}
-	
-	/////////////////////////////// 이하 테스트 코드 ////////////////////////////////////
-	
-    
-    
+
     // 회원정보 수정 폼
     @GetMapping("/updateForm.do")
     public String updateForm(LoginVO vo, HttpSession session, Model model) {
@@ -120,7 +156,7 @@ public class MemberController {
     	return "member/updateForm";
     }
     
-    
+    //회원정보 수정 처리 (사진변경)
     @PostMapping("/update.do")
     public String update(@RequestParam(value = "profileImage") MultipartFile file,
                          MemberVO vo, HttpSession session, RedirectAttributes rttr) {
@@ -163,7 +199,7 @@ public class MemberController {
             }
         }
 
-        // 회원정보 업데이트
+        // 회원 정보 수정 처리
         vo.setId(login.getId());
         log.info(vo);
         try {
@@ -181,7 +217,7 @@ public class MemberController {
         rttr.addFlashAttribute("msg", "회원정보 수정이 완료되었습니다.");
         return "redirect:/member/updateForm.do";
     }
+    
 
    
 }
-

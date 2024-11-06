@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <%@ page language="java" contentType="text/html; charset=UTF-8"
    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -8,132 +7,7 @@
 <html>
 <head>
     <title>Profile</title>
-
-    <style>
-        .profileImgSpace {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .profileImgBox {
-            padding: 10px;
-        }
-
-        .input-file-button {
-            background-color: #333;
-            color: white;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            padding: 5px 20px;
-        }
-
-        .misHeader {
-            align-items: center;
-            height: 100px;
-            margin: 0px;
-        }
-
-        .misTopBody {
-            height: 150px;
-        }
-
-        .misBottomBody {
-            height: 150px;
-        }
-
-        .memberStatusInputBox {
-            width: 80%;
-            height: 50px;
-            padding: 5px;
-            border: 1px solid #ddd;
-            border-radius: 50px;
-            display: flex;
-        }
-
-        .memberStatusTextInput[type="text"], input[type="tel"], input[type="email"],
-        input[type="date"] {
-            width: 85%;
-            height: 100%;
-            padding: 0px;
-            border: none;
-            box-sizing: border-box;
-            margin-left: 5%;
-            margin-right: 2%;
-        }
-
-        .memberStatusSelectInput[type="text"], select {
-            width: 90%;
-            height: 100%;
-            padding: 0px;
-            border: none;
-            box-sizing: border-box;
-            margin-left: 5%;
-            margin-right: 2%;
-        }
-
-        .memberStatusInputClearBtn {
-            border-radius: 50px;
-            border: none;
-            background-color: #ffffff;
-        }
-
-        .memberStatusBirthdayInputBtn {
-            width: 15%;
-            height: 100%;
-            padding: 0px;
-            border: none;
-            border-radius: 50px;
-            background-color: #ffffff;
-        }
-
-        .memberStatusAdressInputBtn {
-            width: 15%;
-            height: 100%;
-            padding: 0px;
-            border: none;
-            border-radius: 50px;
-            background-color: #ffffff;
-        }
-
-        .memberStatusLabel {
-            font-weight: bold;
-            margin-bottom: 5px;
-            padding: 0px;
-        }
-
-        .misFooter {
-            height: 200px;
-        }
-
-        .misFooterBtnSpace {
-            float: right;
-        }
-
-        .updateBtn {
-            background-color: #ccc;
-            color: #333;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            cursor: pointer;
-            padding: 10px 40px;
-            margin: 7px;
-        }
-
-        .cancleBtn {
-            background-color: #333;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            padding: 10px 40px;
-            margin: 7px;
-        }
-    </style>
-
+	<link rel="stylesheet" href="/resources/css/member/updateForm.css">
     <script>
     $(function(){
         let now = new Date();
@@ -259,5 +133,4 @@
         </form>
     </div>
 </body>
-
 </html>

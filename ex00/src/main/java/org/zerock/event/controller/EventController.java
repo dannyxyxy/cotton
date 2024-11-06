@@ -10,7 +10,9 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -124,26 +126,55 @@ public class EventController {
 	
 	// 4-1. 이벤트 게시판 글수정 처리
 	@PostMapping("/update.do")
-	public String update(EventVO vo, RedirectAttributes rttr) {
+	public String update(@RequestParam("file") MultipartFile file, 
+			@ModelAttribute("vo") EventVO vo, HttpServletRequest request, RedirectAttributes rttr) throws Exception {
 		log.info("update() =========");
 		log.info(vo);
+		
+		vo.setImageName(FileUtil.upload(path, file, request));
+		
+		Integer result = service.write(vo);
 		
 		if (service.update(vo) == 1) {
 			// return 이 1 이면 수정이 잘 되었다는 의미입니다.
 			rttr.addFlashAttribute("msg",
-				"이벤트 게시판" + vo.getEno() + "번 글이 수정되었습니다.");
+					"이벤트 게시판" + vo.getEno() + "번 글이 수정되었습니다.");
 		}
 		else {
 			// 글 수정이 안되었을 때
 			rttr.addFlashAttribute("msg",
-				"이벤트 게시판 글수정이 되지 않았습니다."
-				+ "비밀번호가 맞지 않습니다."
-				+ "다시 확인하시고 시도해 주세요.");
+					"이벤트 게시판 글수정이 되지 않았습니다."
+							+ "비밀번호가 맞지 않습니다."
+							+ "다시 확인하시고 시도해 주세요.");
 		}
 		
 		// 글 수정후 글보기로 돌아갑니다. 조회수는 증가하지 않습니다.
 		return "redirect:view.do?eno=" + vo.getEno() + "&inc=0";
 	}
+	
+	// 4-1. 이벤트 게시판 글수정 처리
+//	@PostMapping("/update.do")
+//	public String update(EventVO vo, RedirectAttributes rttr) {
+//		log.info("update() =========");
+//		log.info(vo);
+//		
+//		if (service.update(vo) == 1) {
+//			// return 이 1 이면 수정이 잘 되었다는 의미입니다.
+//			rttr.addFlashAttribute("msg",
+//				"이벤트 게시판" + vo.getEno() + "번 글이 수정되었습니다.");
+//		}
+//		else {
+//			// 글 수정이 안되었을 때
+//			rttr.addFlashAttribute("msg",
+//				"이벤트 게시판 글수정이 되지 않았습니다."
+//				+ "비밀번호가 맞지 않습니다."
+//				+ "다시 확인하시고 시도해 주세요.");
+//		}
+//		
+//		// 글 수정후 글보기로 돌아갑니다. 조회수는 증가하지 않습니다.
+//		return "redirect:view.do?eno=" + vo.getEno() + "&inc=0";
+//	}
+	
 	
 	
 	// 5. 이벤트 게시판 글삭제 처리
@@ -170,6 +201,11 @@ public class EventController {
 		}
 	
 	}
+	
+	
+	
+	
+	
 	
 	
 	

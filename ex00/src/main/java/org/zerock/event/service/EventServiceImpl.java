@@ -74,6 +74,12 @@ public class EventServiceImpl implements EventService {
 	
 	
 	
+	
+	
+	
+	
+	
+	
 	//메인페이지에 이벤트리스트를 전시하기 위해 만든것.
 	@Override
 	public List<EventVO> getAllEvents() {

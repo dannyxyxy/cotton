@@ -177,12 +177,15 @@
         <hr>
         
         <a href="/cartList">쇼핑카트</a>
-        <a href="/wishlist">위시리스트</a>
+        <a href="/wish/list.do?id=${login.id}">위시리스트</a>
         <a href="/butList">구매내역</a>
         <a href="/settings">내가 쓴 리뷰</a>
         <a href="/logout">로그아웃</a>
         <hr>
         <a href="/member/updateForm.do">회원정보</a>
+        <c:if test="${login.gradeNo==9 }">
+        	<a href="/member/adminPage.do">회원관리</a>
+        </c:if>
     </div>
    
     <div class="category-bar">

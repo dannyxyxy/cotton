@@ -1,6 +1,5 @@
 package org.zerock.member.vo;
 
-
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -26,6 +25,5 @@ public class LoginVO {
 	//grade Table
 	private int gradeNo ;
 	private String gradeName;
-
 
 }
