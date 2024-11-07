@@ -93,6 +93,7 @@
     
 
     <decorator:head/>
+    <!-- 로그인 정보가 담긴 div 추가 -->
 </head>
 <body>
     <div class="navbar">
@@ -144,7 +145,7 @@
            </c:if>
             <a href="#" onclick="<c:choose>
                 <c:when test='${empty login}'>window.location.href='/member/loginForm.do';</c:when>
-                <c:otherwise>window.location.href='/member/wishlist.do';</c:otherwise>
+                <c:otherwise>window.location.href='/wish/list.do';</c:otherwise>
             </c:choose>">
                 <i class="fa fa-heart"></i>
             </a>
@@ -177,7 +178,7 @@
         <hr>
         
         <a href="/cartList">쇼핑카트</a>
-        <a href="/wish/list.do?id=${login.id}">위시리스트</a>
+        <a href="/wish/list.do">위시리스트</a>
         <a href="/butList">구매내역</a>
         <a href="/settings">내가 쓴 리뷰</a>
         <a href="/logout">로그아웃</a>

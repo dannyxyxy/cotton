@@ -18,38 +18,23 @@ public class WishServiceImpl implements WishService {
 
     @Setter(onMethod_ = @Autowired)
     private WishMapper mapper;
-
-    @Override
-    public List<WishVO> getWishListByUserId(String id) {
-        return mapper.getWishList(id);
+    
+ // 사용자의 위시리스트 조회
+    public List<WishVO> getWishList(String userId) {
+        return mapper.getWishListByUserId(userId);
     }
 
-    @Override
-    public WishVO getWishByGoodsNo(String id, Long goods_no) {
-        return mapper.getWishByGoodsNo(id, goods_no);
+    // 위시리스트에 상품 추가
+    public boolean addWishItem(Long goodsNo, String userId) {
+        WishVO wishVO = new WishVO();
+        wishVO.setGoods_no(goodsNo);
+        wishVO.setId(userId);
+        wishVO.setTotal(1); // 처음 추가할 때 개수는 1로 설정
+        return mapper.insertWishItem(wishVO);
     }
 
-    @Override
-    @Transactional
-    public void addWishItem(String id, Long goods_no) {
-    	  WishVO existingWish = mapper.getWishByGoodsNo(id, goods_no);
-          if (existingWish == null) {
-              // 상품이 위시리스트에 없을 때 새 항목 추가
-              mapper.addWishItem(id, goods_no);
-              log.info("위시리스트에 추가됨: " + goods_no);
-          } else {
-              log.info("이미 위시리스트에 존재하는 상품: " + goods_no);
-          }
-    }
-
-    @Override
-    @Transactional
-    public void deleteWishItem(Long wish_no) {
-        mapper.deleteWishItem(wish_no);
-    }
-
-    @Override
-    public void updateWishTotal(Long goods_no, Integer total) {
-        mapper.updateWishTotal(goods_no, total);
+    // 위시리스트에서 상품 제거
+    public boolean removeWishItem(Long goodsNo, String userId) {
+        return mapper.removeWishItem(goodsNo, userId);
     }
 }

@@ -32,46 +32,56 @@ import lombok.extern.log4j.Log4j;
 @RequestMapping("/member")
 public class MemberController {
 
-	@Autowired
-	@Qualifier("memberServiceImpl")
-	private MemberService service;
-	
-	
-	@GetMapping("/adminPage.do")
-	 public String list(Model model, HttpServletRequest request) {
-	     log.info("========= adminPage.do ============");
+    @Autowired
+    @Qualifier("memberServiceImpl")
+    private MemberService service;
 
-	     PageObject pageObject = PageObject.getInstance(request);
-	     if (request.getParameter("perPageNum") == null) {
-	        pageObject.setPerPageNum(3);
-	     }
+    // 파일 업로드 디렉토리 경로
+    private static final String UPLOAD_DIR = "/upload/member/";
 
-	     model.addAttribute("list", service.list(pageObject));
-	     model.addAttribute("pageObject", pageObject);
-	     return "member/adminPage";
-	 }
+    // 세션에서 로그인 정보를 가져오는 메서드
+    private LoginVO getSessionLogin(HttpSession session) {
+        return (LoginVO) session.getAttribute("login");
+    }
 
-	 
-	 
-	 @PostMapping("/updateStatus")
-	 public String updateStatus(@RequestParam("id") String id, 
-	                            @RequestParam("status") String status, 
-	                            @RequestParam("gradeNo") int gradeNo, 
-	                            RedirectAttributes rttr) {
-	     log.info("ID: " + id);
-	     log.info("Status: " + status);
-	     log.info("Grade No: " + gradeNo);
+    // 예외 처리 메시지를 설정하는 메서드
+    private void setErrorMessage(RedirectAttributes rttr, String message) {
+        rttr.addFlashAttribute("errorMessage", message);
+    }
+    
+    //회원 리스트 + 페이징처리
+    @GetMapping("/adminPage.do")
+    public String list(Model model, HttpServletRequest request) {
+        log.info("========= adminPage.do ============");
 
-	     try {
-	         service.updateStatusAndGrade(id, status, gradeNo);
-	         rttr.addFlashAttribute("msg", "회원 상태와 등급이 성공적으로 변경되었습니다.");
-	     } catch (Exception e) {
-	         log.error("회원 상태 변경 중 오류 발생", e);
-	         rttr.addFlashAttribute("errorMessage", "회원 상태 변경 중 오류가 발생했습니다. 다시 시도해 주세요.");
-	     }
-	     return "redirect:/member/adminPage.do";
-	 }
-	 
+        PageObject pageObject = PageObject.getInstance(request);
+        if (request.getParameter("perPageNum") == null) {
+            pageObject.setPerPageNum(3);
+        }
+
+        model.addAttribute("list", service.list(pageObject));
+        model.addAttribute("pageObject", pageObject);
+        return "member/adminPage";
+    }
+
+    //회원 상태, 등급 변
+    @PostMapping("/updateStatus")
+    public String updateStatus(@RequestParam("id") String id, 
+                               @RequestParam("status") String status, 
+                               @RequestParam("gradeNo") int gradeNo, 
+                               RedirectAttributes rttr) {
+        log.info("ID: " + id + ", Status: " + status + ", Grade No: " + gradeNo);
+
+        try {
+            service.updateStatusAndGrade(id, status, gradeNo);
+            rttr.addFlashAttribute("msg", "회원 상태와 등급이 성공적으로 변경되었습니다.");
+        } catch (Exception e) {
+            log.error("회원 상태 변경 중 오류 발생", e);
+            setErrorMessage(rttr, "회원 상태 변경 중 오류가 발생했습니다. 다시 시도해 주세요.");
+        }
+        return "redirect:/member/adminPage.do";
+    }
+    
 	// 로그인 폼
 	@GetMapping("/loginForm.do")
 	public String loginForm() {
@@ -80,64 +90,69 @@ public class MemberController {
 	}
 	
 	// 로그인 처리
-	@PostMapping("/login.do")
-	public String login(LoginVO vo,
-			HttpSession session, RedirectAttributes rttr) {
-		log.info("========= login.do =============");
-		
-		// DB에서 로그인 정보를 가져옵니다. - id, pw를 넘겨서
-		LoginVO loginVO = service.login(vo);
-		
-		if (loginVO == null) {
-			rttr.addFlashAttribute("msg",
-				"로그인 정보가 맞지 않습니다. 정보를 확인하시고 다시 시도해 주세요");
-			
-			return "redirect:/member/loginForm.do";
-		}
-		
-		// 로그인 정보를 찾았을때
-		session.setAttribute("login", loginVO);
-		rttr.addFlashAttribute("msg",
-			loginVO.getName() + "님은 " + 
-			loginVO.getGradeName() + "(으)로 로그인 되었습니다.");
-		
-		
-		return "redirect:/main/main.do";
-	}
-	
-	@GetMapping("/logout.do")
-	public String logout(HttpSession session, RedirectAttributes rttr) {
-		log.info("========== logout.do ==========");
-			
-		session.removeAttribute("login");
-		
-		rttr.addFlashAttribute("msg","로그아웃 되었습니다");
-		
-		
-		return "redirect:/main/main.do";
-	}
-	 	
+    @PostMapping("/login.do")
+    public String login(LoginVO vo, HttpSession session, RedirectAttributes rttr) {
+        log.info("========= login.do =============");
+
+        LoginVO loginVO = service.login(vo);
+        
+        // 로그인 정보 틀렸을떄
+        if (loginVO == null) {
+            rttr.addFlashAttribute("msg", "로그인 정보가 맞지 않습니다. 정보를 확인하시고 다시 시도해 주세요.");
+            return "redirect:/member/loginForm.do";
+        }
+        
+        //DB 에서 로그인 하려는 아이디 상태 가져오기
+        String status = loginVO.getStatus();
+        log.info("회원 상태: " + status);
+        
+        // 로그인 아이디 상태가 휴면,탈퇴 상태 일때 로그인 못하게 하기
+        String statusMsg = null;
+        if ("휴면".equals(status)) {
+            statusMsg = "계정이 휴면 상태입니다. 관리자에게 문의하세요.";
+        } else if ("탈퇴".equals(status)) {
+            statusMsg = "이미 탈퇴된 계정입니다.";
+        } else if ("강퇴".equals(status)) {
+            statusMsg = "강퇴된 계정으로 로그인할 수 없습니다.";
+        }
+
+        if (statusMsg != null) {
+            rttr.addFlashAttribute("msg", statusMsg);
+            return "redirect:/member/loginForm.do";
+        }
+        
+        //정상 로그인 처리
+        session.setAttribute("login", loginVO);
+        rttr.addFlashAttribute("msg", loginVO.getName() + "님은 " + loginVO.getGradeName() + "(으)로 로그인 되었습니다.");
+
+        return "redirect:/main/main.do";
+    }
+    
+    //로그아웃
+    @GetMapping("/logout.do")
+    public String logout(HttpSession session, RedirectAttributes rttr) {
+        session.removeAttribute("login");
+        rttr.addFlashAttribute("msg", "로그아웃 되었습니다");
+        return "redirect:/main/main.do";
+    }
+    
 	// 회원가입 폼
 	@GetMapping("/writeForm.do")
 	public String writeForm() {
 		log.info("========= writeForm.do ============");
 		return "member/writeForm";
 	}
-
-	// 회원가입 처리
-	@PostMapping("/write.do")
-	public String write(MemberVO vo,
-			HttpSession session, RedirectAttributes rttr) {
-		log.info("========= write.do =============");
-		
-		service.write(vo);
-		
-		rttr.addFlashAttribute("msg", "회원가입 되었습니다.");
-		
-		return "redirect:/main/main.do";
-	}
-
-    // 회원정보 수정 폼
+    
+    //회원가입 처리
+    @PostMapping("/write.do")
+    public String write(MemberVO vo, RedirectAttributes rttr) {
+        service.write(vo);
+        rttr.addFlashAttribute("msg", "회원가입 되었습니다.");
+        return "redirect:/main/main.do";
+    }
+    
+    
+    // 내정보 수정 폼
     @GetMapping("/updateForm.do")
     public String updateForm(LoginVO vo, HttpSession session, Model model) {
     	log.info("========= updateForm.do ============");
@@ -156,68 +171,53 @@ public class MemberController {
     	return "member/updateForm";
     }
     
-    //회원정보 수정 처리 (사진변경)
+    
+    // 내정보 변경하기
     @PostMapping("/update.do")
     public String update(@RequestParam(value = "profileImage") MultipartFile file,
                          MemberVO vo, HttpSession session, RedirectAttributes rttr) {
         log.info("========= update.do ============");
 
-        // 로그인된 사용자 정보 가져오기
-        LoginVO login = (LoginVO) session.getAttribute("login");
+        LoginVO login = getSessionLogin(session);
 
-        // 이미지 파일 처리
         if (file != null && !file.isEmpty()) {
-        	log.info("file != null");
             try {
-                String uploadDir = session.getServletContext().getRealPath("/upload/member/");
+                String uploadDir = session.getServletContext().getRealPath(UPLOAD_DIR);
                 File directory = new File(uploadDir);
                 if (!directory.exists()) {
-                    directory.mkdirs(); // 디렉터리 생성
+                    directory.mkdirs();
                 }
 
                 String fileName = login.getId() + "_" + UUID.randomUUID() + "_" + file.getOriginalFilename();
                 File newFile = new File(uploadDir + fileName);
 
-                // 파일 저장
                 file.transferTo(newFile);
-
-                // 파일 경로 설정
-                String imagePath = "/upload/member/" + fileName;
-                vo.setPhoto(imagePath); // MemberVO에 사진 경로 설정
+                vo.setPhoto(UPLOAD_DIR + fileName);
 
             } catch (IOException e) {
                 log.error("프로필 사진 업로드 중 오류 발생", e);
-                rttr.addFlashAttribute("errorMessage", "프로필 사진 업데이트 중 오류가 발생했습니다. 다시 시도해주세요.");
+                setErrorMessage(rttr, "프로필 사진 업데이트 중 오류가 발생했습니다.");
                 return "redirect:/member/updateForm.do";
             }
         } else {
-        	log.info("file == null");
             MemberVO existingMember = service.view(login.getId());
             if (existingMember != null) {
-            	log.info(existingMember.getPhoto());
                 vo.setPhoto(existingMember.getPhoto());
             }
         }
 
-        // 회원 정보 수정 처리
         vo.setId(login.getId());
-        log.info(vo);
         try {
             service.update(vo);
+            login.setPhoto(vo.getPhoto());
+            session.setAttribute("login", login);
+            rttr.addFlashAttribute("msg", "회원정보 수정이 완료되었습니다.");
         } catch (Exception e) {
             log.error("회원정보 업데이트 중 오류 발생", e);
-            rttr.addFlashAttribute("errorMessage", "회원정보 수정 중 오류가 발생했습니다. 다시 시도해주세요.");
+            setErrorMessage(rttr, "회원정보 수정 중 오류가 발생했습니다. 다시 시도해주세요.");
             return "redirect:/member/updateForm.do";
         }
 
-        // 세션에 업데이트된 사용자 정보를 다시 저장합니다.
-        login.setPhoto(vo.getPhoto()); // 세션에 있는 로그인 객체의 사진 경로도 업데이트
-        session.setAttribute("login", login);
-
-        rttr.addFlashAttribute("msg", "회원정보 수정이 완료되었습니다.");
         return "redirect:/member/updateForm.do";
     }
-    
-
-   
 }

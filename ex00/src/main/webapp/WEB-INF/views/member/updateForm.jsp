@@ -7,7 +7,10 @@
 <html>
 <head>
     <title>Profile</title>
-	<link rel="stylesheet" href="/resources/css/member/updateForm.css">
+
+    <link rel="stylesheet" href="/resources/css/member/updateForm.css">
+
+
     <script>
     $(function(){
         let now = new Date();
@@ -47,6 +50,7 @@
     </script>
 </head>
 <body>
+
     <div class="container">
         <form action="/member/update.do" method="post" enctype="multipart/form-data"> <!-- onsubmit="return validateForm()" -->
             <!-- 프로필 사진 부분 -->

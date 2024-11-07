@@ -11,14 +11,15 @@
 <title>상품리스트</title>
 <link rel="stylesheet" href="/resources/css/goods/list.css">
 <script type="text/javascript">
-$(function(){
-
-	$(function(){
-		$(".promotion-card").click(function() {
-		    let goods_no = $(this).data("goods_no");
-		    console.log("goods_no =", goods_no);
+$(document).ready(function() {
+		// 상품 상세보기 이동 (검색 아이콘 클릭)
+		$(".btn-search").click(function() {
+		    // 클릭한 버튼의 부모 요소인 promotion-card에서 goods_no 추출
+		    let goods_no = $(this).closest(".promotion-card").data("goods_no"); 
+		    console.log("상품 상세보기로 이동: goods_no =", goods_no);
 		    if (goods_no) {
-		        location = "view.do?goods_no=" + goods_no + "&${pageObject.pageQuery}&${goodsSearchVO.searchQuery}";
+		        // 상품 상세 페이지로 이동
+		        location.href = "view.do?goods_no=" + goods_no + "&${pageObject.pageQuery}&${goodsSearchVO.searchQuery}";
 		    } else {
 		        console.error("goods_no가 정의되지 않았습니다.");
 		    }
@@ -32,30 +33,6 @@ $(function(){
 		    form.action = 'list.do?cate_code1=' + cateCode1;
 		    return true; // 폼 제출을 계속 진행
 		}
-		
-		function addToWishlist(goodsNo) {
-		    // 현재 로그인된 사용자의 ID를 서버로부터 받아옵니다
-		    const userId = '${login.id}';  // ${login.id}는 서버에서 세션을 통해 전달된 값이라고 가정
-
-		    // AJAX 요청을 통해 위시리스트에 추가
-		    fetch(`/wish/add`, {
-		        method: 'POST',
-		        headers: {
-		            'Content-Type': 'application/json'
-		        },
-		        body: JSON.stringify({ id: userId, goods_no: goodsNo })
-		    })
-		    .then(response => response.json())
-		    .then(data => {
-		        if (data.success) {
-		            alert("위시리스트에 추가되었습니다.");
-		        } else {
-		            alert("위시리스트 추가에 실패했습니다.");
-		        }
-		    })
-		    .catch(error => console.error('Error:', error));
-		}
-
 	    
 		$("#perPageNum").change(function(){
 			console.log("goodsSearchVO.goods_no : "+goodsSearchVO.goods_no);
@@ -128,7 +105,6 @@ $(function(){
 	    });
 	  //페이징처리버튼 JS -end
 	});
-});
 </script>
 </head>
 <body>
@@ -138,9 +114,6 @@ $(function(){
         <div><h4>카테고리별 제품 보러가기</h4></div>
         <div>카테고리별 제품을 만나보세요!</div>
     </div>
-    
-    	
-    
     <div class="visualImage">
     <!-- 상단 이미지와 텍스트 -->
     <c:if test="${param.cate_code1==1 }">
@@ -219,11 +192,12 @@ $(function(){
                 <div class="card">
                     <img src="${vo.image_name}" class="card-img-top">
                     <div class="overlay">
-                        <a class="btn btn-wishlist" data-goods-no="${vo.goods_no}" onclick="addToWishlist(${vo.goods_no})">
-					        <i class="fa fa-heart"></i>
-					    </a>
+                        <button class="btn btn-wishlist" onclick="addToWishlist(${vo.goods_no})">
+						    <i class="fa fa-heart"></i>
+						</button>
+
                         <button class="btn btn-addcart"><i class="fa fa-shopping-cart"></i></button>
-                        <button class="btn btn-addcart"><i class="fa fa-search"></i></button>
+                        <button class="btn btn-search"><i class="fa fa-search"></i></button>
                     </div>
                     <div class="card-body">
                         <div class="card-title">${vo.goods_name}</div>
@@ -258,7 +232,35 @@ $(function(){
 		<a href="writeForm.do?perPageNum="${pageObject.perPageNum } class="btn btn-primary">상품등록</a>
 	</div>
 </c:if>
-
+<script type="text/javascript">
+function addToWishlist(goods_no) {
+    // AJAX 요청 보내기 (userId를 클라이언트에서 보내지 않음)
+    var userId = '${loginVO.id}'; // 이 부분이 실제로 정상적으로 로그인된 id를 담고 있는지 확인
+		if (!userId) {
+		    alert("로그인 후 위시리스트에 추가할 수 있습니다.");
+		    return;
+		}
+    $.ajax({
+        url: '/wish/add',  // 위시리스트 추가를 처리하는 서버 경로
+        type: 'POST',
+        data: {
+            goods_no: goods_no  // 상품 번호만 서버로 전송
+        },
+        success: function(response) {
+            if (response.success) {
+                alert("상품이 위시리스트에 추가되었습니다!");
+                loadWishList(); // 위시리스트 갱신 함수 호출 (다시 로드)
+            } else {
+                alert(response.message);  // 서버에서 전달한 실패 메시지 표시
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("AJAX 요청 실패:", error);
+            alert("서버와의 연결에 문제가 발생했습니다.");
+        }
+    });
+}
+</script>
 
 
 </body>

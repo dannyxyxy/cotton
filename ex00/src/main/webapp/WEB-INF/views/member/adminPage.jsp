@@ -10,7 +10,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>adminPage</title>
-<link rel="stylesheet" href="/resources/css/member/adminPage.css">
+
+    <link rel="stylesheet" href="/resources/css/member/adminPage.css">
+
 <script>
 	// 현재 활성화된 폼을 추적하기 위한 변수
 	let activeForm = null;
@@ -38,6 +40,8 @@
 </script>
 </head>
 <body>
+
+
 <div class="container" style="padding: 0px;">
    <div class="misHeader">
       <h2>회원 리스트 관리</h2>

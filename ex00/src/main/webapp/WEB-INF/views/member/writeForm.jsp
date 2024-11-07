@@ -11,9 +11,9 @@
 	<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 	<script src="https://code.jquery.com/ui/1.14.0/jquery-ui.js"></script>
 	
-	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-	<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8030f1881b41d3cc1dfafec0c630e729&libraries=services"></script>
-	<link rel="stylesheet" href="/resources/css/member/writeForm.css">
+    <link rel="stylesheet" href="/resources/css/member/writeForm.css">
+
+    
 
 <script type="text/javascript">
 // 페이지 로딩 후 설정
@@ -100,6 +100,8 @@ $(function() {
 
 </head>
 <body>
+
+
 <div class="container writeAll">
     <br><br>
     <form action="/member/write.do" method="post" enctype="multipart/form-data">
@@ -167,7 +169,7 @@ $(function() {
 
         <div class="form-group">
             <label for="address2">주소입력</label>
-            <input type="text" id="address" name="address" placeholder=" '구'만 입력해주세요 ex)은평구 " >
+            <input type="text" id="address" name="address" placeholder=" 주소를 입력해주세요. " >
         </div>
 
         <div class="form-group flex">

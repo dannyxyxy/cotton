@@ -11,8 +11,34 @@
 <title>위시리스트</title>
 <link rel="stylesheet" href="/resources/css/wish/list.css">
 <script type="text/javascript">
-$(function(){
+function removeFromWishlist(goods_no) {
+    // LoginVO에서 id를 가져옵니다.
+    var userId = '${loginVO.id}'; // AOP에서 설정된 LoginVO의 id 필드를 사용
+    
+    // AJAX 요청 보내기
+    $.ajax({
+        url: '/wish/remove', // 위시리스트에서 상품 제거 경로
+        type: 'POST',
+        data: {
+            goods_no: goods_no,
+            userId: userId
+        },
+        success: function(response) {
+            if (response.success) {
+                alert("위시리스트에서 상품이 제거되었습니다.");
+                location.reload(); // 페이지를 새로 고침하여 위시리스트 갱신
+            } else {
+                alert("위시리스트에서 상품을 제거하는 데 실패했습니다.");
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("AJAX 요청 실패:", error);
+            alert("서버와의 연결에 문제가 발생했습니다.");
+        }
+    });
+}
 
+$(function(){
 	$(function(){
 		$(".promotion-card").click(function() {
 		    let goods_no = $(this).data("goods_no");
@@ -109,46 +135,35 @@ $(function(){
 </script>
 </head>
 <body>
+
 <div class="container p-3 my-3">
 	<!-- 비주얼 이미지 섹션 -->
     <div class="listHeader">
         <div><h4>위시리스트</h4></div>
-        <div>위시리스트로 등록하신 상품들입니다.</div>
+        <div>${login.id }님의 위시리스트로 등록하신 상품들입니다(${total != null ? total : 0})</div>
     </div>
-    
-<c:if test="${empty wishList }">
-    <h4 style="text-align:center;">데이터가 존재하지 않습니다.</h4>
-</c:if>
-<c:if test="${!empty wishList }">
-	<div class="container p-3 my-3">
-    <div class="dataRow row" id="cardContainer">
-        <c:forEach items="${wishList}" var="vo" varStatus="vs">
-        <c:if test="${vs.index % 3 == 0 && vs.index != 0}">
-    </div> <!-- 이전 row 닫기 -->
-     <div class="dataRow row"> <!-- 새로운 row 시작 -->
+    <div id="wishlist-container">
+            <c:if test="${empty wishList}">
+                <p>위시리스트에 추가된 상품이 없습니다.</p>
             </c:if>
-            <div class="col-md-4 promotion-card" data-wish_no="${vo.wish_no}">
+	 <!-- 위시리스트 아이템 리스트 -->
+    <div class="row">
+        <c:forEach items="${wishList}" var="wish">
+            <div class="col-md-4 promotion-card" data-goods_no="${wish.goods_no}">
                 <div class="card">
-                    <img src="${vo.image_name}" class="card-img-top">
-                    <div class="overlay">
-                        <a class="btn btn-wishlist"><i class="fa fa-heart"></i></a>
-                        <button class="btn btn-addcart"><i class="fa fa-shopping-cart"></i></button>
-                        <button class="btn btn-addcart"><i class="fa fa-search"></i></button>
-                    </div>
+                    <img src="${wish.image_name}" class="card-img-top" />
                     <div class="card-body">
-                        <div class="card-title">${vo.goods_name}</div>
-                        <div class="simple-content">${vo.content }</div>
-                        <p class="card-text">
-                            <span class="original-price float-left"><fmt:formatNumber value="${vo.price}"/></span>
-                            <span class="discount_rate">${vo.discount_rate}%</span>
-                            <span class="sale_price float-right"><fmt:formatNumber value="${vo.sale_price}"/></span>
-                        </p>
-                        <div class="review_count">총 리뷰 수 8개</div>
+                        <h5 class="card-title">${wish.goods_name}</h5>
+                        <p class="card-text">${wish.content}</p>
+                        <!-- 위시리스트에서 제거하기 버튼 -->
+                        <button class="btn btn-remove" onclick="removeFromWishlist(${wish.goods_no})">
+                            <i class="fa fa-trash"></i> 위시리스트에서 제거
+                        </button>
                     </div>
                 </div>
             </div>
         </c:forEach>
-    </div> <!-- 마지막 row 닫기 -->
+    </div>
 
     <!-- 페이지 내비게이션 -->
     <div class="pageNav" id="pagination">
@@ -158,10 +173,10 @@ $(function(){
     </div>
 </div>
 
+
 <!--     <div> -->
 <%--         <pageNav:pageNav listURI="list.do" pageObject="${pageObject}"></pageNav:pageNav> --%>
 <!--     </div> -->
-</c:if>
 
 <c:if test="${login.gradeNo==9 }">
 	<div class="pageNav">

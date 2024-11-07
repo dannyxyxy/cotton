@@ -3,11 +3,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<link rel="stylesheet" href="/resources/css/member/loginForm.css">
     <meta charset="UTF-8">
     <title>로그인</title>
+  <!--   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
+
+    <link rel="stylesheet" href="/resources/css/member/loginForm.css">
+
+
 </head>
 <body>
+
     <div class="container loginAll">
         <h3 class="loginText">로그인</h3>
         <form action="login.do" method="post" class="loginInput">

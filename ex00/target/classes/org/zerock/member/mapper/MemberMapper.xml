@@ -10,7 +10,7 @@
 <!-- 로그인 -->
   <select id="login" resultType="org.zerock.member.vo.LoginVO">
   	select
-  		m.id, m.pw, m.name, m.photo, m.gradeNo, g.gradeName
+  		m.id, m.pw, m.name, m.photo, m.status, m.gradeNo, g.gradeName
   		from member m, grade g
   	where
   		(id=#{id} and pw=#{pw})
