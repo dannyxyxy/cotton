@@ -14,33 +14,6 @@
 	
 	<link rel="stylesheet" href="/resources/css/event/view.css">
 
-<!-- 1. 필요한 전역변수 선언 : 직접코딩 -->
-<script type="text/javascript">
-	// 보고 있는 일반 게시판 글번호
-	let id = "test1";// id를 하드코딩 - member table에 등록된 id중 - 로그인 id
-	let eno = ${vo.eno};
-	let replyPage = 1; // 댓글의 현재 페이지
-	console.log("전역변수 eno : " + eno);
-</script>
-
-<!-- 2. 날짜 및 시간 처리함수 선언 -->
-<script type="text/javascript" src="/js/dateTime.js"></script>
-
-<!-- 댓글 페이지네이션 함수 선언 -->
-<script type="text/javascript" src="/js/util.js"></script>
-
-<!-- 3. 댓글 객체 (replySerive) 를 선언 : Ajax 처리부분 포함 -->
-<!-- 댓글 처리하는 모든 곳에 사용하는 부분을 코딩 -->
-<script type="text/javascript" src="/js/reply.js"></script>
-
-<script type="text/javascript">
-	//replyService.list(1, 10);
-	//replyService.list(1); // 일반게시판 글번호는 전역변수로 처리
-	//replyService.list();
-</script>
-<!-- 4. 댓글 객체(reply.js에서 선언한 replyService)를 호출하여 처리 + 이벤트처리 -->
-<!-- 일반 게시판 댓글에 사용되는 부분을 코딩 -->
-<script type="text/javascript" src="/js/replyProcess.js"></script>
 
 <script type="text/javascript">
 	$(function(){
@@ -90,7 +63,7 @@
         <div class="buttons">
 	        <button class="button backBtn" onclick="history.back()" id="cancelBtn">돌아가기</button>
 	        <c:if test="${login.gradeNo==9 }">
-	            <a href="updateForm.do?perPageNum=${pageObject.perPageNum }" class="button updateBtn">수정</a>
+	            <a href="updateForm.do?perPageNum=${pageObject.perPageNum }&eno=${vo.eno}" class="button updateBtn">수정</a>
 	            <!-- <button class="button deleteBtn">이벤트 삭제</button> -->
 	            <form action="${pageContext.request.contextPath}/event/delete.do" method="post" onsubmit="return confirm('정말로 삭제하시겠습니까?');">
 				    <input type="hidden" name="eno" value="${vo.eno}">

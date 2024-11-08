@@ -13,19 +13,19 @@ import lombok.extern.log4j.Log4j;
 
 public interface EventService {
 	
-	// 1. 일반 게시판 리스트
+	// 1. 이벤트 게시판 리스트
 	public List<EventVO> list(PageObject pageObject);
 	
-	// 2. 일반 게시판 글보기
+	// 2. 이벤트 게시판 글보기
 	public EventVO view(Long eno);
 	
-	// 3. 일반 게시판 글등록
+	// 3. 이벤트 게시판 글등록
 	public Integer write(EventVO vo);
 	
-	// 4. 일반 게시판 글수정
+	// 4. 이벤트 게시판 글수정
 	public Integer update(EventVO vo);
 	
-	// 5. 일반 게시판 글삭제
+	// 5. 이벤트 게시판 글삭제
 	public Integer delete(EventVO vo);
 	
 	

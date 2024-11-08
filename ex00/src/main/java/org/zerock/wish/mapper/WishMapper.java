@@ -14,6 +14,7 @@ public interface WishMapper {
     // 위시리스트 상품 추가
     boolean insertWishItem(WishVO wishVO);
 
-    // 위시리스트에서 상품 제거
-    boolean removeWishItem(@Param("goods_no") Long goodsNo, @Param("id") String userId);
+    
+
+	void deleteWishItemByWishNo(Long wishNo);
 }

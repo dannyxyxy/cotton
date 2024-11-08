@@ -27,7 +27,7 @@ public class EventServiceImpl implements EventService {
 	@Inject
 	private EventMapper mapper;
 
-	// 1. 일반 게시판 리스트
+	// 1. 이벤트 게시판 리스트
 	@Override
 	public List<EventVO> list(PageObject pageObject) {
 		log.info("list() 실행 =====");
@@ -36,7 +36,7 @@ public class EventServiceImpl implements EventService {
 		return mapper.list(pageObject);
 	}
 	
-	// 2. 일반 게시판 글보기
+	// 2. 이벤트 게시판 글보기
 	@Override
 	public EventVO view(Long eno) {
 		log.info("view() 실행 =====");
@@ -46,7 +46,7 @@ public class EventServiceImpl implements EventService {
 		return mapper.view(eno);
 	}
 	
-	// 3. 일반 게시판 글등록
+	// 3. 이벤트 게시판 글등록
 	// 트랜젝션 테스트를 위한 어노테이션 추가
 	//@Transactional - 테스트용
 	@Override
@@ -58,14 +58,21 @@ public class EventServiceImpl implements EventService {
 		return result;
 	}
 	
-	// 4. 일반 게시판 글수정
+	// 4. 이벤트 게시판 글수정
+//	@Override
+//	public Integer update(EventVO vo) {
+//		log.info("update() 실행 =====");
+//		return mapper.update(vo);
+//	}
+	// 4. 이벤트 게시판 글수정
 	@Override
 	public Integer update(EventVO vo) {
+		Integer result = mapper.update(vo);
 		log.info("update() 실행 =====");
-		return mapper.update(vo);
+		return result;
 	}
 	
-	// 5. 일반 게시판 글삭제
+	// 5. 이벤트 게시판 글삭제
 	@Override
 	public Integer delete(EventVO vo) {
 		log.info("delete() 실행 =====");

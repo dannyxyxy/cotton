@@ -25,6 +25,7 @@
 	<div class="container">
 		<h2>이벤트 및 프로모션 등록하기</h2>
 		<form action="write.do" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="eno" value="${vo.eno}" />
 			<div class="titleBox">
 			    <label for="eventName">이벤트 이름</label>
 			    <input class="ipt" type="text" name="title" placeholder="이벤트 이름" required>

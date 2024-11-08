@@ -122,6 +122,7 @@ public class MemberController {
         }
         
         //정상 로그인 처리
+        session.setAttribute("id", loginVO.getId());
         session.setAttribute("login", loginVO);
         rttr.addFlashAttribute("msg", loginVO.getName() + "님은 " + loginVO.getGradeName() + "(으)로 로그인 되었습니다.");
 

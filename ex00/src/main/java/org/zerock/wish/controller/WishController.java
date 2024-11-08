@@ -27,18 +27,21 @@ public class WishController {
     @Qualifier("wishServiceImpl")
     private WishService service;
     
-    // 로그인된 사용자의 위시리스트를 가져오는 메서드
+ // 로그인된 사용자의 위시리스트를 가져오는 메서드
     @GetMapping("/list")
     public String getWishList(@RequestParam("id") String userId, Model model) {
         List<WishVO> wishList = service.getWishList(userId);
+        int total = wishList.size(); // 위시리스트에 담긴 상품 수
         model.addAttribute("wishList", wishList);
-        return "wishList"; // wishList.jsp로 전달
+        model.addAttribute("total", total); // 총 상품 수를 모델에 추가
+        // Redirect to wishList.jsp with id parameter
+        return "wish/list";
     }
 
     // 위시리스트에 상품을 추가하는 메서드
     @PostMapping("/add")
     @ResponseBody
-    public ResponseEntity<?> addWishItem(HttpSession session, 
+    public ResponseEntity<?> addWishItem(HttpSession session,
                                           @RequestParam("goods_no") Long goodsNo, 
                                           @RequestParam("userId") String userId) {
         // 로그인 정보 확인
@@ -62,15 +65,15 @@ public class WishController {
         }
     }
 
-    // 위시리스트에서 상품을 제거하는 메서드
     @PostMapping("/remove")
-    @ResponseBody
-    public ResponseEntity<?> removeFromWishlist(@RequestParam("goods_no") Long goodsNo, @RequestParam("userId") String userId) {
-        boolean result = service.removeWishItem(goodsNo, userId);
-        if (result) {
-            return ResponseEntity.ok(Map.of("success", true));
-        } else {
-            return ResponseEntity.ok(Map.of("success", false));
+    public ResponseEntity<String> removeWishItem(@RequestParam("wish_no") Long wishNo) {
+        try {
+            // 서비스 계층에서 wish_no를 이용해 해당 상품을 삭제
+            service.removeWishItem(wishNo);
+            return ResponseEntity.ok("위시리스트에서 상품이 제거되었습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                 .body("위시리스트 항목 삭제 중 오류가 발생했습니다.");
         }
     }
 }

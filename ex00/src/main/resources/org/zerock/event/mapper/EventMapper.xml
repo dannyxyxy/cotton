@@ -66,24 +66,26 @@
        INSERT INTO event(eno, title, content, startDate, endDate, writeDate, imageName)
        VALUES(#{eno}, #{title, jdbcType=VARCHAR}, #{content, jdbcType=VARCHAR}, 
                #{startDate, jdbcType=DATE}, #{endDate, jdbcType=DATE}, #{writeDate, jdbcType=DATE}, 
-               #{imageName, jdbcType=BLOB})
+               #{imageName, jdbcType=VARCHAR})
    </insert>
 
    <!-- 이벤트 게시판 글수정 쿼리 -->
+   <update id="update">
+<!--        <![CDATA[ -->
+		UPDATE event
+		SET title = #{title, jdbcType=VARCHAR}, content = #{content, jdbcType=VARCHAR},
+			startDate = #{startDate, jdbcType=DATE}, endDate = #{endDate, jdbcType=DATE}, writeDate = #{writeDate, jdbcType=DATE},
+			imageName = #{imageName, jdbcType=VARCHAR}
+		WHERE eno = #{eno, jdbcType=INTEGER}
+<!-- 		]]> -->
+   </update>
 <!--    <update id="update"> -->
 <!--        <![CDATA[ -->
-<!--        UPDATE event -->
-<!--        SET title = #{title, jdbcType=VARCHAR}, content = #{content, jdbcType=VARCHAR} -->
-<!--        WHERE eno = #{eno, jdbcType=INTEGER} -->
+<!--        SELECT eno, title, content, startDate, endDate, writeDate, imageName -->
+<!--        FROM event -->
+<!--        WHERE eno = #{eno} -->
 <!--        ]]> -->
 <!--    </update> -->
-   <update id="update">
-       <![CDATA[
-       SELECT eno, title, content, startDate, endDate, writeDate, imageName
-       FROM event
-       WHERE eno = #{eno}
-       ]]>
-   </update>
 
    <!-- 이벤트 게시판 글삭제 쿼리 -->
    <delete id="delete">

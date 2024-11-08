@@ -17,13 +17,6 @@
     WHERE rnum BETWEEN #{pageObject.startRow} AND #{pageObject.endRow}
 </select>
 
-
-
-
-
-
-
-  	
   	<select id="getTotalRow" resultType="Long">
     SELECT count(*)
     FROM goods g

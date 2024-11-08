@@ -235,7 +235,7 @@ $(document).ready(function() {
 <script type="text/javascript">
 function addToWishlist(goods_no) {
     // AJAX 요청 보내기 (userId를 클라이언트에서 보내지 않음)
-    var userId = '${loginVO.id}'; // 이 부분이 실제로 정상적으로 로그인된 id를 담고 있는지 확인
+    var userId = '${login.id}'; // 이 부분이 실제로 정상적으로 로그인된 id를 담고 있는지 확인
 		if (!userId) {
 		    alert("로그인 후 위시리스트에 추가할 수 있습니다.");
 		    return;
@@ -244,15 +244,12 @@ function addToWishlist(goods_no) {
         url: '/wish/add',  // 위시리스트 추가를 처리하는 서버 경로
         type: 'POST',
         data: {
-            goods_no: goods_no  // 상품 번호만 서버로 전송
+            goods_no: goods_no,  // 상품 번호만 서버로 전송
+            userId : userId
         },
         success: function(response) {
-            if (response.success) {
-                alert("상품이 위시리스트에 추가되었습니다!");
-                loadWishList(); // 위시리스트 갱신 함수 호출 (다시 로드)
-            } else {
-                alert(response.message);  // 서버에서 전달한 실패 메시지 표시
-            }
+           alert("상품이 위시리스트에 추가되었습니다!");
+           loadWishList(); // 위시리스트 갱신 함수 호출 (다시 로드)   
         },
         error: function(xhr, status, error) {
             console.error("AJAX 요청 실패:", error);

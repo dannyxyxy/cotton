@@ -1,5 +1,7 @@
 package org.zerock.main.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,8 +19,9 @@ public class MainController {
 	}
 	
 	@GetMapping("/main/main.do")
-	public String main(Model model) {
+	public String main(Model model, HttpSession session) {
 		log.info("/main/main.do =================");
+		session.setAttribute("mainPage", "mainPage");
 		return "main/main";
 	}
 }

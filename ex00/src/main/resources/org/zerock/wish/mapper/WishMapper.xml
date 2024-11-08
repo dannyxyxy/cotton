@@ -3,37 +3,37 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.zerock.wish.mapper.WishMapper">
-    <select id="getWishListByUserId" resultMap="wishResultMap">
-        SELECT
-            w.wish_no,
-            w.id,
-            g.goods_name,
-            g.content,
-            g.price,
-            g.sale_price,
-            g.discount_rate,
-            g.image_name,
-            w.total,
-            g.goods_no
-        FROM
-            wish w
-        JOIN
-            goods g ON w.goods_no = g.goods_no
-        WHERE
-            w.id = #{id}  <!-- 로그인된 사용자의 id를 기준으로 위시리스트 조회 -->
-    </select>
+   <select id="getWishListByUserId" resultMap="wishResultMap">
+    SELECT
+        w.wish_no,
+        w.id,
+        w.total,
+        g.goods_no,
+        g.goods_name,
+        g.content,
+        g.image_name,
+        p.price,
+        p.sale_price,
+        p.discount_rate
+    FROM
+        wish w
+    JOIN
+        goods g ON w.goods_no = g.goods_no
+    JOIN
+        goods_price p ON g.goods_no = p.goods_no
+    WHERE
+        w.id = #{id}  <!-- 로그인된 사용자의 id를 기준으로 위시리스트 조회 -->
+</select>
 
-    <!-- 위시리스트 상품을 추가하는 SQL -->
-    <insert id="insertWishItem">
-        INSERT INTO wish (goods_no, id, total)
-        VALUES (#{goods_no}, #{id}, 1)  <!-- 상품 번호와 사용자 ID, 개수 1로 추가 -->
-    </insert>
 
-    <!-- 위시리스트에서 상품을 제거하는 SQL -->
-    <delete id="removeWishItem">
-        DELETE FROM wish
-        WHERE goods_no = #{goods_no} AND id = #{id}
-    </delete>
+   <insert id="insertWishItem">
+    INSERT INTO wish (wish_no, goods_no, id, total)
+    VALUES (wish_seq.nextval, #{goods_no}, #{id}, #{total})
+	</insert>
+
+<delete id="deleteWishItemByWishNo">
+    DELETE FROM wish WHERE wish_no = #{wishNo}
+</delete>
 
     <!-- 결과 매핑 -->
     <resultMap id="wishResultMap" type="org.zerock.wish.vo.WishVO">

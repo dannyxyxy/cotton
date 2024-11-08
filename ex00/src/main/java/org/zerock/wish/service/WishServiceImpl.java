@@ -33,8 +33,7 @@ public class WishServiceImpl implements WishService {
         return mapper.insertWishItem(wishVO);
     }
 
-    // 위시리스트에서 상품 제거
-    public boolean removeWishItem(Long goodsNo, String userId) {
-        return mapper.removeWishItem(goodsNo, userId);
+    public void removeWishItem(Long wishNo) {
+        mapper.deleteWishItemByWishNo(wishNo);
     }
 }

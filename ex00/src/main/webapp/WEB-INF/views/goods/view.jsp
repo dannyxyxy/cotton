@@ -13,7 +13,30 @@
 
 
 <script type="text/javascript">
-
+function addToWishlist(goods_no) {
+    // AJAX 요청 보내기 (userId를 클라이언트에서 보내지 않음)
+    var userId = '${login.id}'; // 이 부분이 실제로 정상적으로 로그인된 id를 담고 있는지 확인
+		if (!userId) {
+		    alert("로그인 후 위시리스트에 추가할 수 있습니다.");
+		    return;
+		}
+    $.ajax({
+        url: '/wish/add',  // 위시리스트 추가를 처리하는 서버 경로
+        type: 'POST',
+        data: {
+            goods_no: goods_no,  // 상품 번호만 서버로 전송
+            userId : userId
+        },
+        success: function(response) {
+           alert("상품이 위시리스트에 추가되었습니다!");
+           loadWishList(); // 위시리스트 갱신 함수 호출 (다시 로드)   
+        },
+        error: function(xhr, status, error) {
+            console.error("AJAX 요청 실패:", error);
+            alert("서버와의 연결에 문제가 발생했습니다.");
+        }
+    });
+}
 	$(document).ready(function(){
 		// smallImageDiv 내에 있는 img 요소에 클릭 이벤트를 연결
 	    $("#smallImageDiv").on("click", "img", function(){
@@ -92,7 +115,7 @@
 				</div>
 				<div class="add">
 					<div class="addCart">ADD CART</div>
-					<div class="addWish">ADD WISH</div>
+					<button class="addWish" onclick="addToWishlist(${vo.goods_no})">ADD WISH</button>
 					<div class="addBuy">구매하기</div>
 				</div>
 				<div style="float: right; width: 150px; margin-top: 50px;">

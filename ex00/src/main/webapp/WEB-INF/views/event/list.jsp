@@ -136,7 +136,7 @@
 	                    </div>
 	                </div>
 	            </c:forEach>
-	        </div>				
+	        </div>
 				<!-- 이미지 데이터 반복 표시 끝 -->
 			<!-- 페이지 내비게이션 -->
 		    <div class="pageNav" id="pagination">

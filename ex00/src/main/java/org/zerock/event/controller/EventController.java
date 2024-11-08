@@ -38,6 +38,7 @@ import oracle.jdbc.proxy.annotation.Post;
 @Log4j
 public class EventController {
 	
+	// 파일이 저장될 경로
 	String path = "/upload/event";
 	
 	// 자동 DI
@@ -95,7 +96,8 @@ public class EventController {
 	// 3-2. 이벤트 게시판 글쓰기 처리
 	@PostMapping("/write.do")
 	public String write(@RequestParam("file") MultipartFile file, 
-						@ModelAttribute("vo") EventVO vo, HttpServletRequest request, RedirectAttributes rttr) throws Exception {
+						@ModelAttribute("vo") EventVO vo,
+						HttpServletRequest request,RedirectAttributes rttr) throws Exception {
 		log.info("write() =======");
 		log.info(vo);
 		
@@ -124,35 +126,34 @@ public class EventController {
 		return "event/updateForm";
 	}
 	
-	// 4-1. 이벤트 게시판 글수정 처리
+	// 4-2. 이벤트 게시판 글수정 처리
 	@PostMapping("/update.do")
 	public String update(@RequestParam("file") MultipartFile file, 
-			@ModelAttribute("vo") EventVO vo, HttpServletRequest request, RedirectAttributes rttr) throws Exception {
+						@ModelAttribute("vo") EventVO vo,
+						HttpServletRequest request,
+						RedirectAttributes rttr) throws Exception {
 		log.info("update() =========");
+		log.info("Received Eno: " + vo.getEno());  // vo의 eno가 null인지 확인하는 로그
 		log.info(vo);
 		
 		vo.setImageName(FileUtil.upload(path, file, request));
 		
-		Integer result = service.write(vo);
+		Integer result = service.update(vo);
 		
 		if (service.update(vo) == 1) {
 			// return 이 1 이면 수정이 잘 되었다는 의미입니다.
-			rttr.addFlashAttribute("msg",
-					"이벤트 게시판" + vo.getEno() + "번 글이 수정되었습니다.");
+			rttr.addFlashAttribute("msg", "이벤트 게시판" + vo.getEno() + "번 글이 수정되었습니다.");
 		}
 		else {
 			// 글 수정이 안되었을 때
-			rttr.addFlashAttribute("msg",
-					"이벤트 게시판 글수정이 되지 않았습니다."
-							+ "비밀번호가 맞지 않습니다."
-							+ "다시 확인하시고 시도해 주세요.");
+			rttr.addFlashAttribute("msg", "이벤트 게시판 글수정이 되지 않았습니다." + "다시 확인하시고 시도해 주세요.");
 		}
 		
 		// 글 수정후 글보기로 돌아갑니다. 조회수는 증가하지 않습니다.
-		return "redirect:view.do?eno=" + vo.getEno() + "&inc=0";
+		return "redirect:list.do?eno=" + vo.getEno() + "&inc=0";
 	}
 	
-	// 4-1. 이벤트 게시판 글수정 처리
+	// 4-2. 이벤트 게시판 글수정 처리
 //	@PostMapping("/update.do")
 //	public String update(EventVO vo, RedirectAttributes rttr) {
 //		log.info("update() =========");
@@ -167,12 +168,11 @@ public class EventController {
 //			// 글 수정이 안되었을 때
 //			rttr.addFlashAttribute("msg",
 //				"이벤트 게시판 글수정이 되지 않았습니다."
-//				+ "비밀번호가 맞지 않습니다."
 //				+ "다시 확인하시고 시도해 주세요.");
 //		}
 //		
 //		// 글 수정후 글보기로 돌아갑니다. 조회수는 증가하지 않습니다.
-//		return "redirect:view.do?eno=" + vo.getEno() + "&inc=0";
+//		return "redirect:list.do?eno=" + vo.getEno() + "&inc=0";
 //	}
 	
 	
@@ -193,8 +193,7 @@ public class EventController {
 		else {
 			// 삭제가 안 되었을 때
 			rttr.addFlashAttribute("msg",
-				"이벤트게시판 글삭제가 되지 않았습니다."
-				+ "비밀번호를 확인하시고 다시시도해 주세요");
+				"이벤트게시판 글삭제가 되지 않았습니다.");
 		
 			// 삭제가 되지않으면 원래 글번호 글보기로 돌아갑니다.
 			return "redirect:view.do?no=" + vo.getEno() + "&inc=0";

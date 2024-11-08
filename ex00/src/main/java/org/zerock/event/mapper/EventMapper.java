@@ -9,8 +9,8 @@ import org.zerock.util.page.PageObject;
 @Repository
 public interface EventMapper {
 
-	// 1. 일반 게시판 리스트
-	// 일반 게시판 리스트 페이지 처리를 위한 전체 데이터 개수를 가져온다.
+	// 1. 이벤트 게시판 리스트
+	// 이벤트 게시판 리스트 페이지 처리를 위한 전체 데이터 개수를 가져온다.
 	public Long getTotalRow(PageObject pageObject);
 	// 리스트 가져오는 쿼리 실행
 	public List<EventVO> list(PageObject pageObject);
@@ -23,21 +23,22 @@ public interface EventMapper {
 	// 7. DB닫기
 	// 위의 7단계를 mybatis가 대신 처리해 준다.
 	
-	// 2. 일반 게시판 글보기
+	// 2. 이벤트 게시판 글보기
 	// 조회수 증가
 	public Integer increase(Long eno);
+	
 	// 글보기 (글정보)
 	public EventVO view(Long eno);
 	
-	// 3. 일반 게시판 글쓰기
+	// 3. 이벤트 게시판 글쓰기
 	public Integer write(EventVO vo);
 	// 글등록의 트랜젝션 처리 테스트 위한 메서드
 	//public Integer writeTx(EventVO vo);  - 테스트용
 	
-	// 4. 일반 게시판 글수정
+	// 4. 이벤트 게시판 글수정
 	public Integer update(EventVO vo);
 	
-	// 5. 일반 게시판 글삭제
+	// 5. 이벤트 게시판 글삭제
 	public Integer delete(EventVO vo);
 	
 	
