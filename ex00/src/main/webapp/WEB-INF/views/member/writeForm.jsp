@@ -5,15 +5,15 @@
 <head>
 <meta charset="UTF-8">
 <title>회원가입</title>
-	<!-- datepicker -->
-	
-	<link rel="stylesheet" href="https://code.jquery.com/ui/1.14.0/themes/base/jquery-ui.css">
-	<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-	<script src="https://code.jquery.com/ui/1.14.0/jquery-ui.js"></script>
-	
-    <link rel="stylesheet" href="/resources/css/member/writeForm.css">
-
-    
+   <!-- datepicker -->
+   
+   <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.0/themes/base/jquery-ui.css">
+   <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+   <script src="https://code.jquery.com/ui/1.14.0/jquery-ui.js"></script>
+   
+   <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+   <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8030f1881b41d3cc1dfafec0c630e729&libraries=services"></script>
+   <link rel="stylesheet" href="/resources/css/member/writeForm.css">
 
 <script type="text/javascript">
 // 페이지 로딩 후 설정
@@ -34,10 +34,11 @@ $(function() {
         yearRange: yearRange,
 
     });
-    
+	
  // 아이디 중복 확인 이벤트
     $("#ID").keyup(function() {
         let id = $("#ID").val();
+        console.log("아이디확인");
         if (id.length >= 4) {
             $.ajax({
                 url: "/ajax/checkId.do",
@@ -71,7 +72,7 @@ $(function() {
     $("#PW, #pw2").keyup(function() {
         let pw = $("#PW").val();
         let pw2 = $("#pw2").val();
-
+        console.log("비밀번호확인");
         if (pw.length < 4) {
             $("#pwDiv").removeClass("alert-success alert-danger").addClass("alert-danger");
             $("#pwDiv").text("비밀번호는 필수입력입니다. 4자 이상 입력하세요.");
@@ -93,15 +94,13 @@ $(function() {
             }
         }
     });
-
+    
 });
 
 </script>
 
 </head>
 <body>
-
-
 <div class="container writeAll">
     <br><br>
     <form action="/member/write.do" method="post" enctype="multipart/form-data">
@@ -109,7 +108,7 @@ $(function() {
             <h2>회원가입</h2>
             <br>
             
-            	
+               
             
             <label for="id">아이디</label>
             <input type="text" class="form-control" maxlength="20" 
@@ -169,7 +168,7 @@ $(function() {
 
         <div class="form-group">
             <label for="address2">주소입력</label>
-            <input type="text" id="address" name="address" placeholder=" 주소를 입력해주세요. " >
+            <input type="text" id="address" name="address" placeholder=" '구'만 입력해주세요 ex)은평구 " >
         </div>
 
         <div class="form-group flex">
@@ -179,5 +178,10 @@ $(function() {
         </div>
     </form>
 </div>
+<script type="text/javascript">
+$(function(){
+	
+})
+</script>
 </body>
 </html>

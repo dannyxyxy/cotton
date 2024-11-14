@@ -29,12 +29,13 @@ public class GoodsServiceImpl implements GoodsService {
 	private GoodsMapper mapper;
 	
 	@Override
-	public List<GoodsVO> list(PageObject pageObject, GoodsSearchVO goodsSearchVO) {
-		// TODO Auto-generated method stub
-		pageObject.setTotalRow(mapper.getTotalRow(pageObject, goodsSearchVO));
-		
-		return mapper.list(pageObject, goodsSearchVO);
-	}
+	   public List<GoodsVO> list(PageObject pageObject, GoodsSearchVO goodsSearchVO) {
+	       List<GoodsVO> goodsList = mapper.list(pageObject, goodsSearchVO);
+	       for (GoodsVO goods : goodsList) {
+	           goods.setReviewCount(mapper.getReviewCountByGoodsNo(goods.getGoods_no()));
+	       }
+	       return goodsList;
+	   }
 
 	@Override
 	public GoodsVO view(Long goods_no) {
@@ -119,6 +120,11 @@ public class GoodsServiceImpl implements GoodsService {
 	public Integer getCateCode1ByGoodsNo(Long goods_no) {
 	    return mapper.getCateCode1ByGoodsNo(goods_no);
 	}
+	
+	@Override
+    public Integer getReviewCountByGoodsNo(Long goods_no) {
+        return mapper.getReviewCountByGoodsNo(goods_no);
+    }
 
 	
 }

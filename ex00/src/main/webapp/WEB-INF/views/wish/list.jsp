@@ -11,6 +11,32 @@
 <title>위시리스트</title>
 <link rel="stylesheet" href="/resources/css/wish/list.css">
 <script type="text/javascript">
+//장바구니에 상품을 추가하는 함수
+function addToCartlist(goods_no) {
+    // AJAX 요청 보내기 (userId를 클라이언트에서 보내지 않음)
+    var userId = '${login.id}'; // 이 부분이 실제로 정상적으로 로그인된 id를 담고 있는지 확인
+		if (!userId) {
+		    alert("로그인 후 장바구니에 추가할 수 있습니다.");
+		    return;
+		}
+    $.ajax({
+        url: '/cart/add',  // 위시리스트 추가를 처리하는 서버 경로
+        type: 'POST',
+        data: {
+            goods_no: goods_no,  // 상품 번호만 서버로 전송
+            userId : userId
+        },
+        success: function(response) {
+           alert("상품이 장바구니에 추가되었습니다!");
+           loadCartList(); // 위시리스트 갱신 함수 호출 (다시 로드)   
+        },
+        error: function(xhr, status, error) {
+            console.error("AJAX 요청 실패:", error);
+            alert("서버와의 연결에 문제가 발생했습니다.");
+        }
+    });
+}
+
 function removeFromWishlist(wish_no) {
     // AJAX 요청을 통해 wish_no만 전달하여 해당 상품 삭제
     $.ajax({
@@ -106,7 +132,9 @@ $(function(){
                          <button class="btn btn-remove" onclick="removeFromWishlist(${wish.wish_no})">
                          	<i class="fa fa-trash"></i>
                          </button>
-                        <button class="btn btn-addcart"><i class="fa fa-shopping-cart"></i></button>
+                        <button class="btn btn-addcart" onclick="addToCartlist(${wish.goods_no})">
+                        	<i class="fa fa-shopping-cart"></i>
+                        </button>
                         <button class="btn btn-search"><i class="fa fa-search"></i></button>
                     </div>
                     <div class="card-body">

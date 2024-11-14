@@ -28,6 +28,8 @@ public interface GoodsMapper {
     int deleteGoods(Long goods_no); // 상품 삭제
     int deleteImages(Long goods_no); // 이미지 데이터 삭제
 	public Integer getCateCode1ByGoodsNo(Long goods_no);
+	
+	Integer getReviewCountByGoodsNo(Long goods_no);
 
 	
 }

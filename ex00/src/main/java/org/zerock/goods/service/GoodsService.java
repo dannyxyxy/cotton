@@ -23,6 +23,8 @@ public interface GoodsService {
 	public Integer update(GoodsVO vo);
 	boolean delete(Long goods_no, HttpServletRequest request) throws Exception;
 	Integer getCateCode1ByGoodsNo(Long goods_no);
+	
+	Integer getReviewCountByGoodsNo(Long goods_no);
 
 	
 }

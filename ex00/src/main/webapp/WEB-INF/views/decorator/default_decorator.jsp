@@ -88,10 +88,25 @@
                 }
             });
         });
+        // 데코레이터에 있는 검색바를 서치했을떄 해당 category로 url을 보내주는 처리
+        function performSearch() {
+            var category = document.getElementById('categorySelect').value;
+            var goodsName = document.getElementById('searchInput').value;          
+            // Construct the URL based on selected category and search input
+            var url = '/goods/list.do?category=' + category;        
+            if (goodsName) {
+                url += '&goods_name=' + encodeURIComponent(goodsName);
+            }
+            // Redirect to the constructed URL
+            window.location.href = url;
+        }
+        // Reset search and category selection
+        function reset() {
+            document.getElementById('categorySelect').value = '';
+            document.getElementById('searchInput').value = '';
+        }
     </script>
     
-    
-
     <decorator:head/>
     <!-- 로그인 정보가 담긴 div 추가 -->
 </head>
@@ -128,7 +143,12 @@
         
         <div class="nav-icons">
             <a href="/event/list.do">이벤트 및 프로모션</a>
-            <a href="/member/inquiry.do">고객문의</a>
+            <a href="#" onclick="<c:choose>
+                <c:when test='${empty login}'>window.location.href='/member/loginForm.do';</c:when>
+                <c:otherwise>window.location.href='/qna/list.do?id=${login.id }';</c:otherwise>
+            </c:choose>">
+                나의 고객문의
+            </a>
             <c:if test="${ empty login }">
                 <a href="/member/loginForm.do"><i class="fa fa-user"></i></a>
             </c:if>      
@@ -151,7 +171,7 @@
             </a>
             <a href="#" onclick="<c:choose>
                 <c:when test='${empty login}'>window.location.href='/member/loginForm.do';</c:when>
-                <c:otherwise>window.location.href='/member/cart.do';</c:otherwise>
+                <c:otherwise>window.location.href='/cart/list.do?id=${login.id }';</c:otherwise>
             </c:choose>">
                 <i class="fa fa-shopping-cart"></i>
             </a>
@@ -177,15 +197,20 @@
         </div>
         <hr>
         
-        <a href="/cartList">쇼핑카트</a>
+        <a href="/cart/list.do?id=${login.id }">쇼핑카트</a>
         <a href="/wish/list.do?id=${login.id }">위시리스트</a>
         <a href="/butList">구매내역</a>
-        <a href="/settings">내가 쓴 리뷰</a>
+        <c:if test="${login.gradeNo==1 }">
+        	<a href="/review/list.do?id=${login.id }">내가 쓴 리뷰</a>
+        </c:if>
         <a href="/logout">로그아웃</a>
         <hr>
         <a href="/member/updateForm.do">회원정보</a>
         <c:if test="${login.gradeNo==9 }">
         	<a href="/member/adminPage.do">회원관리</a>
+        </c:if>
+        <c:if test="${login.gradeNo==9 }">
+        	<a href="/review/list.do?id=${login.id }">리뷰관리</a>
         </c:if>
     </div>
    

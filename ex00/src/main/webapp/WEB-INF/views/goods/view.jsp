@@ -10,41 +10,10 @@
 <link rel="stylesheet" href="/resources/css/goods/view.css">
 <link rel="stylesheet" href="/resources/css/goods/view_detail.css">
 <link rel="stylesheet" href="/resources/css/goods/view_review.css">
-
-
 <script type="text/javascript">
-function addToWishlist(goods_no) {
-    // AJAX 요청 보내기 (userId를 클라이언트에서 보내지 않음)
-    var userId = '${login.id}'; // 이 부분이 실제로 정상적으로 로그인된 id를 담고 있는지 확인
-		if (!userId) {
-		    alert("로그인 후 위시리스트에 추가할 수 있습니다.");
-		    return;
-		}
-    $.ajax({
-        url: '/wish/add',  // 위시리스트 추가를 처리하는 서버 경로
-        type: 'POST',
-        data: {
-            goods_no: goods_no,  // 상품 번호만 서버로 전송
-            userId : userId
-        },
-        success: function(response) {
-           alert("상품이 위시리스트에 추가되었습니다!");
-           loadWishList(); // 위시리스트 갱신 함수 호출 (다시 로드)   
-        },
-        error: function(xhr, status, error) {
-            console.error("AJAX 요청 실패:", error);
-            alert("서버와의 연결에 문제가 발생했습니다.");
-        }
-    });
-}
 	$(document).ready(function(){
-		// smallImageDiv 내에 있는 img 요소에 클릭 이벤트를 연결
-	    $("#smallImageDiv").on("click", "img", function(){
-	        alert("이미지 클릭");
-	        $("#bigImageDiv img").attr("src", $(this).attr("src"));
-	    });
-
 		
+
 		$("#listBtn").click(function () {
 			// alert("리스트 버튼");
 			location="list.do?page=${param.page}"
@@ -53,22 +22,19 @@ function addToWishlist(goods_no) {
 		});
 		
 		function sendData(){
-			let firstForm = document.forms[0];
-		
+			let firstForm = document.forms[0];		
 			if($("input[name='star']:checked").val() == undefined){
 			alert("별점 선택 필수입니다!");
 			return;
-		}
-			
-			 function loadContent(tab) {
-		            window.location.href = window.location.pathname + "?tab=" + tab; // 현재 페이지에 tab 파라미터 추가
-		        }
-		
+		}		
+		function loadContent(tab) {
+	     window.location.href = window.location.pathname + "?tab=" + tab; // 현재 페이지에 tab 파라미터 추가
+	 }		
 	});
+}
 </script>
 </head>
-<body>
-
+<body data-spy="scroll" data-target=".navbar" data-offset="50">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-6 bigImg">
@@ -114,9 +80,9 @@ function addToWishlist(goods_no) {
 					</div>
 				</div>
 				<div class="add">
-					<div class="addCart">ADD CART</div>
-					<button class="addWish" onclick="addToWishlist(${vo.goods_no})">ADD WISH</button>
-					<div class="addBuy">구매하기</div>
+					<button class="btn btn-addcart" onclick="addToCartlist(${vo.goods_no})">ADD CART</button>
+					<button class="btn btn-wishlist" onclick="addToWishlist(${vo.goods_no})">ADD WISH</button>
+					<button class="btn btn-addcart" onclick="addToCartlist(${vo.goods_no}); window.location.href='/cart/list.do?id=${login.id}';">구매하기</button>
 				</div>
 				<div style="float: right; width: 150px; margin-top: 50px;">
 					<c:if test="${login.gradeNo==9 }">
@@ -129,29 +95,104 @@ function addToWishlist(goods_no) {
 				</div>
 			</div>
 			</div>
-		<ul class="nav nav-tabs" role="tablist">
+			
+		<nav class="navbar navbar-expand-sm">  
+		  <ul class="navbar-nav">
 		    <li class="nav-item">
-		      <a class="nav-link active" data-toggle="tab" href="#detail">상세보기</a>
+		      <a class="nav-link" href="#section1">상세보기</a>
 		    </li>
 		    <li class="nav-item">
-		      <a class="nav-link" data-toggle="tab" href="#review">리뷰보기</a>
+		      <a class="nav-link" href="#section2">리뷰보기</a>
 		    </li>
+		    
 		  </ul>
-       
-	<div class="tab-content">
-		  <div class="tab-pane container active" id="detail">
-		  	<div class="container">
-        		<jsp:include page="view_detail.jsp"></jsp:include>
-		  	</div>
-		  </div>
-		  <div class="tab-pane container fade" id="review">
-        	<jsp:include page="view_review.jsp"></jsp:include>
-    	</div>		  
-	</div>
-	</div>
+		</nav>
+
+<div id="section1" class="container-fluid" style="padding-top:50px;padding-bottom:50px">
+  <h4>제품 상세보기</h4>
+  	<jsp:include page="view_detail.jsp"></jsp:include>
+</div>
+<div id="section2" class="container-fluid" style="padding-top:50px;padding-bottom:50px;border-top:0.5px solid #e0e0e0;">
+  <h4>제품 리뷰보기</h4>
+  	<jsp:include page="view_review.jsp"></jsp:include>
+</div>
+</div>
+<!-- 'Top' 버튼 HTML -->
+<button id="topBtn" title="Go to top">Top</button>
+	
+	<script type="text/javascript">
+	function addToWishlist(goods_no) {
+	    // AJAX 요청 보내기 (userId를 클라이언트에서 보내지 않음)
+	    var userId = '${login.id}'; // 이 부분이 실제로 정상적으로 로그인된 id를 담고 있는지 확인
+			if (!userId) {
+			    alert("로그인 후 위시리스트에 추가할 수 있습니다.");
+			    return;
+			}
+	    $.ajax({
+	        url: '/wish/add',  // 위시리스트 추가를 처리하는 서버 경로
+	        type: 'POST',
+	        data: {
+	            goods_no: goods_no,  // 상품 번호만 서버로 전송
+	            userId : userId
+	        },
+	        success: function(response) {
+	           alert("상품이 위시리스트에 추가되었습니다!");
+	           loadWishList(); // 위시리스트 갱신 함수 호출 (다시 로드)   
+	        },
+	        error: function(xhr, status, error) {
+	            console.error("AJAX 요청 실패:", error);
+	            alert("서버와의 연결에 문제가 발생했습니다.");
+	        }
+	    });
+	}
+
+	//장바구니에 상품을 추가하는 함수
+	function addToCartlist(goods_no) {
+	    // AJAX 요청 보내기 (userId를 클라이언트에서 보내지 않음)
+	    var userId = '${login.id}'; // 이 부분이 실제로 정상적으로 로그인된 id를 담고 있는지 확인
+			if (!userId) {
+			    alert("로그인 후 장바구니에 추가할 수 있습니다.");
+			    return;
+			}
+	    $.ajax({
+	        url: '/cart/add',  // 위시리스트 추가를 처리하는 서버 경로
+	        type: 'POST',
+	        data: {
+	            goods_no: goods_no,  // 상품 번호만 서버로 전송
+	            userId : userId
+	        },
+	        success: function(response) {
+	           alert("상품이 장바구니에 추가되었습니다!");
+	           loadCartList(); // 위시리스트 갱신 함수 호출 (다시 로드)   
+	        },
+	        error: function(xhr, status, error) {
+	            console.error("AJAX 요청 실패:", error);
+	            alert("서버와의 연결에 문제가 발생했습니다.");
+	        }
+	    });
+	}
+	
+	// smallImageDiv 내에 있는 img 요소에 클릭 이벤트를 연결
+    $("#smallImageDiv").on("click", "img", function(){
+        $("#bigImageDiv img").attr("src", $(this).attr("src"));
+    });
+	
+	// top버튼 클릭시 html 최상단으로 화면전환
+    document.addEventListener("DOMContentLoaded", function() {
+        // 스크롤 위치에 따라 버튼 보이기
+        window.onscroll = function() {
+            const topButton = document.getElementById("topBtn");
+            if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                topButton.style.display = "block";
+            } else {
+                topButton.style.display = "none";
+            }
+        };
+        // 'Top' 버튼 클릭 시 상단으로 스크롤 이동
+        document.getElementById("topBtn").onclick = function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+    });
+	</script>
 </body>
-
-
-
-
 </html>

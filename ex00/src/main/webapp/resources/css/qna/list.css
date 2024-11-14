@@ -1,0 +1,42 @@
+@charset "UTF-8";
+.card-title {
+	width: 80%;
+}
+
+.card {
+	height: 200px;
+	margin-bottom: 15px;
+	border: 1px solid #ddd;
+	padding: 15px;
+	border-radius: 8px;
+	text-decoration: none;
+	color: inherit;
+	transition: background-color 0.2s ease;
+}
+
+.card:hover {
+	background-color: #f8f9fa;
+	cursor: pointer;
+}
+
+.writeBtn {
+	background-color: #ccc;
+	color: #333;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	cursor: pointer;
+	padding: 10px 40px;
+	margin: 7px 0px;
+}
+
+.btnBox {
+	width: 100%;
+	display: flex;
+	justify-content: flex-start;
+}
+
+.paginationBox {
+	display: flex;
+	place-items: center;
+	flex-direction: column;
+}

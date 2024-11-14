@@ -27,6 +27,8 @@ public class PageObject {
 	// pre: 현재공지, old: 지난공지, res: 예약공지, all: 전체공지
 	private String period;
 	
+	private String userId;  // 추가된 필드
+
 	public PageObject() {
 		this.page = 1;
 		this.perPageNum = 10;
@@ -180,13 +182,23 @@ public class PageObject {
 	public void setPeriod(String period) {
 		this.period = period;
 	}
+	
+	 // getter, setter 메서드
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+	
 
 	@Override
 	public String toString() {
 		return "PageObject [page=" + page + ", perPageNum=" + perPageNum + ", startRow=" + startRow + ", endRow="
 				+ endRow + ", perGroupPageNum=" + perGroupPageNum + ", startPage=" + startPage + ", endPage=" + endPage
 				+ ", totalPage=" + totalPage + ", totalRow=" + totalRow + ", key=" + key + ", word=" + word
-				+ ", period=" + period + "]";
+				+ ", period=" + period + ", userId=" + userId + "]";
 	}
 
 	

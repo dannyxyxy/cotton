@@ -33,6 +33,7 @@ import org.zerock.goods.vo.GoodsPriceVO;
 import org.zerock.goods.vo.GoodsSearchVO;
 import org.zerock.goods.vo.GoodsVO;
 import org.zerock.member.vo.MemberVO;
+import org.zerock.review.service.ReviewService;
 import org.zerock.util.file.FileUtil;
 import org.zerock.util.page.PageObject;
 
@@ -50,60 +51,84 @@ public class GoodsController {
 	@Qualifier("goodsServiceImpl")
 	private GoodsService service;
 	
-	@GetMapping("/list.do")
-	public String list(Model model, @ModelAttribute(name = "goodsSearchVO") GoodsSearchVO goodsSearchVO,
-	                   HttpServletRequest request) {
-	    PageObject pageObject = PageObject.getInstance(request);
-	    String perPageNum = request.getParameter("perPageNum");
-	    String cateCode1 = request.getParameter("cate_code1");
+	@Autowired
+   @Qualifier("reviewServiceImpl")
+   private ReviewService reviewService;
+   
+   
+   
+   @GetMapping("/list.do")
+   public String list(Model model, @ModelAttribute(name = "goodsSearchVO") GoodsSearchVO goodsSearchVO,
+                      HttpServletRequest request) {
+       PageObject pageObject = PageObject.getInstance(request);
+       String perPageNum = request.getParameter("perPageNum");
+       String cateCode1 = request.getParameter("cate_code1");
 
-	    log.info("페이지 당 항목 수: " + perPageNum); // 추가된 로깅
-	    
-	    // 페이지 당 항목 수 설정
-	    if (perPageNum == null) {
-	        pageObject.setPerPageNum(8);
-	    } else {
-	        pageObject.setPerPageNum(Integer.parseInt(perPageNum));
-	    }
+       log.info("페이지 당 항목 수: " + perPageNum); // 추가된 로깅
+       
+       // 페이지 당 항목 수 설정
+       if (perPageNum == null) {
+           pageObject.setPerPageNum(8);
+       } else {
+           pageObject.setPerPageNum(Integer.parseInt(perPageNum));
+       }
 
-	    // cate_code1 값을 Integer로 변환하여 설정
-	    if (cateCode1 != null) {
-	        try {
-	            Integer parsedCateCode1 = Integer.parseInt(cateCode1);
-	            goodsSearchVO.setCate_code1(parsedCateCode1);
-	            log.info("카테고리 코드 설정: " + parsedCateCode1); // 추가된 로깅
-	        } catch (NumberFormatException e) {
-	            log.warn("잘못된 cate_code1 값: " + cateCode1); // 경고 로그
-	            goodsSearchVO.setCate_code1(null); // 기본값 설정
-	        }
-	    }
+       // cate_code1 값을 Integer로 변환하여 설정
+       if (cateCode1 != null) {
+           try {
+               Integer parsedCateCode1 = Integer.parseInt(cateCode1);
+               goodsSearchVO.setCate_code1(parsedCateCode1);
+               log.info("카테고리 코드 설정: " + parsedCateCode1); // 추가된 로깅
+           } catch (NumberFormatException e) {
+               log.warn("잘못된 cate_code1 값: " + cateCode1); // 경고 로그
+               goodsSearchVO.setCate_code1(null); // 기본값 설정
+           }
+       }
 
-	    // 카테고리 및 상품 목록 조회
-	    List<CategoryVO> listBig = service.listCategory(0);
-	    model.addAttribute("listBig", listBig);
-	    
-	    List<GoodsVO> list = service.list(pageObject, goodsSearchVO);
-	    model.addAttribute("list", list);
-	    model.addAttribute("pageObject", pageObject);
-	    model.addAttribute("goodsSearchVO", goodsSearchVO); // 모델에 추가
+       // 카테고리 및 상품 목록 조회
+       List<CategoryVO> listBig = service.listCategory(0);
+       model.addAttribute("listBig", listBig);
+       
+       List<GoodsVO> list = service.list(pageObject, goodsSearchVO);
+       model.addAttribute("list", list);
+       model.addAttribute("pageObject", pageObject);
+       model.addAttribute("goodsSearchVO", goodsSearchVO); // 모델에 추가
 
-	    return "goods/list"; // 뷰 반환
-	}
+       return "goods/list"; // 뷰 반환
+   }
 
-
-
-
-
-
-	
-	@GetMapping("/view.do")
-	public String view(Long goods_no, PageObject pageObject,
-			@ModelAttribute(name="goodsSearchVO") GoodsSearchVO goodsSearchVO, Model model) {
-		
-		model.addAttribute("vo",service.view(goods_no));
-		model.addAttribute("imageList",service.imageList(goods_no));
-		return "goods/view";
-	}
+   @GetMapping("/view.do")
+   public String view(Long goods_no, PageObject pageObject,
+         @ModelAttribute(name="goodsSearchVO") GoodsSearchVO goodsSearchVO, Model model) {
+      
+      model.addAttribute("vo",service.view(goods_no));
+      model.addAttribute("imageList",service.imageList(goods_no));
+      model.addAttribute("reviewList", reviewService.goodsReview(goods_no)); // 해당 상품의 리뷰 추가
+      return "goods/view";
+   }
+   
+	// view_review
+	   @GetMapping("/view_review.do")
+	   public String view_review(Long goods_no, PageObject pageObject, Model model) {
+	      
+	      model.addAttribute("vo",service.view(goods_no));
+	//      model.addAttribute("imageList",service.imageList(goods_no));
+	  return "goods/view";
+	   }
+	   
+	// view_review
+   @PostMapping("/view_review.do")
+   public String view_review(GoodsVO vo, HttpServletRequest request ,RedirectAttributes rttr) throws Exception {
+      log.info("================== view_review.do ==================");
+      log.info(vo);
+      
+//	      List<String> imageFileNames = new ArrayList<String>();
+      //vo.setSale_price(vo.sale_price());
+      Integer result = service.write(vo, null);
+      rttr.addFlashAttribute("msg","리뷰가 정상등록되었습니다.");
+      
+      return "redirect:view.do";
+   }
 	
 	@GetMapping("/writeForm.do")
 	public String writeForm(Model model) {

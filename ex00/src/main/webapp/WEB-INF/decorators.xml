@@ -17,6 +17,9 @@
 		<pattern>/category/*</pattern>
 		<pattern>/event/*</pattern>
 		<pattern>/wish/*</pattern>
+		<pattern>/cart/*</pattern>
+		<pattern>/qna/*</pattern>
+		<pattern>/review/*</pattern>
 	</decorator>
 	
 <!-- 	<decorator name="admin" page="admin_decorator.jsp"> -->

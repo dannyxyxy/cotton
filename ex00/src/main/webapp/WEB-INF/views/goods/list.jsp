@@ -33,39 +33,7 @@ $(document).ready(function() {
 		    form.action = 'list.do?cate_code1=' + cateCode1;
 		    return true; // 폼 제출을 계속 진행
 		}
-	    
-		$("#perPageNum").change(function(){
-			console.log("goodsSearchVO.goods_no : "+goodsSearchVO.goods_no);
-			$("#searchForm").submit();
-		});
-		// 검색데이터 세팅
-		$("#key").val("${(empty pageObject.key) ? 't' : pageObject.key}");
-		$("#perPageNum").val("${(empty pageObject.perPageNum) ? '10' : pageObject.perPageNum}");
 		
-		$("#cate_code1").change(function(){
-		    let cate_code1 = $(this).val();
-		    $.ajax({
-		        type: "get",
-		        url: "/goods/getCategory.do?cate_code1=" + cate_code1,
-		        dataType: "json", // JSON 형식의 데이터를 기대
-		        success: function(result){
-		            console.log(result);
-		            let subCategorySelect = $("#cate_code2");
-		            subCategorySelect.empty(); // 기존 옵션 제거
-		            $.each(result, function(index, category){
-		                subCategorySelect.append(
-		                    $("<option></option>").attr("value", category.cate_code2).text(category.cate_name)
-		                );
-		            });
-		        },
-		        error: function(xhr, status, err){
-		            console.log("중분류 가져오기 오류");
-		            console.log("xhr : " + xhr);
-		            console.log("status : " + status);
-		            console.log("err : " + err);
-		        }
-		    });
-		});
 		//페이징처리버튼 JS
 		const cardsPerPage = 6; // 페이지당 카드 수
 	    let currentPage = 1; // 현재 페이지
@@ -159,7 +127,7 @@ $(document).ready(function() {
     <!-- 하단 서치 폼 -->
     <form action="list.do" id="searchForm" class="visualImage-form">
     <!-- cate_code1 값을 저장할 hidden 필드 추가 -->
-    <input type="hidden" name="cate_code1" value="${cate_code1 }">
+    <input type="hidden" name="cate_code1" value="${goodsSearchVO.cate_code1}">
 
     <div class="input-group mb-3">
         <input type="text" class="form-control" placeholder="상품명검색" id="goods_name"
@@ -195,8 +163,9 @@ $(document).ready(function() {
                         <button class="btn btn-wishlist" onclick="addToWishlist(${vo.goods_no})">
 						    <i class="fa fa-heart"></i>
 						</button>
-
-                        <button class="btn btn-addcart"><i class="fa fa-shopping-cart"></i></button>
+                        <button class="btn btn-addcart" onclick="addToCartlist(${vo.goods_no})">
+                        	<i class="fa fa-shopping-cart"></i>
+                        </button>
                         <button class="btn btn-search"><i class="fa fa-search"></i></button>
                     </div>
                     <div class="card-body">
@@ -207,7 +176,7 @@ $(document).ready(function() {
                             <span class="discount_rate">${vo.discount_rate}%</span>
                             <span class="sale_price float-right"><fmt:formatNumber value="${vo.sale_price}"/></span>
                         </p>
-                        <div class="review_count">총 리뷰 수 8개</div>
+                        <div class="review_count">총 리뷰 수 ${vo.reviewCount}개</div>
                     </div>
                 </div>
             </div>
@@ -250,6 +219,31 @@ function addToWishlist(goods_no) {
         success: function(response) {
            alert("상품이 위시리스트에 추가되었습니다!");
            loadWishList(); // 위시리스트 갱신 함수 호출 (다시 로드)   
+        },
+        error: function(xhr, status, error) {
+            console.error("AJAX 요청 실패:", error);
+            alert("서버와의 연결에 문제가 발생했습니다.");
+        }
+    });
+}
+//장바구니에 상품을 추가하는 함수
+function addToCartlist(goods_no) {
+    // AJAX 요청 보내기 (userId를 클라이언트에서 보내지 않음)
+    var userId = '${login.id}'; // 이 부분이 실제로 정상적으로 로그인된 id를 담고 있는지 확인
+		if (!userId) {
+		    alert("로그인 후 장바구니에 추가할 수 있습니다.");
+		    return;
+		}
+    $.ajax({
+        url: '/cart/add',  // 위시리스트 추가를 처리하는 서버 경로
+        type: 'POST',
+        data: {
+            goods_no: goods_no,  // 상품 번호만 서버로 전송
+            userId : userId
+        },
+        success: function(response) {
+           alert("상품이 장바구니에 추가되었습니다!");
+           loadCartList(); // 위시리스트 갱신 함수 호출 (다시 로드)   
         },
         error: function(xhr, status, error) {
             console.error("AJAX 요청 실패:", error);

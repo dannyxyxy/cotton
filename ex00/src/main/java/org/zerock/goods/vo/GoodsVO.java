@@ -24,6 +24,8 @@ public class GoodsVO {
 
     // Add this line to define goods_price_no
     private Long goods_price_no; // Ensure this property is added
+    
+    private Integer reviewCount;
 
 }
 
