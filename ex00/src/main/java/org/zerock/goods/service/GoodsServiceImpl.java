@@ -36,6 +36,11 @@ public class GoodsServiceImpl implements GoodsService {
 	       }
 	       return goodsList;
 	   }
+	
+	@Override
+    public List<GoodsVO> getAllGoods() {
+        return mapper.selectAllGoods(); // Mapper를 통해 상품 목록 가져오기
+    }
 
 	@Override
 	public GoodsVO view(Long goods_no) {

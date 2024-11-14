@@ -156,6 +156,11 @@
     WHERE goods_no = #{goods_no}
 </select>
 
+<!-- 모든 상품 목록을 likeCount 내림차순으로 정렬해서 조회 -->
+    <select id="selectAllGoods" resultType="org.zerock.goods.vo.GoodsVO">
+        SELECT * FROM goods
+        ORDER BY likeCount DESC
+    </select>
 
 
 

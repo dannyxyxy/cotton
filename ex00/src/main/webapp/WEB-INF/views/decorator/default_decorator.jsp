@@ -256,6 +256,7 @@
     </div>
     
     <div class="footer">
+    <div style="width: 1140px; display: flex; justify-content: space-between; margin: auto;">
         <div class="footer-column">
             <h4>Use cases</h4>
             <a href="#">UI design</a>
@@ -273,6 +274,7 @@
             <a href="#">Blog</a>
             <a href="#">Best practices</a>
             <a href="#">Colors</a>
+        </div>
         </div>
     </div>
 </body>

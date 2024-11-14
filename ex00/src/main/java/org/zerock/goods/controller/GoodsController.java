@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.zerock.category.vo.CategoryVO;
+import org.zerock.event.vo.EventVO;
 import org.zerock.goods.service.GoodsService;
 import org.zerock.goods.vo.GoodsImageVO;
 import org.zerock.goods.vo.GoodsPriceVO;
@@ -96,6 +97,15 @@ public class GoodsController {
 
        return "goods/list"; // 뷰 반환
    }
+   
+   @GetMapping("/main")
+	public String mainPage(Model model) {
+	    // 메인 페이지에 전시할 이벤트 리스트 가져오기
+	    List<GoodsVO> goodsList = service.getAllGoods(); // 실제 서비스 호출로 변경
+	    log.info("list"+goodsList);
+	    model.addAttribute("eventList", goodsList);
+	    return "goods/goodsList";
+	}
 
    @GetMapping("/view.do")
    public String view(Long goods_no, PageObject pageObject,

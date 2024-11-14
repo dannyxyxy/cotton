@@ -30,6 +30,7 @@ public interface GoodsMapper {
 	public Integer getCateCode1ByGoodsNo(Long goods_no);
 	
 	Integer getReviewCountByGoodsNo(Long goods_no);
+	List<GoodsVO> selectAllGoods(); // 모든 상품 목록을 조회하는 메소드
 
 	
 }

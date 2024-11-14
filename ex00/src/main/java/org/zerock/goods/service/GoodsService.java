@@ -25,6 +25,7 @@ public interface GoodsService {
 	Integer getCateCode1ByGoodsNo(Long goods_no);
 	
 	Integer getReviewCountByGoodsNo(Long goods_no);
+	List<GoodsVO> getAllGoods(); // 모든 상품 목록을 가져오는 메소드
 
 	
 }
