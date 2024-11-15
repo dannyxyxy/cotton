@@ -76,7 +76,7 @@ $(document).ready(function() {
 </script>
 </head>
 <body>
-<div class="container p-3 my-3">
+<div class="container p-3 my-3" >
 	<!-- 비주얼 이미지 섹션 -->
     <div class="listHeader">
         <div><h4>카테고리별 제품 보러가기</h4></div>
@@ -146,7 +146,7 @@ $(document).ready(function() {
 </div>
 
 <c:if test="${empty list }">
-    <h4 style="text-align:center;">데이터가 존재하지 않습니다.</h4>
+    <h4 style="text-align:center; height: 200px;">데이터가 존재하지 않습니다.</h4>
 </c:if>
 <c:if test="${!empty list }">
 	<div class="container p-3 my-3">

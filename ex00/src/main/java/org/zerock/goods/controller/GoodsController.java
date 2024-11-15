@@ -101,10 +101,10 @@ public class GoodsController {
    @GetMapping("/main")
 	public String mainPage(Model model) {
 	    // 메인 페이지에 전시할 이벤트 리스트 가져오기
-	    List<GoodsVO> goodsList = service.getAllGoods(); // 실제 서비스 호출로 변경
-	    log.info("list"+goodsList);
-	    model.addAttribute("eventList", goodsList);
-	    return "goods/goodsList";
+	    List<GoodsVO> list = service.getAllGoods(); // 실제 서비스 호출로 변경
+	    log.info("list"+list);
+	    model.addAttribute("list", list);
+	    return "goods/list";
 	}
 
    @GetMapping("/view.do")

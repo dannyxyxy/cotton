@@ -23,9 +23,8 @@
             })
             .catch(error => console.error('Error:', error));
     });
-    
     document.addEventListener('DOMContentLoaded', function() {
-        fetch('/main')  // GET 요청을 통해 상품 목록을 가져옴
+        fetch('/goods/main')  // GET 요청을 통해 이벤트 리스트를 가져옴
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -33,8 +32,8 @@
                 return response.text();  // 응답을 텍스트로 변환
             })
             .then(data => {
-                // 상품 목록을 표시할 컨테이너에 삽입
-                document.getElementById('goodsListContainer').innerHTML = data;
+                // 이벤트 리스트만을 eventListContainer에 삽입
+                document.getElementById('eventGoodsContainer').innerHTML = data;
             })
             .catch(error => console.error('Error:', error));
     });
@@ -131,13 +130,12 @@
 	    	<div><h4>진행중인 이벤트 및 프로모션</h4></div>
 	    	<div><b>cotton</b>이 자신있게 제시하는<br>이벤트와 프로모션을 살펴보세요!</div>
     	</div>
-    	<div style="height:370px; overflow:hidden;">
-    		<div id="eventListContainer"></div>	
-    	</div>
-    	<div style="height:370px; overflow:hidden;">
-    		<div id="goodsListContainer"></div>	
-    	</div>
-    
+    <div id="eventListContainer" style="height:370px;overflow:hidden;"></div>
+    <div style="text-align:center;">
+	    <div style="margin-top:50px;"><h4>이달의 베스트셀러</h4></div>
+	    <div><b>cotton</b>에서 판매하는 이달의 인기상품입니다.</div>
+    </div>
+    <div id="eventGoodsContainer" style="clip-path: inset(400px 0 100px 0); margin-top:-400px;"></div>		
     </div>
 </body>
 </html>

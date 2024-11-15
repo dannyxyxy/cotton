@@ -144,9 +144,9 @@
 
 			</fieldset>
 		    
-		  <div class="form-group" style="float: right; margin-top: 48px;">
-				    <button type="submit" class="btn2">등록</button>
-				    <button type="button" class="btn1" onclick="history.back()" id="cancelBtn">취소</button>
+		  <div class="buttons" style="margin-top: 28px; height: 100px;">
+				    <button type="submit" class="btn2" style="float: right;">등록</button>
+				    <button type="button" class="btn1" style="float: left;" onclick="history.back()" id="cancelBtn">취소</button>
 		</div>
 	  </form>
 	</div>

@@ -255,27 +255,27 @@
         <decorator:body />
     </div>
     
-    <div class="footer">
-    <div style="width: 1140px; display: flex; justify-content: space-between; margin: auto;">
-        <div class="footer-column">
-            <h4>Use cases</h4>
-            <a href="#">UI design</a>
-            <a href="#">UX design</a>
-            <a href="#">Wireframing</a>
-        </div>
-        <div class="footer-column">
-            <h4>Explore</h4>
-            <a href="#">Design</a>
-            <a href="#">Prototyping</a>
-            <a href="#">Development features</a>
-        </div>
-        <div class="footer-column">
-            <h4>Resources</h4>
-            <a href="#">Blog</a>
-            <a href="#">Best practices</a>
-            <a href="#">Colors</a>
-        </div>
-        </div>
-    </div>
+	    <div class="footer">
+	    	<div style="width: 1140px; display: flex; justify-content: space-between; margin: auto;">
+		        <div class="footer-column">
+		            <h4>Use cases</h4>
+		            <a href="#">UI design</a>
+		            <a href="#">UX design</a>
+		            <a href="#">Wireframing</a>
+		        </div>
+		        <div class="footer-column" style="margin: 0 100px;">
+		            <h4>Explore</h4>
+		            <a href="#">Design</a>
+		            <a href="#">Prototyping</a>
+		            <a href="#">Development features</a>
+		        </div>
+		        <div class="footer-column">
+		            <h4>Resources</h4>
+		            <a href="#">Blog</a>
+		            <a href="#">Best practices</a>
+		            <a href="#">Colors</a>
+		        </div>
+	    	</div>
+	    </div>
 </body>
 </html>

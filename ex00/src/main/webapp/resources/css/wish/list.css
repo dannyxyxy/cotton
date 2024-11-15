@@ -1,4 +1,9 @@
 @charset "UTF-8";
+
+.main-content {
+	padding: 20px 0 0;
+}
+
    .listHeader{
 		margin-bottom:15px;
 	}

@@ -145,6 +145,7 @@ $(function(){
                             <span class="discount_rate">${wish.discount_rate}%</span>
                             <span class="sale_price float-right"><fmt:formatNumber value="${wish.sale_price}"/></span>
                         </p>
+                        <div class="review_count">총 리뷰 수 8개</div>
                     </div>
                 </div>
             </div>

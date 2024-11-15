@@ -33,6 +33,80 @@
 	});
 }
 </script>
+<script type="text/javascript">
+	function addToWishlist(goods_no) {
+	    // AJAX 요청 보내기 (userId를 클라이언트에서 보내지 않음)
+	    var userId = '${login.id}'; // 이 부분이 실제로 정상적으로 로그인된 id를 담고 있는지 확인
+			if (!userId) {
+			    alert("로그인 후 위시리스트에 추가할 수 있습니다.");
+			    return;
+			}
+	    $.ajax({
+	        url: '/wish/add',  // 위시리스트 추가를 처리하는 서버 경로
+	        type: 'POST',
+	        data: {
+	            goods_no: goods_no,  // 상품 번호만 서버로 전송
+	            userId : userId
+	        },
+	        success: function(response) {
+	           alert("상품이 위시리스트에 추가되었습니다!");
+	           loadWishList(); // 위시리스트 갱신 함수 호출 (다시 로드)   
+	        },
+	        error: function(xhr, status, error) {
+	            console.error("AJAX 요청 실패:", error);
+	            alert("서버와의 연결에 문제가 발생했습니다.");
+	        }
+	    });
+	}
+
+	//장바구니에 상품을 추가하는 함수
+	function addToCartlist(goods_no) {
+	    // AJAX 요청 보내기 (userId를 클라이언트에서 보내지 않음)
+	    var userId = '${login.id}'; // 이 부분이 실제로 정상적으로 로그인된 id를 담고 있는지 확인
+			if (!userId) {
+			    alert("로그인 후 장바구니에 추가할 수 있습니다.");
+			    return;
+			}
+	    $.ajax({
+	        url: '/cart/add',  // 위시리스트 추가를 처리하는 서버 경로
+	        type: 'POST',
+	        data: {
+	            goods_no: goods_no,  // 상품 번호만 서버로 전송
+	            userId : userId
+	        },
+	        success: function(response) {
+	           alert("상품이 장바구니에 추가되었습니다!");
+	           loadCartList(); // 위시리스트 갱신 함수 호출 (다시 로드)   
+	        },
+	        error: function(xhr, status, error) {
+	            console.error("AJAX 요청 실패:", error);
+	            alert("서버와의 연결에 문제가 발생했습니다.");
+	        }
+	    });
+	}
+	
+	// smallImageDiv 내에 있는 img 요소에 클릭 이벤트를 연결
+    $("#smallImageDiv").on("click", "img", function(){
+        $("#bigImageDiv img").attr("src", $(this).attr("src"));
+    });
+	
+	// top버튼 클릭시 html 최상단으로 화면전환
+    document.addEventListener("DOMContentLoaded", function() {
+        // 스크롤 위치에 따라 버튼 보이기
+        window.onscroll = function() {
+            const topButton = document.getElementById("topBtn");
+            if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                topButton.style.display = "block";
+            } else {
+                topButton.style.display = "none";
+            }
+        };
+        // 'Top' 버튼 클릭 시 상단으로 스크롤 이동
+        document.getElementById("topBtn").onclick = function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+    });
+	</script>
 </head>
 <body data-spy="scroll" data-target=".navbar" data-offset="50">
 	<div class="container">
@@ -120,79 +194,6 @@
 <!-- 'Top' 버튼 HTML -->
 <button id="topBtn" title="Go to top">Top</button>
 	
-	<script type="text/javascript">
-	function addToWishlist(goods_no) {
-	    // AJAX 요청 보내기 (userId를 클라이언트에서 보내지 않음)
-	    var userId = '${login.id}'; // 이 부분이 실제로 정상적으로 로그인된 id를 담고 있는지 확인
-			if (!userId) {
-			    alert("로그인 후 위시리스트에 추가할 수 있습니다.");
-			    return;
-			}
-	    $.ajax({
-	        url: '/wish/add',  // 위시리스트 추가를 처리하는 서버 경로
-	        type: 'POST',
-	        data: {
-	            goods_no: goods_no,  // 상품 번호만 서버로 전송
-	            userId : userId
-	        },
-	        success: function(response) {
-	           alert("상품이 위시리스트에 추가되었습니다!");
-	           loadWishList(); // 위시리스트 갱신 함수 호출 (다시 로드)   
-	        },
-	        error: function(xhr, status, error) {
-	            console.error("AJAX 요청 실패:", error);
-	            alert("서버와의 연결에 문제가 발생했습니다.");
-	        }
-	    });
-	}
-
-	//장바구니에 상품을 추가하는 함수
-	function addToCartlist(goods_no) {
-	    // AJAX 요청 보내기 (userId를 클라이언트에서 보내지 않음)
-	    var userId = '${login.id}'; // 이 부분이 실제로 정상적으로 로그인된 id를 담고 있는지 확인
-			if (!userId) {
-			    alert("로그인 후 장바구니에 추가할 수 있습니다.");
-			    return;
-			}
-	    $.ajax({
-	        url: '/cart/add',  // 위시리스트 추가를 처리하는 서버 경로
-	        type: 'POST',
-	        data: {
-	            goods_no: goods_no,  // 상품 번호만 서버로 전송
-	            userId : userId
-	        },
-	        success: function(response) {
-	           alert("상품이 장바구니에 추가되었습니다!");
-	           loadCartList(); // 위시리스트 갱신 함수 호출 (다시 로드)   
-	        },
-	        error: function(xhr, status, error) {
-	            console.error("AJAX 요청 실패:", error);
-	            alert("서버와의 연결에 문제가 발생했습니다.");
-	        }
-	    });
-	}
 	
-	// smallImageDiv 내에 있는 img 요소에 클릭 이벤트를 연결
-    $("#smallImageDiv").on("click", "img", function(){
-        $("#bigImageDiv img").attr("src", $(this).attr("src"));
-    });
-	
-	// top버튼 클릭시 html 최상단으로 화면전환
-    document.addEventListener("DOMContentLoaded", function() {
-        // 스크롤 위치에 따라 버튼 보이기
-        window.onscroll = function() {
-            const topButton = document.getElementById("topBtn");
-            if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
-                topButton.style.display = "block";
-            } else {
-                topButton.style.display = "none";
-            }
-        };
-        // 'Top' 버튼 클릭 시 상단으로 스크롤 이동
-        document.getElementById("topBtn").onclick = function() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        };
-    });
-	</script>
 </body>
 </html>
