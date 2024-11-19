@@ -85,10 +85,7 @@
 	    });
 	}
 	
-	// smallImageDiv 내에 있는 img 요소에 클릭 이벤트를 연결
-    $("#smallImageDiv").on("click", "img", function(){
-        $("#bigImageDiv img").attr("src", $(this).attr("src"));
-    });
+	
 	
 	// top버튼 클릭시 html 최상단으로 화면전환
     document.addEventListener("DOMContentLoaded", function() {
@@ -193,7 +190,11 @@
 </div>
 <!-- 'Top' 버튼 HTML -->
 <button id="topBtn" title="Go to top">Top</button>
-	
-	
+<script type="text/javascript">
+//smallImageDiv 내에 있는 img 요소에 클릭 이벤트를 연결
+$("#smallImageDiv").on("click", "img", function(){
+    $("#bigImageDiv img").attr("src", $(this).attr("src"));
+});
+</script>
 </body>
 </html>

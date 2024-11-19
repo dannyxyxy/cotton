@@ -181,10 +181,14 @@
     <div class="right-sidebar" id="rightSidebar">
         <button class="close-sidebar float-right" aria-label="Close Sidebar"><i class="fa fa-close closeBtn"></i></button>
         <c:if test="${!empty login.photo}">
-            <img src="${login.photo}" alt="Profile Picture" class="profile-pic">
+        	<div class="profile-container">
+	            <img src="${login.photo}" class="profile-pic">	
+        	</div>
         </c:if>
         <c:if test="${empty login.photo}">
-            <div class="default-icon" aria-label="Default Profile Icon">&#128100;</div>
+        	<div class="profile-container">
+        		<div class="default-icon" aria-label="Default Profile Icon">&#128100;</div>
+        	</div>
         </c:if>
         
         <div class="username">
@@ -196,21 +200,19 @@
             </c:if>
         </div>
         <hr>
-        
-        <a href="/cart/list.do?id=${login.id }">쇼핑카트</a>
-        <a href="/wish/list.do?id=${login.id }">위시리스트</a>
-        <a href="/butList">구매내역</a>
-        <c:if test="${login.gradeNo==1 }">
-        	<a href="/review/list.do?id=${login.id }">내가 쓴 리뷰</a>
-        </c:if>
-        <a href="/logout">로그아웃</a>
-        <hr>
-        <a href="/member/updateForm.do">회원정보</a>
-        <c:if test="${login.gradeNo==9 }">
-        	<a href="/member/adminPage.do">회원관리</a>
-        </c:if>
-        <c:if test="${login.gradeNo==9 }">
-        	<a href="/review/list.do?id=${login.id }">리뷰관리</a>
+	        <a href="/cart/list.do?id=${login.id }" style="font-size:15px;">쇼핑카트</a>
+	        <a href="/wish/list.do?id=${login.id }" style="font-size:15px;">위시리스트</a>
+	        <c:if test="${login.gradeNo==1 }">
+	        	<a href="/review/list.do?id=${login.id }" style="font-size:15px;">내가 쓴 리뷰</a>
+	        </c:if>
+	        <a href="/logout" style="font-size:15px;">로그아웃</a>
+	        <hr>
+	        <a href="/member/updateForm.do" style="font-size:15px;">회원정보</a>
+	        <c:if test="${login.gradeNo==9 }">
+	        	<a href="/member/adminPage.do" style="font-size:15px;">회원관리</a>
+	        </c:if>
+	        <c:if test="${login.gradeNo==9 }">
+	        	<a href="/review/list.do?id=${login.id }" style="font-size:15px;">리뷰관리</a>
         </c:if>
     </div>
    
@@ -277,5 +279,37 @@
 		        </div>
 	    	</div>
 	    </div>
+	    
+	     <!-- The Modal -->
+	  <div class="modal fade" id="msgModal">
+	    <div class="modal-dialog">
+	      <div class="modal-content">   
+	        <!-- Modal Header -->
+	        <div class="modal-header">
+	          <h4 class="modal-title">INFO</h4>
+	          <button type="button" class="close" data-dismiss="modal">&times;</button>
+	        </div>    
+	        <!-- Modal body -->
+	        <div class="modal-body">
+	          ${msg}
+	        </div>   
+	        <!-- Modal footer -->
+	        <div class="modal-footer">
+	          <button type="button" class="btn btn-dark" data-dismiss="modal">OK</button>
+	        </div>
+	        
+	      </div>
+	    </div>
+	  </div>
+	<!-- session 담은 msg를 보여주는 모달창 -->
+	<c:if test="${!empty msg}">
+		<!-- 모달을 보이게하는 javascript -->
+		<script type="text/javascript">
+			$(function() {
+				$("#msgModal").modal("show");
+				
+			})
+		</script>
+	</c:if>
 </body>
 </html>

@@ -11,40 +11,53 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>문의글 리스트</title>
-<link rel="stylesheet" href="/resources/css/qna/list.css">
+<link rel="stylesheet" href="/resources/css/qna/list.css" />
 </head>
 <body>
 	<div class="container">
-		<h2>고객문의</h2>
-		<p>문의사항을 작성해주세요</p>
-		<c:forEach items="${list}" var="vo">
-			<a href="view.do?no=${vo.no}" class="card">
-				<div class="card-body" style="padding: 0px">
-					<div class="row">
-						<div class="col-2">
-							<img src="${vo.image_name}" style="height: 170px"></img>
-						</div>
-						<div class="col-8" style="padding: 20px;">
-							<h4 class="card-title">${vo.title}</h4>
-							<p class="card-text">${vo.content}</p>
-						</div>
-						<div class="col-2" style="padding: 20px;">
-							<p style="margin-left: auto;">
-								<fmt:formatDate value="${vo.writeDate}" pattern="yyyy-MM-dd" />
-							</p>
-							<p>작성자 : ${vo.id}</p>
-							<p>상품 코드 : ${vo.goods_code}</p>
-						</div>
-					</div>
-				</div>
-			</a>
-		</c:forEach>
-		<span class="paginationBox"> 
-			<pageNav:adminPageNav listURI="list.do" pageObject="${pageObject}"></pageNav:adminPageNav>
-		</span>
-		<div class="btnBox">
-			<a href="writeForm.do" class="writeBtn" style="margin-left: auto;">글쓰기</a>
-		</div>
+    <h2>고객문의</h2>
+    <p>문의사항을 작성해주세요</p>
+    
+    <c:choose>
+        <c:when test="${not empty list}">
+            <c:forEach items="${list}" var="vo">
+                <a href="view.do?no=${vo.no}" class="card">
+                    <div class="card-body" style="padding: 0px">
+                        <div class="row">
+                            <div class="col-2">
+                                <img src="${vo.image_name}" style="height: 170px"></img>
+                            </div>
+                            <div class="col-8" style="padding: 20px;">
+                                <h4 class="card-title">${vo.title}</h4>
+                                <p class="card-text">${vo.content}</p>
+                            </div>
+                            <div class="col-2" style="padding: 20px;">
+                                <p style="margin-left: auto;">
+                                    <fmt:formatDate value="${vo.writeDate}" pattern="yyyy-MM-dd" />
+                                </p>
+                                <p>작성자 : ${vo.id}</p>
+                                <p>상품 코드 : ${vo.goods_code}</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </c:forEach>
+            
+            <span class="paginationBox"> 
+        		<pageNav:adminPageNav listURI="list.do" pageObject="${pageObject}"></pageNav:adminPageNav>
+    		</span>
+            
+        </c:when>
+        
+        <c:otherwise>
+            <p>문의사항이 없습니다</p>
+        </c:otherwise>
+    </c:choose>
+    
+    <div class="btnBox">
+        <a href="writeForm.do" class="writeBtn" style="margin-left: auto;">글쓰기</a>
+    </div>
 	</div>
+	
 </body>
 </html>

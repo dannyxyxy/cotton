@@ -24,4 +24,9 @@ public class MainController {
 		session.setAttribute("mainPage", "mainPage");
 		return "main/main";
 	}
+	
+	@GetMapping("/main/carouselPage")
+    public String carouselPage() {
+        return "carouselPage"; // /WEB-INF/views/carouselPage.jsp를 반환
+    }
 }

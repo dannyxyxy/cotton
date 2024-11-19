@@ -34,7 +34,7 @@
         if (activeForm) {
             activeForm.submit();
         } else {
-            alert("수정할 회원을 선택해주세요.");
+           /*  alert("수정할 회원을 선택해주세요."); */
         }
     }
 </script>

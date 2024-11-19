@@ -79,6 +79,7 @@
         SET 
             title = #{title},
             content = #{content},
+            goods_code = #{goods_code},
 <!--              새 이미지가 없으면 기존 값을 유지 -->
             qna_image_name = COALESCE(#{qna_image_name}, qna_image_name),
             writeDate = SYSDATE

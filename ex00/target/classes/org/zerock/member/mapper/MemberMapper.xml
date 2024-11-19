@@ -63,7 +63,7 @@
 	  	)
 	  	where rnum between #{startRow} and #{endRow}
   	</select>
-  	<!-- 일반 게시판 리스트 페이지 처리를 위한 전체 데이터 개수를 가져오는 쿼리 -->
+  	<!-- 페이지 처리를 위한 전체 데이터 개수를 가져오는 쿼리 -->
   	<select id="getTotalRow" resultType="Long">
   		select count(*)
   		from member

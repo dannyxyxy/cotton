@@ -28,17 +28,7 @@
 		        console.error("eno가 정의되지 않았습니다.");
 		    }
 		});
-		
-// 		$(".dataRow").click(function() {
-// 			// tag에 적힌 data-eno="${vo.eno}"
-// 			let eno = $(this).data("eno");
-// 			//alert(eno);
-// 			location = "view.do?eno=" + eno + "&inc=1"
-// 				+ "&${pageObject.pageQuery}";
-// 				// pageObject의 getPageQuery()를 가져와서
-// 				// page, perPageNum, key, word를 붙인다.
-// 		});
-	
+
 	    
 		$("#perPageNum").change(function(){
 			$("#searchForm").submit();

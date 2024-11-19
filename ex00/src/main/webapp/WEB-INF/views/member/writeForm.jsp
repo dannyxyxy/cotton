@@ -112,7 +112,7 @@ $(function() {
             
             <label for="id">아이디</label>
             <input type="text" class="form-control" maxlength="20" 
-            pattern="^[a-zA-Z][a-zA-Z0-9]{4,19}$" required placeholder="아이디 입력" id="ID" name="id">
+            pattern="^[a-zA-Z][a-zA-Z0-9]{3,19}$" required placeholder="아이디 입력" id="ID" name="id">
         </div>
         <div id="checkIdDiv" class="alert alert-danger">
             아이디를 입력해주세요.
@@ -168,7 +168,7 @@ $(function() {
 
         <div class="form-group">
             <label for="address2">주소입력</label>
-            <input type="text" id="address" name="address" placeholder=" '구'만 입력해주세요 ex)은평구 " >
+            <input type="text" id="address" name="address" placeholder=" 주소를 입력해주세요. " >
         </div>
 
         <div class="form-group flex">

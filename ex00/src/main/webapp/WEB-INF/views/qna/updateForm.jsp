@@ -8,7 +8,7 @@
 <meta charset="UTF-8">
 <title>문의 글 수정</title>
 
-<link rel="stylesheet" href="/resources/css/qna/view.css">
+<link rel="stylesheet" href="/resources/css/qna/updateForm.css">
 </head>
 <body>
 
@@ -19,18 +19,19 @@
 			<input type="hidden" name="no" value="${param.no }" /> 
 			<label for="title" style="color: #ccc;">문의사항을 남겨주세요! 순차적으로 확인 도와드리겠습니다.</label>
 
-			<div class="form-group">
-				<input type="text" class="form-control box" id="title"
+			
+			<div class="qnaInfo-container">
+				<input type="text" style="width: 69%; margin: 0 10px 0 0;" class="qnaInfo-box" id="title"
 					pattern="^[^ .].{2,99}$" required value="${vo.title }" name="title"
-					style="float: left;" title="제목을 입력하세요. 최소 3자 이상이어야 합니다."> 
-				<input type="text" class="form-control box" id="goods_code"
+					title="제목을 입력하세요. 최소 3자 이상이어야 합니다." > 
+				<input type="text" style="width: 29%;" class="qnaInfo-box" id="goods_code"
 					pattern="^[^ .].{2,99}$" required value="${vo.goods_code }"
 					name="goods_code" style="float: right;"
 					title="상품 코드를 입력하세요. 최소 3자 이상이어야 합니다.">
 			</div>
 
-			<div class="form-group" style="margin-top: 20px;">
-				<textarea class="form-control box content" rows="7" id="content"
+			<div class="qnaContent-container" style="margin-top: 30px;">
+				<textarea class="qnaContent-box" rows="7" id="content"
 					name="content" title="내용을 입력해주세요." required>${vo.content } </textarea>
 			</div>
 
@@ -41,7 +42,7 @@
 			</div>
 
 			<div class="form-group btnBox">
-				<button type="submit" class="registerBtn">수정하기</button>
+				<button type="submit" style="margin-left: auto;" class="registerBtn">수정하기</button>
 				<button type="button" class="cancelBtn" onclick="history.back()" id="cancelBtn">돌아가기</button>
 			</div>
 		</form>

@@ -1,10 +1,26 @@
 @charset "UTF-8";
-.box {
-	width: 49%;
+
+.qnaInfo-container{
+	width: 100%;
+}
+.qnaInfo-box{
+	border: 1px solid #ccc;
+	border-radius: .60rem;
+	font-size: 1rem;
+	padding: 10px;
 }
 
-.content {
+.qnaContent-container{
 	width: 100%;
+}
+
+.qnaContent-box{
+	width: 100%;
+	min-height: 300px;
+	border: 1px solid #ccc;
+	border-radius: .60rem;
+	font-size: 1rem;
+	padding: 10px;
 }
 
 .ipt {
@@ -22,10 +38,12 @@
 }
 
 .cancelBtn {
+	color: #000000;
+	background-color: #EEEEEE;
 	width: 150px;
 	height: 40px;
 	float: right;
-	margin-right: 20px;
+	margin: 0 0 0 16px;
 	border: none;
 	border-radius: .25rem;
 	font-size: 14px;
@@ -35,11 +53,12 @@
 	width: 150px;
 	height: 40px;
 	float: right;
-	border: none;
 	border-radius: .25rem;
 	font-size: 14px;
-	background: black;
-	color: white;
+	background-color: #333333;
+	color: #FFFFFF;
+	margin: 0 0 0 16px;
+
 }
 
 select {

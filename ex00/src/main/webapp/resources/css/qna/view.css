@@ -43,8 +43,10 @@
     justify-content: flex-start;
 }
 
-.cancelBtn, .registerBtn, .deleteBtn {
-    margin: 10px 0px 0px 5px;
+.registerBtn, .deleteBtn {
+	color: #FFFFFF;
+	background-color: #333333;
+    margin: 0 0 0 16px;
     width: 150px;
     height: 40px;
     border: none;
@@ -54,7 +56,15 @@
     line-height: 40px;
 }
 
-.registerBtn, .deleteBtn {
-    background: black;
-    color: white;
+.cancelBtn {
+	color: #000000;
+	background-color: #EEEEEE;
+    margin: 0 0 0 16px;
+    width: 150px;
+    height: 40px;
+    border: none;
+    border-radius: .25rem;
+    font-size: 14px;
+    text-align: center;
+    line-height: 40px;
 }

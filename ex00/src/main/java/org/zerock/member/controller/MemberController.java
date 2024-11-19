@@ -74,7 +74,7 @@ public class MemberController {
 
         try {
             service.updateStatusAndGrade(id, status, gradeNo);
-            rttr.addFlashAttribute("msg", "회원 상태와 등급이 성공적으로 변경되었습니다.");
+            rttr.addFlashAttribute("msg", "회원 정보 변경이 성공적으로 변경되었습니다.");
         } catch (Exception e) {
             log.error("회원 상태 변경 중 오류 발생", e);
             setErrorMessage(rttr, "회원 상태 변경 중 오류가 발생했습니다. 다시 시도해 주세요.");
@@ -122,7 +122,6 @@ public class MemberController {
         }
         
         //정상 로그인 처리
-        session.setAttribute("id", loginVO.getId());
         session.setAttribute("login", loginVO);
         rttr.addFlashAttribute("msg", loginVO.getName() + "님은 " + loginVO.getGradeName() + "(으)로 로그인 되었습니다.");
 
@@ -173,9 +172,9 @@ public class MemberController {
     }
     
     
-    // 내정보 변경하기
     @PostMapping("/update.do")
-    public String update(@RequestParam(value = "profileImage") MultipartFile file,
+    public String update(@RequestParam(value = "profileImage", required = false) MultipartFile file,
+                         @RequestParam("existingPhoto") String existingPhoto,
                          MemberVO vo, HttpSession session, RedirectAttributes rttr) {
         log.info("========= update.do ============");
 
@@ -201,10 +200,8 @@ public class MemberController {
                 return "redirect:/member/updateForm.do";
             }
         } else {
-            MemberVO existingMember = service.view(login.getId());
-            if (existingMember != null) {
-                vo.setPhoto(existingMember.getPhoto());
-            }
+            // 새 파일이 없으면 기존 사진 유지
+            vo.setPhoto(existingPhoto);
         }
 
         vo.setId(login.getId());

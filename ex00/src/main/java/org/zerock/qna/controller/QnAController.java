@@ -34,9 +34,10 @@ public class QnAController {
 
     // 1. QnA 게시판 리스트
     @GetMapping("/list.do")
-    public String list(Model model, HttpSession session, HttpServletRequest request) {
+    public String list(Model model, HttpSession session, HttpServletRequest request, RedirectAttributes rttr) {
         LoginVO login = (LoginVO) session.getAttribute("login");
         if (login == null) {
+            rttr.addFlashAttribute("msg", "로그인이 필요한 페이지입니다.");
             return "redirect:/member/loginForm.do";
         }
 
@@ -63,9 +64,10 @@ public class QnAController {
 
     // 2. QnA 게시판 보기
     @GetMapping("/view.do")
-    public String view(Model model, HttpSession session, Long no) {
+    public String view(Model model, HttpSession session, Long no, RedirectAttributes rttr) {
         LoginVO login = (LoginVO) session.getAttribute("login");
         if (login == null) {
+            rttr.addFlashAttribute("msg", "로그인이 필요한 페이지입니다.");
             return "redirect:/member/loginForm.do";
         }
 
@@ -78,9 +80,10 @@ public class QnAController {
 
     // 3. QnA 게시판 글 등록
     @GetMapping("/writeForm.do")
-    public String writeForm(HttpSession session) {
+    public String writeForm(HttpSession session, RedirectAttributes rttr) {
         LoginVO login = (LoginVO) session.getAttribute("login");
         if (login == null) {
+            rttr.addFlashAttribute("msg", "로그인이 필요한 페이지입니다.");
             return "redirect:/member/loginForm.do";
         }
         return "qna/writeForm";
@@ -91,6 +94,7 @@ public class QnAController {
                         RedirectAttributes rttr) {
         LoginVO login = (LoginVO) session.getAttribute("login");
         if (login == null) {
+            rttr.addFlashAttribute("msg", "로그인이 필요한 페이지입니다.");
             return "redirect:/member/loginForm.do";
         }
 
@@ -98,17 +102,15 @@ public class QnAController {
         String path = "/upload/qna";
 
         try {
-            if (!imageFile.isEmpty()) {
-                String uploadedImagePath = FileUtil.upload(path, imageFile, request);
+            if (imageFile != null && !imageFile.isEmpty()) {
                 vo.setQna_image_name("/upload/qna/" + imageFile.getOriginalFilename());
             }
 
-            Integer result = service.write(vo);
+            service.write(vo);
             rttr.addFlashAttribute("msg", "문의가 정상 등록되었습니다.");
         } catch (Exception e) {
             log.error("QnA 작성 중 오류 발생: ", e);
             rttr.addFlashAttribute("msg", "QnA 등록 중 오류가 발생했습니다.");
-            return "redirect:/errorPage.do";
         }
 
         return "redirect:list.do";
@@ -116,9 +118,10 @@ public class QnAController {
 
     // 4. QnA 게시판 글 수정
     @GetMapping("/updateForm.do")
-    public String updateForm(Long no, Model model, HttpSession session) {
+    public String updateForm(Long no, Model model, HttpSession session, RedirectAttributes rttr) {
         LoginVO login = (LoginVO) session.getAttribute("login");
         if (login == null) {
+            rttr.addFlashAttribute("msg", "로그인이 필요한 페이지입니다.");
             return "redirect:/member/loginForm.do";
         }
 
@@ -128,44 +131,59 @@ public class QnAController {
     }
 
     @PostMapping("/update.do")
-    public String update(QnAVO vo, @RequestParam("imageFile") MultipartFile imageFile, HttpServletRequest request, HttpSession session) {
+    public String update(QnAVO vo, 
+                         @RequestParam(value = "imageFile", required = false) MultipartFile imageFile, 
+                         HttpServletRequest request, 
+                         HttpSession session, 
+                         RedirectAttributes rttr) {
         LoginVO login = (LoginVO) session.getAttribute("login");
         if (login == null) {
+            rttr.addFlashAttribute("msg", "로그인이 필요한 페이지입니다.");
             return "redirect:/member/loginForm.do";
         }
 
         try {
-            service.update(vo, imageFile, request);
-            return "redirect:/qna/view.do?no=" + vo.getNo();
+            service.update(vo, imageFile, request); // 모든 로직은 서비스에서 처리
+            rttr.addFlashAttribute("msg", "문의 글이 성공적으로 수정되었습니다.");
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("QnA 수정 중 오류 발생: ", e);
+            rttr.addFlashAttribute("msg", "문의 글 수정 중 오류가 발생했습니다.");
             return "redirect:/qna/updateForm.do?no=" + vo.getNo();
         }
+
+        return "redirect:/qna/view.do?no=" + vo.getNo();
     }
+
 
     // QnA 글 답변
     @PostMapping("/updateReply.do")
-    public String updateReply(QnAVO vo, HttpSession session) throws Exception {
+    public String updateReply(QnAVO vo, HttpSession session, RedirectAttributes rttr) throws Exception {
         LoginVO login = (LoginVO) session.getAttribute("login");
         if (login == null) {
+            rttr.addFlashAttribute("msg", "로그인이 필요한 페이지입니다.");
             return "redirect:/member/loginForm.do";
         }
 
         service.updateReply(vo);
+        rttr.addFlashAttribute("msg", "답변이 정상적으로 등록되었습니다.");
         return "redirect:/qna/view.do?no=" + vo.getNo();
     }
 
     // QnA 글 삭제
     @GetMapping("/delete.do")
-    public String deletePost(@RequestParam("no") Long no, HttpSession session) {
+    public String deletePost(@RequestParam("no") Long no, HttpSession session, RedirectAttributes rttr) {
         LoginVO login = (LoginVO) session.getAttribute("login");
         if (login == null) {
+            rttr.addFlashAttribute("msg", "로그인이 필요한 페이지입니다.");
             return "redirect:/member/loginForm.do";
         }
 
-        int deletedCount = service.delete(no);
-        if (deletedCount == 0) {
-            return "redirect:/qna/list.do?error=delete_failed";
+        try {
+            service.delete(no);
+            rttr.addFlashAttribute("msg", "문의 글이 성공적으로 삭제되었습니다.");
+        } catch (Exception e) {
+            log.error("QnA 삭제 중 오류 발생: ", e);
+            rttr.addFlashAttribute("msg", "문의 글 삭제 중 오류가 발생했습니다.");
         }
 
         return "redirect:/qna/list.do";

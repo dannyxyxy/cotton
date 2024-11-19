@@ -10,6 +10,7 @@
 <meta charset="UTF-8">
 <title>문의 글 보기</title>
 <link rel="stylesheet" href="/resources/css/qna/view.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 </head>
 <body>
 	<div class="container">
@@ -34,11 +35,22 @@
 		<div class="content-box" style="height: 500px">
 			<!-- 본문 첨부 이미지 -->
 			<div class="col-4">
-				<img src="${vo.qna_image_name}" style="width: 100%"></img>
-				<!-- 				<img src="/upload/image/attach.png" style="width: 100%"></img> -->
+				<c:choose>
+					<c:when test="${not empty vo.qna_image_name}">
+						<!-- 이미지가 있는 경우 -->
+						<img src="${vo.qna_image_name}" style="width: 100%;"></img>
+					</c:when>
+					<c:otherwise>
+						<!-- 이미지가 없는 경우 아이콘 표시 -->
+						<i class="far fa-image"
+							style="font-size: 250px; color: #333333; display: block; margin: auto;"></i>
+					</c:otherwise>
+				</c:choose>
+
 				<div style="font-size: 25px; margin-top: 20px;">상품명 :
 					${vo.goods_name}</div>
 			</div>
+
 			<!-- 본문 내용 -->
 			<div class="col-8">
 				<span style="font-size: 25px;"> ${vo.content} </span>
@@ -104,7 +116,7 @@
 									<p style="margin: 0px; font-size: 16px;">빠르게 확인하여 답변
 										남겨드리겠습니다.</p>
 									<p style="margin-left: auto; font-size: 16px;">
-										답변일 :
+							b 			답변일 :
 										<fmt:formatDate value="${vo.replyDate}" pattern="yyyy-MM-dd" />
 									</p>
 								</div>
@@ -115,8 +127,8 @@
 								</div>
 
 								<div class="btnBox">
-									<button type="button" style="margin-left: auto;"
-										class="cancelBtn" onclick="history.back()" id="cancelBtn">취소</button>
+									<button type="button" style="margin-left: auto;" class="cancelBtn"
+										onclick="location.href='/qna/list.do'" id="cancelBtn">취소</button>
 									<button type="submit" class="registerBtn">수정</button>
 								</div>
 							</div>
@@ -142,8 +154,8 @@
 								</div>
 
 								<div class="btnBox">
-									<button type="button" style="margin-left: auto;"
-										class="cancelBtn" onclick="history.back()" id="cancelBtn">취소</button>
+									<button type="button" style="margin-left: auto;" class="cancelBtn"
+										onclick="location.href='/qna/list.do'" id="cancelBtn">취소</button>
 									<button type="submit" class="registerBtn">등록</button>
 								</div>
 							</div>

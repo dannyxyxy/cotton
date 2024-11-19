@@ -17,21 +17,21 @@
 
 			<label for="name" style="color: #ccc;">문의사항을 남겨주세요! 순차적으로 확인
 				도와드리겠습니다.</label>
-			<div class="form-group">
-				<input type="text" class="form-control box" id="title"
+			<div class="qnaInfo-container">
+				<input type="text" style="width: 69%; margin: 0 10px 0 0;" class="qnaInfo-box" id="title"
 					pattern="^[^ .].{2.99}$" required placeholder="글제목" name="title"
-					style="float: left;"> <input type="text"
-					class="form-control box" id="goods_code" pattern="^[^ .].{2.99}$"
+					style="float: left;"> 
+				<input type="text" style="width: 29%;" class="qnaInfo-box" id="goods_code" pattern="^[^ .].{2.99}$"
 					required placeholder="모델번호" name="goods_code" style="float: right;">
 			</div>
 
-			<div class="form-group" style="margin-top: 60px;">
-				<textarea class="form-control box content" rows="7" id="content"
+			<div class="qnaContent-container" style="margin-top: 30px;">
+				<textarea class="qnaContent-box" rows="7" id="content"
 					name="content" placeholder="문의사항" required></textarea>
 			</div>
 
-			<b style="font-size: 14px;">문의 관련 이미지 첨부하기</b> <input type="file"
-				class="form-control" name="imageFile"
+			<b style="font-size: 14px;">문의 관련 이미지 첨부하기</b> 
+			<input type="file" class="form-control" name="imageFile"
 				style="height: 100%; margin: 5px 0 20px 0;">
 
 			<div class="form-group btnBox">
