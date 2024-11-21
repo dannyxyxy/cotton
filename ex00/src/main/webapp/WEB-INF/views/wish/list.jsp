@@ -16,7 +16,8 @@ function addToCartlist(goods_no) {
     // AJAX 요청 보내기 (userId를 클라이언트에서 보내지 않음)
     var userId = '${login.id}'; // 이 부분이 실제로 정상적으로 로그인된 id를 담고 있는지 확인
 		if (!userId) {
-		    alert("로그인 후 장바구니에 추가할 수 있습니다.");
+			$('#msgModal .modal-body').text("로그인 후 장바구니에 추가할 수 있습니다."); // 모달 메시지 업데이트
+            $('#msgModal').modal('show'); // 모달 표시
 		    return;
 		}
     $.ajax({
@@ -27,7 +28,8 @@ function addToCartlist(goods_no) {
             userId : userId
         },
         success: function(response) {
-           alert("상품이 장바구니에 추가되었습니다!");
+        	$('#msgModal .modal-body').text("상품이 장바구니에 추가되었습니다!"); // 모달 메시지 업데이트
+            $('#msgModal').modal('show'); // 모달 표시
            loadCartList(); // 위시리스트 갱신 함수 호출 (다시 로드)   
         },
         error: function(xhr, status, error) {
@@ -44,8 +46,12 @@ function removeFromWishlist(wish_no) {
         type: 'POST',
         data: { wish_no: wish_no }, // wish_no만 넘김
         success: function(response) {
-            alert("위시리스트에서 상품이 제거되었습니다.");
-            location.reload(); // 페이지를 새로 고침하여 위시리스트 갱신
+        	$('#msgModal .modal-body').text("위시리스트에서 상품이 제거되었습니다."); // 모달 메시지 업데이트
+            $('#msgModal').modal('show'); // 모달 표시
+         // 모달이 표시된 후 2초 후 새로고침
+            setTimeout(function() {
+                location.reload(); // 페이지 새로 고침
+            }, 1000); // 1000ms = 1초
         },
         error: function(xhr, status, error) {
             console.error("AJAX 요청 실패:", error);
@@ -68,45 +74,99 @@ $(function(){
 		    }
 		});
 		
-		//페이징처리버튼 JS
-		const cardsPerPage = 6; // 페이지당 카드 수
-	    let currentPage = 1; // 현재 페이지
-	    const totalCards = $("div.promotion-card").length; // 전체 카드 수
-	    const totalPages = Math.ceil(totalCards / cardsPerPage); // 전체 페이지 수
-	    function showPage(page) {
-	        // 모든 카드를 숨김
-	        $("div.promotion-card").hide();
-	        
-	        // 현재 페이지 카드만 표시
-	        $("div.promotion-card").slice((page - 1) * cardsPerPage, page * cardsPerPage).show();
-	        
-	        // 페이지 정보 업데이트
-	        $("#pageInfo").text(`${page} / ${totalPages}`);
-	        
-	        // 이전 및 다음 버튼 상태 설정
-	        $("#prevPage").prop("disabled", page === 1);
-	        $("#nextPage").prop("disabled", page === totalPages);
-	    }
-	    // 페이지 로드 시 첫 페이지 표시
-	    showPage(currentPage);
-	    // 이전 페이지 버튼 클릭 시
-	    $("#prevPage").click(function(e) {
-	        e.preventDefault();
-	        if (currentPage > 1) {
-	            currentPage--;
-	            showPage(currentPage);
-	        }
-	    });
-	    // 다음 페이지 버튼 클릭 시
-	    $("#nextPage").click(function(e) {
-	        e.preventDefault();
-	        if (currentPage < totalPages) {
-	            currentPage++;
-	            showPage(currentPage);
-	        }
-	    });
-	  //페이징처리버튼 JS -end
 	});
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    const cardsPerPage = 6; // 한 페이지당 표시할 카드 수
+    let currentPage = 1; // 현재 페이지
+    const cards = document.querySelectorAll(".promotion-card"); // 모든 카드 선택
+    const totalCards = cards.length; // 전체 카드 개수
+    const totalPages = Math.ceil(totalCards / cardsPerPage); // 총 페이지 수
+    const maxPageButtons = 5; // 한 번에 표시할 최대 페이지 버튼 수
+
+    // 페이지 버튼 생성 및 렌더링
+    function renderPagination() {
+        const pagination = document.getElementById("pagination");
+        pagination.innerHTML = ""; // 기존 버튼 제거
+
+        // 이전 버튼
+        const prevBtn = document.createElement("a");
+        prevBtn.href = "#";
+        prevBtn.innerHTML = "&laquo;";
+        prevBtn.className = currentPage === 1 ? "disabled" : "";
+        prevBtn.onclick = (e) => {
+            e.preventDefault();
+            if (currentPage > 1) {
+                currentPage--;
+                showPage(currentPage);
+            }
+        };
+        pagination.appendChild(prevBtn);
+
+        // 숫자 버튼 생성
+        const startPage = Math.floor((currentPage - 1) / maxPageButtons) * maxPageButtons + 1;
+        const endPage = Math.min(startPage + maxPageButtons - 1, totalPages);
+
+        for (let i = startPage; i <= endPage; i++) {
+            const pageBtn = document.createElement("a");
+            pageBtn.href = "#";
+            pageBtn.textContent = i;
+            pageBtn.className = currentPage === i ? "active" : "";
+            pageBtn.onclick = (e) => {
+                e.preventDefault();
+                currentPage = i;
+                showPage(currentPage);
+            };
+            pagination.appendChild(pageBtn);
+        }
+
+        // 다음 그룹으로 이동 버튼
+        if (endPage < totalPages) {
+            const moreBtn = document.createElement("a");
+            moreBtn.href = "#";
+            moreBtn.innerHTML = "...";
+            moreBtn.onclick = (e) => {
+                e.preventDefault();
+                currentPage = endPage + 1;
+                showPage(currentPage);
+            };
+            pagination.appendChild(moreBtn);
+        }
+
+        // 다음 버튼
+        const nextBtn = document.createElement("a");
+        nextBtn.href = "#";
+        nextBtn.innerHTML = "&raquo;";
+        nextBtn.className = currentPage === totalPages ? "disabled" : "";
+        nextBtn.onclick = (e) => {
+            e.preventDefault();
+            if (currentPage < totalPages) {
+                currentPage++;
+                showPage(currentPage);
+            }
+        };
+        pagination.appendChild(nextBtn);
+    }
+
+    // 현재 페이지의 카드만 표시
+    function showPage(page) {
+        // 모든 카드 숨기기
+        cards.forEach((card) => (card.style.display = "none"));
+
+        // 현재 페이지의 카드만 표시
+        const startIndex = (page - 1) * cardsPerPage;
+        const endIndex = page * cardsPerPage;
+        for (let i = startIndex; i < endIndex && i < totalCards; i++) {
+            cards[i].style.display = "block"; // 카드 보이기
+        }
+
+        // 페이지 버튼 업데이트
+        renderPagination();
+    }
+
+    // 초기 로드 시 첫 페이지 표시
+    showPage(currentPage);
 });
 </script>
 </head>
@@ -151,13 +211,10 @@ $(function(){
             </div>
         </c:forEach>
     </div>
-
-    <!-- 페이지 내비게이션 -->
-    <div class="pageNav" id="pagination">
-        <a href="#" class="btn" id="prevPage"><i class="fa fa-angle-left"></i></a>
-        <span id="pageInfo"></span>
-        <a href="#" class="btn" id="nextPage"><i class="fa fa-angle-right"></i></a>
-    </div>
+	
+	<!-- 페이지 내비게이션 -->
+          <div class="pageNav" id="pagination"></div>
+    
 </div>
 </body>
 </html>

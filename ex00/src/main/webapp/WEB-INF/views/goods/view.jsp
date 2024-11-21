@@ -10,35 +10,14 @@
 <link rel="stylesheet" href="/resources/css/goods/view.css">
 <link rel="stylesheet" href="/resources/css/goods/view_detail.css">
 <link rel="stylesheet" href="/resources/css/goods/view_review.css">
-<script type="text/javascript">
-	$(document).ready(function(){
-		
 
-		$("#listBtn").click(function () {
-			// alert("리스트 버튼");
-			location="list.do?page=${param.page}"
-				+ "&perPageNum=${param.perPageNum}"
-				+ "&${goodsSearchVO.searchQuery}";
-		});
-		
-		function sendData(){
-			let firstForm = document.forms[0];		
-			if($("input[name='star']:checked").val() == undefined){
-			alert("별점 선택 필수입니다!");
-			return;
-		}		
-		function loadContent(tab) {
-	     window.location.href = window.location.pathname + "?tab=" + tab; // 현재 페이지에 tab 파라미터 추가
-	 }		
-	});
-}
-</script>
 <script type="text/javascript">
 	function addToWishlist(goods_no) {
 	    // AJAX 요청 보내기 (userId를 클라이언트에서 보내지 않음)
 	    var userId = '${login.id}'; // 이 부분이 실제로 정상적으로 로그인된 id를 담고 있는지 확인
 			if (!userId) {
-			    alert("로그인 후 위시리스트에 추가할 수 있습니다.");
+				$('#msgModal .modal-body').text("로그인 후 위시리스트에 추가할 수 있습니다."); // 모달 메시지 업데이트
+	            $('#msgModal').modal('show'); // 모달 표시
 			    return;
 			}
 	    $.ajax({
@@ -49,7 +28,8 @@
 	            userId : userId
 	        },
 	        success: function(response) {
-	           alert("상품이 위시리스트에 추가되었습니다!");
+	        	$('#msgModal .modal-body').text("상품이 위시리스트에 추가되었습니다!"); // 모달 메시지 업데이트
+	            $('#msgModal').modal('show'); // 모달 표시
 	           loadWishList(); // 위시리스트 갱신 함수 호출 (다시 로드)   
 	        },
 	        error: function(xhr, status, error) {
@@ -64,7 +44,8 @@
 	    // AJAX 요청 보내기 (userId를 클라이언트에서 보내지 않음)
 	    var userId = '${login.id}'; // 이 부분이 실제로 정상적으로 로그인된 id를 담고 있는지 확인
 			if (!userId) {
-			    alert("로그인 후 장바구니에 추가할 수 있습니다.");
+				$('#msgModal .modal-body').text("로그인 후 장바구니에 추가할 수 있습니다."); // 모달 메시지 업데이트
+	            $('#msgModal').modal('show'); // 모달 표시
 			    return;
 			}
 	    $.ajax({
@@ -75,7 +56,8 @@
 	            userId : userId
 	        },
 	        success: function(response) {
-	           alert("상품이 장바구니에 추가되었습니다!");
+	        	$('#msgModal .modal-body').text("상품이 장바구니에 추가되었습니다!"); // 모달 메시지 업데이트
+	            $('#msgModal').modal('show'); // 모달 표시
 	           loadCartList(); // 위시리스트 갱신 함수 호출 (다시 로드)   
 	        },
 	        error: function(xhr, status, error) {
@@ -147,20 +129,21 @@
 				<div class="bBox">
 					<img class="bBoxImg" src="${vo.image_name }">
 					<div class="bBoxTxt">
-						<strong>${vo.goods_name }<span style="font-weight: 100;">&nbsp;<fmt:formatNumber value="${vo.sale_price}"/></span>원</strong>
+						<span>${vo.goods_name }</span><br><span><fmt:formatNumber value="${vo.sale_price}"/>원</span>
 					</div>
 				</div>
 				<div class="add">
 					<button class="btn btn-addcart" onclick="addToCartlist(${vo.goods_no})">ADD CART</button>
 					<button class="btn btn-wishlist" onclick="addToWishlist(${vo.goods_no})">ADD WISH</button>
-					<button class="btn btn-addcart" onclick="addToCartlist(${vo.goods_no}); window.location.href='/cart/list.do?id=${login.id}';">구매하기</button>
+					<button class="btn btn-addcart" style="background-color:#333; color:#FFF;" onclick="addToCartlist(${vo.goods_no});
+					 window.location.href='/cart/list.do?id=${login.id}';">구매하기</button>
 				</div>
-				<div style="float: right; width: 150px; margin-top: 50px;">
+				<div class="manage">
 					<c:if test="${login.gradeNo==9 }">
-						<a href="updateForm.do?goods_no=${vo.goods_no }" class="btn btn-primary">상품수정</a>
+						<a class="btn editBtn" href="updateForm.do?goods_no=${vo.goods_no }">제품 수정</a>
 						<form action="${pageContext.request.contextPath}/goods/delete.do" method="post" onsubmit="return confirm('정말로 삭제하시겠습니까?');">
 						    <input type="hidden" name="goods_no" value="${vo.goods_no}">
-						    <button type="submit" class="deleteBtn">제품 삭제</button>
+						    <button type="submit" class="btn deleteBtn">제품 삭제</button>
 						</form>
 					</c:if>
 				</div>

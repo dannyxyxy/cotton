@@ -89,22 +89,38 @@
             });
         });
         // 데코레이터에 있는 검색바를 서치했을떄 해당 category로 url을 보내주는 처리
-        function performSearch() {
-            var category = document.getElementById('categorySelect').value;
-            var goodsName = document.getElementById('searchInput').value;          
-            // Construct the URL based on selected category and search input
-            var url = '/goods/list.do?category=' + category;        
-            if (goodsName) {
-                url += '&goods_name=' + encodeURIComponent(goodsName);
-            }
-            // Redirect to the constructed URL
-            window.location.href = url;
-        }
-        // Reset search and category selection
-        function reset() {
-            document.getElementById('categorySelect').value = '';
-            document.getElementById('searchInput').value = '';
-        }
+        function validateSearchForm() {
+		    var category = document.getElementById('categorySelect').value.trim();
+		    var goodsName = document.getElementById('searchInput').value.trim();
+		
+		    // 유효성 검사: 둘 중 하나라도 비어 있으면 경고 메시지 표시
+		    if (!category || !goodsName) {
+		    	$('#msgModal .modal-body').text("카테고리와 제품명을 모두 입력해주세요."); // 모달 메시지 업데이트
+	            $('#msgModal').modal('show'); // 모달 표시
+		        return false; // 폼 제출 중지
+		    }
+		
+		    return true; // 폼 제출 허용
+		}
+		
+		function performSearch() {
+		    // 기본 유효성 검사 호출
+		    if (!validateSearchForm()) return;
+		
+		    var category = document.getElementById('categorySelect').value.trim();
+		    var goodsName = document.getElementById('searchInput').value.trim();
+		
+		    var url = '/goods/list.do';
+		    url += '?cate_code1=' + encodeURIComponent(category);
+		    url += '&goods_name=' + encodeURIComponent(goodsName);
+		
+		    window.location.href = url;
+		}
+		
+		function reset() {
+		    document.getElementById('categorySelect').value = '';
+		    document.getElementById('searchInput').value = '';
+		}
     </script>
     
     <decorator:head/>
@@ -113,9 +129,9 @@
 <body>
     <div class="navbar">
         <a href="/main.do" class="logo">cotton</a>
-        <form action="/goods/list.do" method="get" class="search-container">
-	    <select class="form-control searchDrop" id="categorySelect" name="cate_code1">
-	        <option value="">카테고리</option>
+        <form action="/goods/list.do" method="get" class="search-container" onsubmit="return validateSearchForm();">
+	    <select class="form-control searchDrop" id="categorySelect" name="cate_code1" style="font-size: 14px;">
+	        <option value="" disabled selected>카테고리 선택</option>
 	        <option value="1">의자</option>
 	        <option value="2">소품</option>
 	        <option value="3">침구</option>
@@ -260,22 +276,25 @@
 	    <div class="footer">
 	    	<div style="width: 1140px; display: flex; justify-content: space-between; margin: auto;">
 		        <div class="footer-column">
-		            <h4>Use cases</h4>
-		            <a href="#">UI design</a>
-		            <a href="#">UX design</a>
-		            <a href="#">Wireframing</a>
+		            <h4>Collaborators</h4>
+		            <a href="https://github.com/dannyxyxy"><i class="fa fa-github"></i> @dannyxyxy</a>
+		            <a href="https://github.com/luuunana"><i class="fa fa-github"></i> @luuunana</a>
+		            <a href="https://github.com/ayger123"><i class="fa fa-github"></i> @ayger123</a>
+		            <a href="https://github.com/tomato2kg"><i class="fa fa-github"></i> @tomato2kg</a>
 		        </div>
 		        <div class="footer-column" style="margin: 0 100px;">
-		            <h4>Explore</h4>
-		            <a href="#">Design</a>
-		            <a href="#">Prototyping</a>
-		            <a href="#">Development features</a>
+		            <h4>Contact</h4>
+		            <a href="https://mail.google.com/"><i class="fa fa-send"></i> cotton@gmail.com</a>      
+		           	<a href="https://www.instagram.com/cottonmall/profilecard/?igsh=Y3Rtcjh4ZGw0ODFy"><i class="fa fa-instagram"></i> @cottonmall</a>
+		           	<a href="https://github.com/dannyxyxy/cotton"><i class="fa fa-github"></i> @cotton</a>
+		           	<a href="https://www.figma.com/design/EmqKq85HvwzRfT08pPEpSW/cotton?node-id=0-1&node-type=canvas&t=wsvuoLmmZaKcl33w-0"><i class="fa fa-paint-brush"></i> @cotton</a>
 		        </div>
 		        <div class="footer-column">
-		            <h4>Resources</h4>
-		            <a href="#">Blog</a>
-		            <a href="#">Best practices</a>
-		            <a href="#">Colors</a>
+		            <h4>cotton's goal</h4>
+		            <p>Our ultimate goal is<br>
+		            comfortable and convenient shopping for customers<br>
+		            and the growth of collaborators.<br>
+		            Thank you for visit cotton, and enjoy!</p>
 		        </div>
 	    	</div>
 	    </div>

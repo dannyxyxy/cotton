@@ -9,6 +9,7 @@
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     overflow: hidden; /* float을 사용하는 이미지 정렬을 위해 설정 */
     position: relative;
+    margin-bottom: 15px;
 }
 
 /* Image styling */
@@ -109,41 +110,57 @@
     z-index: 10;
 }
 
+.btn {
+		    color: white;
+		    background: transparent; /* 버튼 배경 투명 */
+		    border: none;
+		    margin: 5px;
+		    padding: 10px;
+		    cursor: pointer;
+		}
+
 .card:hover .overlay {
     opacity: 1;
 }
 
-/* Pagination Styling */
+/* 페이지 내비게이션 */
 .pageNav {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 20px;
+    margin-top: 40px;
+    gap: 8px;
 }
 
-.pageNav .btn {
-    background-color: #f8f9fa;
-    border: 1px solid #ddd;
-    color: #333;
-    padding: 10px 15px;
-    border-radius: 4px;
-    margin: 0 5px;
+.pageNav a {
+    text-decoration: none;
+    color: #888;
+    font-size: 14px;
+    padding: 5px 10px;
+    border: 1px solid transparent;
     cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 18px;
-    font-weight: bold;
-    display: inline-block;
-    text-align: center;
+    transition: all 0.2s ease-in-out;
 }
 
-.pageNav .btn:hover {
-    background-color: #333;
-    color: #fff;
-}
-
-#pageInfo {
+.pageNav a:hover {
     font-weight: bold;
     color: #333;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.pageNav a.active {
+    font-weight: bold;
+    color: #333;
+    border: 1px solid #ddd;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+}
+
+.pageNav a.disabled {
+    color: #ccc;
+    cursor: not-allowed;
+    pointer-events: none;
 }
 
 /* Cart Summary Card */

@@ -73,5 +73,9 @@ public class ReviewServiceImpl implements ReviewService {
 	    return mapper.insertLike(userId, reviewRno);
 	}
 	
+	@Override
+	public ReviewVO getReviewByRno(Long rno) {
+	    return mapper.getReviewByRno(rno);
+	}
 	
 }

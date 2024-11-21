@@ -55,7 +55,6 @@ public class ReviewController {
         return "review/list";
     }
     
-    
 
     // 2-1. 리뷰 쓰기 폼
     @GetMapping("/writeForm.do")
@@ -65,10 +64,10 @@ public class ReviewController {
     }
     
 
-    // 2-2. 리뷰 쓰기 처리
+ // 2-2. 리뷰 쓰기 처리
     @PostMapping("/write.do")
     public String write(
-    		@ModelAttribute("vo") ReviewVO vo,
+            @ModelAttribute("vo") ReviewVO vo,
             @RequestParam("goods_no") Long goodsNo,
             @RequestParam(value = "page", required = false, defaultValue = "1") int page,
             @RequestParam(value = "perPageNum", required = false, defaultValue = "8") int perPageNum,
@@ -80,15 +79,24 @@ public class ReviewController {
             @RequestParam(value = "max_price", required = false, defaultValue = "") String maxPrice,
             HttpSession session,
             RedirectAttributes rttr) throws Exception {
-    	vo.setId(getId(session)); // 로그인한 사용자의 ID 설정
-//    	String id = getId(session); // 로그인한 사용자의 ID 가져오기
-        log.info("write() ======= 리뷰 작성 - ID: " + vo.getId());
         
+        // 로그인 여부 확인
+        LoginVO loginVO = (LoginVO) session.getAttribute("login");
+        if (loginVO == null) {
+            // 로그인 페이지로 리다이렉트
+            rttr.addFlashAttribute("msg", "로그인이 필요합니다. 로그인 후 다시 시도해주세요.");
+            return "redirect:/member/loginForm.do"; // 로그인 페이지 URL
+        }
+
+        // 로그인된 사용자 ID 설정
+        vo.setId(loginVO.getId());
+        log.info("write() ======= 리뷰 작성 - ID: " + vo.getId());
+
         vo.setGoods_no(goodsNo);  // goods_no 필드가 null로 넘어가지 않도록 vo에 직접 설정
         log.info("write() ======= 리뷰 작성 - goods_no: " + goodsNo);
-        
+
         log.info(vo);
-        
+
         service.write(vo);
         rttr.addFlashAttribute("msg", "리뷰가 등록되었습니다.");
         return "redirect:/goods/view.do?goods_no=" + goodsNo 
@@ -106,11 +114,16 @@ public class ReviewController {
 
     // 3-1. 리뷰 수정 폼
     @GetMapping("/updateForm.do")
-    public String updateForm(Long goods_no) {
-    	log.info("updateForm() =======");
+    public String updateForm(@RequestParam("rno") Long rno, Model model) {
+        // rno를 기반으로 리뷰 데이터를 가져옴
+        ReviewVO vo = service.getReviewByRno(rno);
+        if (vo == null) {
+            throw new IllegalArgumentException("존재하지 않는 리뷰입니다.");
+        }
+        model.addAttribute("vo", vo); // JSP로 전달
         return "review/updateForm";
     }
-    
+
 
     // 3-2. 리뷰 수정
     @PostMapping("/update.do")
@@ -161,23 +174,6 @@ public class ReviewController {
     }
     
     
-    // 좋아요 수
-//    @PostMapping("/like.do")
-//    @ResponseBody
-//    public ResponseEntity<String> increaseLikeCount(@RequestParam("rno") Long rno, HttpSession session) throws Exception {
-//        String userId = getId(session);  // 세션에서 로그인한 사용자 ID 가져오기
-//
-//        // 좋아요 중복 체크: 사용자가 이미 좋아요를 눌렀다면 중복 메시지 반환
-//        if (service.checkDuplicateLike(userId, rno) > 0) {
-//            return new ResponseEntity<>("이미 좋아요를 누르셨습니다.", HttpStatus.BAD_REQUEST);
-//        }
-//
-//        // 중복이 아닌 경우에만 좋아요 증가 및 기록 추가
-//        service.increaseLikeCount(rno);  // 좋아요 수 증가
-//        service.insertLike(userId, rno);  // 좋아요 기록 추가
-//
-//        return new ResponseEntity<>("좋아요가 반영되었습니다.", HttpStatus.OK);
-//    }
     @PostMapping("/like.do")
     @ResponseBody
     public ResponseEntity<String> increaseLikeCount(@RequestParam("rno") Long rno, HttpSession session) {
@@ -201,10 +197,5 @@ public class ReviewController {
 
         return new ResponseEntity<>("좋아요가 반영되었습니다.", HttpStatus.OK);
     }
-    
-    
-    
-    
-    
 }
 

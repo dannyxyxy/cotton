@@ -46,6 +46,8 @@ public interface ReviewMapper {
 
 	// 좋아요 기록 추가 메서드
 	public Integer insertLike(@Param("userId") String userId, @Param("reviewRno") Long reviewRno);
+
+	public ReviewVO getReviewByRno(Long rno);
 	
 	
 	

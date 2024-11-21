@@ -10,12 +10,9 @@
 <head>
 	<meta charset="UTF-8">
 	<title>리뷰 등록하기</title>
-	<jsp:include page="../jsp/webLib.jsp"></jsp:include>
 	
 	<link rel="stylesheet" href="/resources/css/review/writeForm.css">
 
-<script type="text/javascript">
-</script>
 
 </head>
 <body>

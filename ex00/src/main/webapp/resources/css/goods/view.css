@@ -124,48 +124,55 @@
 .add {
 	width: 100%;
 	margin-top: 16px;
-	font-size: 12px;
 	position: relative;
 	top: 45px;
+	display:flex;
+	gap:18px;
+	align-items: center;
 }
-
-.addCart, .addWish, .addBuy, .updateBtn, .deleteBtn {
+.add > .btn-addcart,.btn-wishlist,.btn-addcart{
 	width: 150px;
-	height: 30px;
-	text-align: center;
-	line-height: 30px;
-	border-radius: .25rem;
-	cursor: pointer;
+    height: 40px;
+    font-size: 14px; /* 적절한 크기로 조정 */
+    background-color: #EEE;
+    color: #000; /* 텍스트 색상 */
+    border: none;
+    border-radius:.25rem;
+    text-align: center;
+    cursor: pointer;
 }
 
-.addCart, .addWish {
-	float: left;
-	background: #e6e6e6;
+.manage{
+	width: 100%;
+	margin-top: 16px;
+	position: relative;
+	top: 45px;
+	display:flex;
+	gap:18px;
+	justify-content: flex-end; /* 버튼들을 오른쪽으로 정렬 */
+}
+.manage > .editBtn,.deleteBtn{
+	width: 150px;
+    height: 40px;
+    font-size: 14px; /* 적절한 크기로 조정 */
+    background-color: #000;
+    color: #FFF; /* 텍스트 색상 */
+    border: none;
+    border-radius:.25rem;
+    text-align: center;
+    cursor: pointer;
+    vertical-align: middle;
 }
 
-.addWish {
-	margin: 0 10px;
+.editBtn{
+	display: inline-flex; /* 플렉스 컨테이너로 변경 */
+    align-items: center;  /* 수직 중앙 정렬 */
+    justify-content: center; /* 수평 중앙 정렬 (선택 사항) */
 }
 
-.addBuy {
-	float: right;
-	background: #2c2c2c;
-	color: white;
-}
-
-.updateBtn {
-	float: left;
-	width: 70px;
-	background: #2c2c2c;
-	color: white;
-	font-size: 12px;
-}
-
-.deleteBtn {
-	float: right;
-	width: 70px;
-	background: #e6e6e6;
-	font-size: 12px;
+.btn:hover{
+	color:#fff;
+	background-color: #000;
 }
 
 /* Custom scrollbar style */

@@ -14,11 +14,13 @@
   	</select>
   	
   	
-  	<!-- 모든 리뷰를 가져오는 쿼리 -->
-    <select id="selectAllReview" resultType="org.zerock.review.vo.ReviewVO">
-        SELECT rno, goods_no, title, content, id, writeDate, likeCount, status
-        FROM review
-    </select>
+	<select id="selectAllReview" resultType="org.zerock.review.vo.ReviewVO">
+	    SELECT r.rno, r.goods_no, r.title, r.content, r.id, r.writeDate, r.status,
+	           (SELECT COUNT(*) FROM review_likes l WHERE l.review_rno = r.rno) AS likeCount
+	    FROM review r
+	    ORDER BY likeCount DESC, writeDate DESC  <!-- 좋아요 순, 같은 경우 최신순 -->
+	</select>
+	
     
     <select id="goodsReview" parameterType="Long" resultType="org.zerock.review.vo.ReviewVO">
 	    SELECT *
@@ -27,8 +29,6 @@
 	    ORDER BY likeCount DESC, writeDate DESC  <!-- 좋아요 순, 같은 경우 최신순 -->
 	</select>
 
-  	
-  	
 
 	<!-- 리뷰 쓰기 쿼리 -->
 	<insert id="write">
@@ -45,19 +45,17 @@
 	</insert>
 	
 	
-	
 	<!-- 리뷰 수정 쿼리 -->
 	<!-- ![CDATA[]] 를 사용하면 특수문자를 string으로 인식하게 만들어준다. -->
 	<update id="update">
-		<![CDATA[
- 		UPDATE review
-		SET title = #{title, jdbcType=VARCHAR}, content = #{content, jdbcType=VARCHAR},
-			likeCount = #{likeCount, jdbcType=INTEGER}, status = #{status, jdbcType=VARCHAR}
- 		WHERE rno = #{rno, jdbcType=INTEGER} and id = #{id, jdbcType=VARCHAR}
-  		]]>
+	    <![CDATA[
+	    UPDATE review
+	    SET title = #{title, jdbcType=VARCHAR}, content = #{content, jdbcType=VARCHAR},
+	        status = #{status, jdbcType=VARCHAR}
+	    WHERE rno = #{rno, jdbcType=INTEGER} AND id = #{id, jdbcType=VARCHAR}
+	    ]]>
 	</update>
-	
-	
+
 	
 	<!-- 리뷰 삭제 쿼리 -->
 	<delete id="delete">
@@ -67,6 +65,7 @@
 	        and id = #{id, jdbcType=VARCHAR}
 	    </if>
 	</delete>
+	
 	
 	<!-- likeCount 좋아요 수 -->
 	<update id="increaseLikeCount">
@@ -83,6 +82,7 @@
 	    WHERE user_id = #{userId} AND review_rno = #{reviewRno}
 	</select>
 	
+	
 	<!-- 좋아요 기록 추가 쿼리 -->
 	<insert id="insertLike" parameterType="map">
 	    INSERT INTO review_likes (user_id, review_rno)
@@ -97,5 +97,10 @@
 	</select>
 	
 	
+	<select id="getReviewByRno" parameterType="Long" resultType="org.zerock.review.vo.ReviewVO">
+	    SELECT rno, goods_no, title, content, id, writeDate, likeCount, status
+	    FROM review
+	    WHERE rno = #{rno}
+	</select>
 	
 </mapper>

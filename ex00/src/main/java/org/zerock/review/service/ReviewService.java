@@ -29,6 +29,6 @@ public interface ReviewService {
 	
 	public Integer checkDuplicateLike(String userId, Long reviewRno); // 중복 체크 메서드
 	public Integer insertLike(String userId, Long reviewRno); // 좋아요 기록 추가 메서드
-	
+	ReviewVO getReviewByRno(Long rno);
 	
 }
